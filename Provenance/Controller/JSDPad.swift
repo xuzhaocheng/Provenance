@@ -25,7 +25,7 @@ protocol JSDPadDelegate: class {
     func dPadDidReleaseDirection(_ dPad: JSDPad)
 }
 
-class JSDPad: UIView {
+class JSDPad: MovableButtonView {
     weak var delegate: JSDPadDelegate?
 
     private var currentDirection: JSDPadDirection = .none

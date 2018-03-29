@@ -14,7 +14,8 @@ protocol JSButtonDelegate: class {
     func buttonReleased(_ button: JSButton)
 }
 
-class JSButton: UIView {
+class JSButton: MovableButtonView {
+    
     private(set) var titleLabel: UILabel!
     private var backgroundImageView: UIImageView! {
         didSet {
@@ -131,12 +132,22 @@ class JSButton: UIView {
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if inMoveMode {
+            super.touchesBegan(touches, with: event)
+            return
+        }
+        
         delegate?.buttonPressed(self)
         pressed = true
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else {
+            return
+        }
+        
+        if inMoveMode {
+            super.touchesMoved(touches, with: event)
             return
         }
 
@@ -158,11 +169,21 @@ class JSButton: UIView {
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if inMoveMode {
+            super.touchesEnded(touches, with: event)
+            return
+        }
+        
         delegate?.buttonReleased(self)
         pressed = false
     }
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if inMoveMode {
+            super.touchesCancelled(touches, with: event)
+            return
+        }
+        
         delegate?.buttonReleased(self)
         pressed = false
     }

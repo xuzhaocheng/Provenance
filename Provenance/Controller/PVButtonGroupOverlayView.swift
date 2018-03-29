@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PVButtonGroupOverlayView: UIView {
+class PVButtonGroupOverlayView: MovableButtonView {
     var buttons = [JSButton]()
 
     init(buttons: [JSButton]) {
@@ -27,6 +27,10 @@ class PVButtonGroupOverlayView: UIView {
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if inMoveMode {
+            super.touchesBegan(touches, with: event)
+            return
+        }
         let touch = touches.first!
         let location = touch.location(in: self)
         for button: JSButton in buttons {
@@ -39,6 +43,10 @@ class PVButtonGroupOverlayView: UIView {
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if inMoveMode {
+            super.touchesMoved(touches, with: event)
+            return
+        }
         let touch = touches.first!
         let location = touch.location(in: self)
         for button: JSButton in buttons {
@@ -53,14 +61,26 @@ class PVButtonGroupOverlayView: UIView {
     }
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if inMoveMode {
+            super.touchesCancelled(touches, with: event)
+            return
+        }
         for button: JSButton in buttons {
             button.touchesCancelled(touches, with: event)
         }
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if inMoveMode {
+            super.touchesEnded(touches, with: event)
+            return
+        }
         for button: JSButton in buttons {
             button.touchesEnded(touches, with: event)
         }
+    }
+    
+    var isMovable: Bool {
+        return true
     }
 }
