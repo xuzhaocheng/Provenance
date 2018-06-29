@@ -177,6 +177,30 @@ class PVControllerViewController<T: ResponderClient> : UIViewController, Control
     var rightAnalogButton: JSButton?
 
     let alpha: CGFloat = PVSettingsModel.shared.controllerOpacity
+    
+    var hasMFiPlus = false
+    var shouldShowMFiPlusHeadsUp = false
+    var mFiPlusHeadsUpView: UIView?
+    var mFiPlusControllerTopView = UIImageView(image: #imageLiteral(resourceName: "mFi-HUD-comboExtOFF").withRenderingMode(.alwaysOriginal))
+    var mFiPlusControllerCombo = UIImageView(image: #imageLiteral(resourceName: "mFi-HUD-comboLR12").withRenderingMode(.alwaysOriginal))
+    var mFiPlusHUDDPadView: UIView?
+    var mFiPlusHUDDPadLeft: UIView?
+    var mFiPlusHUDDPadUp: UIView?
+    var mFiPlusHUDDPadDown: UIView?
+    var mFiPlusHUDDPadRight: UIView?
+    var mFiPlusHUDDPadLeftLabel: UILabel?
+    var mFiPlusHUDDPadUpLabel: UILabel?
+    var mFiPlusHUDDPadDownLabel: UILabel?
+    var mFiPlusHUDDPadRightLabel: UILabel?
+    var mFiPlusHUDButtonsView: UIView?
+    var mFiPlusHUDButtonX: UIView?
+    var mFiPlusHUDButtonY: UIView?
+    var mFiPlusHUDButtonA: UIView?
+    var mFiPlusHUDButtonB: UIView?
+    var mFiPlusHUDButtonXLabel: UILabel?
+    var mFiPlusHUDButtonYLabel: UILabel?
+    var mFiPlusHUDButtonALabel: UILabel?
+    var mFiPlusHUDButtonBLabel: UILabel?
 
     #if os(iOS)
     private var _feedbackGenerator: AnyObject?
@@ -234,13 +258,26 @@ class PVControllerViewController<T: ResponderClient> : UIViewController, Control
         if PVSettingsModel.shared.volumeHUD {
             volume.barTintColor = .white
             volume.barBackgroundColor = UIColor.white.withAlphaComponent(0.3)
-            volume.animation = .slideDown
+            volume.animation = .fadeIn
             view.addSubview(volume)
         }
 
         NotificationCenter.default.addObserver(volume, selector: #selector(SubtleVolume.resume), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
 
         #endif
+        
+        if system.shortName == "N64" || system.shortName == "PSX" {
+            hasMFiPlus = true
+        }
+        
+            if PVControllerManager.shared.hasControllers && hasMFiPlus {
+                PVControllerManager.shared.allLiveControllers.forEach({ (key, controller) in
+                    self.setupMFiPlusViews(for: controller)
+                    self.shouldShowMFiPlusHeadsUp = true
+                })
+            }
+        hideMFiPlusHUD()
+        hideMFIPlusHeadsUp()
     }
 
     // MARK: - GameController Notifications
@@ -264,6 +301,15 @@ class PVControllerViewController<T: ResponderClient> : UIViewController, Control
                 leftAnalogButton?.isHidden = true
                 rightAnalogButton?.isHidden = true
             }
+        
+        if PVControllerManager.shared.hasControllers {
+            PVControllerManager.shared.allLiveControllers.forEach({ (key, controller) in
+                self.hideTouchControls(for: controller)
+                self.setupMFiPlusViews(for: controller)
+            })
+        }
+        
+        showMFiPlusHeadsUp()
         setupTouchControls()
         #endif
     }
@@ -291,6 +337,8 @@ class PVControllerViewController<T: ResponderClient> : UIViewController, Control
                 rightAnalogButton?.isHidden = true
             }
         setupTouchControls()
+        hideMFIPlusHeadsUp()
+        hideMFiPlusHUD()
         #endif
     }
 
@@ -336,6 +384,14 @@ class PVControllerViewController<T: ResponderClient> : UIViewController, Control
             layoutVolume()
         }
         updateHideTouchControls()
+        layoutMFiPlusHeadsUp()
+        layoutMFiPlusHUD()
+        if shouldShowMFiPlusHeadsUp {
+            showMFiPlusHeadsUp()
+            showMFiPlusHUD()
+            shouldShowMFiPlusHeadsUp = false
+        }
+        
     #endif
     }
 
@@ -349,6 +405,209 @@ class PVControllerViewController<T: ResponderClient> : UIViewController, Control
         volume.frame = CGRect(x: safeAreaInsets.left + volumeXPadding, y: safeAreaInsets.top + volumeYPadding, width: UIScreen.main.bounds.width - (volumeXPadding * 2) - safeAreaInsets.left - safeAreaInsets.right, height: volumeHeight)
     }
     #endif
+    
+    func setupMFiPlusViews(for controller: GCController) {
+        let yPadding: CGFloat = 54
+        mFiPlusHeadsUpView = UIView(frame: CGRect(x: (UIScreen.main.bounds.width / 2) - (86 / 2), y: safeAreaInsets.top + yPadding, width: (mFiPlusControllerTopView.image?.size.width)!, height: (mFiPlusControllerTopView.image?.size.height)!))
+        setupMFiPlusHUD()
+        updateMFiPlusViews(for: controller)
+        mFiPlusHeadsUpView?.addSubview(mFiPlusControllerTopView)
+        mFiPlusHeadsUpView?.addSubview(mFiPlusControllerCombo)
+        self.view.addSubview(mFiPlusHeadsUpView!)
+        mFiPlusHeadsUpView?.superview?.bringSubview(toFront: mFiPlusHeadsUpView!)
+        
+        switch system.shortName {
+        case "PSX":
+            mFiPlusHUDDPadRightLabel?.text = "Select"
+            mFiPlusHUDButtonXLabel?.text = "Start"
+            mFiPlusHUDButtonX?.borderColor = UIColor(white: 1.0, alpha: 0.8)
+            mFiPlusHUDDPadRight?.borderColor = UIColor(white: 1.0, alpha: 0.8)
+        case "N64":
+            mFiPlusHUDDPadRightLabel?.text = "Select"
+            mFiPlusHUDButtonXLabel?.text = "Start"
+            mFiPlusHUDDPadRight?.borderColor = UIColor(white: 1.0, alpha: 0.8)
+            mFiPlusHUDButtonX?.borderColor = UIColor(white: 1.0, alpha: 0.8)
+            mFiPlusHUDButtonY?.borderColor = UIColor(white: 1.0, alpha: 0.8)
+            mFiPlusHUDButtonA?.borderColor = UIColor(white: 1.0, alpha: 0.8)
+            mFiPlusHUDButtonB?.borderColor = UIColor(white: 1.0, alpha: 0.8)
+        default:
+            break
+        }
+    }
+    
+    func updateMFiPlusViews(for controller: GCController) {
+        if (controller.extendedGamepad != nil) {
+            mFiPlusControllerTopView.image = #imageLiteral(resourceName: "mFi-HUD-comboExtOFF").withRenderingMode(.alwaysOriginal)
+        } else if (controller.gamepad != nil) {
+            mFiPlusControllerTopView.image = #imageLiteral(resourceName: "mFi-HUD-comboStdOFF").withRenderingMode(.alwaysOriginal)
+        }
+        
+        switch system.shortName {
+        case "PSX":
+            if (controller.extendedGamepad != nil) {
+                mFiPlusControllerCombo.image = #imageLiteral(resourceName: "mFi-HUD-comboLR12").withRenderingMode(.alwaysOriginal)
+            } else if (controller.gamepad != nil) {
+                mFiPlusControllerCombo.image = #imageLiteral(resourceName: "mFi-HUD-comboLR1").withRenderingMode(.alwaysOriginal)
+            }
+        case "N64":
+            if (controller.extendedGamepad != nil) {
+                mFiPlusControllerCombo.image = #imageLiteral(resourceName: "mFi-HUD-comboLR1").withRenderingMode(.alwaysOriginal)
+            } else if (controller.gamepad != nil) {
+                mFiPlusControllerCombo.image = #imageLiteral(resourceName: "mFi-HUD-comboR1").withRenderingMode(.alwaysOriginal)
+            }
+        default:
+            break
+        }
+        
+        layoutMFiPlusHeadsUp()
+        layoutMFiPlusHUD()
+    }
+    
+    func pulseMFiCombo() {
+        UIView.animate(withDuration: 0.3, delay: 0.1, options: [.curveEaseInOut], animations: {
+            self.mFiPlusControllerCombo.alpha = 1.0
+            self.mFiPlusHUDButtonsView?.alpha = 1.0
+            self.mFiPlusHUDDPadView?.alpha = 1.0
+        }, completion: { (finished: Bool) in
+            UIView.animate(withDuration: 0.6, delay: 0.1, options: [.curveEaseInOut], animations: {
+                self.mFiPlusControllerCombo.alpha = 0.0
+                self.mFiPlusHUDButtonsView?.alpha = 0.6
+                self.mFiPlusHUDDPadView?.alpha = 0.6
+            }, completion: { (finished: Bool) in
+                UIView.animate(withDuration: 0.3, delay: 0.1, options: [.curveEaseInOut], animations: {
+                    self.mFiPlusControllerCombo.alpha = 1.0
+                    self.mFiPlusHUDButtonsView?.alpha = 1.0
+                    self.mFiPlusHUDDPadView?.alpha = 1.0
+                }, completion: { (finished: Bool) in
+                    UIView.animate(withDuration: 0.6, delay: 0.1, options: [.curveEaseInOut], animations: {
+                        self.mFiPlusControllerCombo.alpha = 0.0
+                        self.mFiPlusHUDButtonsView?.alpha = 0.6
+                        self.mFiPlusHUDDPadView?.alpha = 0.6
+                    }, completion: { (finished: Bool) in
+                        UIView.animate(withDuration: 0.3, delay: 0.1, options: [.curveEaseInOut], animations: {
+                            self.mFiPlusControllerCombo.alpha = 1.0
+                            self.mFiPlusHUDButtonsView?.alpha = 1.0
+                            self.mFiPlusHUDDPadView?.alpha = 1.0
+                        }, completion: { (finished: Bool) in
+                            self.hideMFIPlusHeadsUp()
+                            self.hideMFiPlusHUD()
+                        })
+                    })
+                })
+            })
+        })
+    }
+    
+    func layoutMFiPlusHeadsUp() {
+        let yPadding: CGFloat = 54
+        let frame = CGRect(x: (UIScreen.main.bounds.width / 2) - (86 / 2), y: safeAreaInsets.top + yPadding, width: (mFiPlusControllerTopView.image?.size.width)!, height: (mFiPlusControllerTopView.image?.size.height)!)
+        mFiPlusHeadsUpView?.frame = frame
+    }
+    
+    func showMFiPlusHeadsUp() {
+        UIView.animate(withDuration: 1.0, delay: 0.0, options: [.curveEaseInOut], animations: {
+            self.mFiPlusHeadsUpView?.alpha = 1.0
+        }, completion: { (finished: Bool) in
+            self.pulseMFiCombo()
+        })
+    }
+    
+    func hideMFIPlusHeadsUp() {
+        UIView.animate(withDuration: 1.5, delay: 0.0, options: [.curveEaseInOut], animations: {
+            self.mFiPlusHeadsUpView?.alpha = 0.0
+            self.mFiPlusControllerCombo.alpha = 0.0
+        }, completion: nil)
+    }
+    
+    func setupMFiPlusHUD() {
+        let yPadding: CGFloat = 60
+        let xPadding: CGFloat = UIScreen.main.bounds.width / 16
+        let frameSize: CGFloat = 28
+        let frameL = CGRect(x: safeAreaInsets.left + xPadding, y: safeAreaInsets.top + yPadding, width: frameSize, height: frameSize)
+        let frameR = CGRect(x: UIScreen.main.bounds.width - xPadding - frameSize, y: safeAreaInsets.top + yPadding, width: frameSize, height: frameSize)
+        mFiPlusHUDDPadView = UIView(frame: frameL)
+        mFiPlusHUDButtonsView = UIView(frame: frameR)
+        
+        let buttonSize: CGFloat = 10
+        
+        //Setup HUD D-Pad
+        mFiPlusHUDDPadLeft = UIView(frame: CGRect(x: 0, y: (frameSize / 2) - (buttonSize / 2), width: buttonSize, height: buttonSize))
+        mFiPlusHUDDPadUp = UIView(frame: CGRect(x: (frameSize / 2) - (buttonSize / 2), y: 0, width: buttonSize, height: buttonSize))
+        mFiPlusHUDDPadDown = UIView(frame: CGRect(x: (frameSize / 2) - (buttonSize / 2), y: frameSize - buttonSize, width: buttonSize, height: buttonSize))
+        mFiPlusHUDDPadRight = UIView(frame: CGRect(x: frameSize - buttonSize, y: (frameSize / 2) - (buttonSize / 2), width: buttonSize, height: buttonSize))
+        
+        mFiPlusHUDDPadLeft?.borderColor = UIColor(white: 1.0, alpha: 0.3)
+        mFiPlusHUDDPadUp?.borderColor = UIColor(white: 1.0, alpha: 0.3)
+        mFiPlusHUDDPadDown?.borderColor = UIColor(white: 1.0, alpha: 0.3)
+        mFiPlusHUDButtonB?.borderColor = UIColor(white: 1.0, alpha: 0.3)
+        
+        mFiPlusHUDDPadLeft?.layer.borderWidth = 1.5
+        mFiPlusHUDDPadUp?.layer.borderWidth = 1.5
+        mFiPlusHUDDPadDown?.layer.borderWidth = 1.5
+        mFiPlusHUDDPadRight?.layer.borderWidth = 1.5
+        
+        mFiPlusHUDDPadView?.addSubview(mFiPlusHUDDPadLeft!)
+        mFiPlusHUDDPadView?.addSubview(mFiPlusHUDDPadUp!)
+        mFiPlusHUDDPadView?.addSubview(mFiPlusHUDDPadDown!)
+        mFiPlusHUDDPadView?.addSubview(mFiPlusHUDDPadRight!)
+        
+        //Setup HUD Buttons
+        mFiPlusHUDButtonX = UIView(frame: CGRect(x: 0, y: (frameSize / 2) - (buttonSize / 2), width: buttonSize, height: buttonSize))
+        mFiPlusHUDButtonY = UIView(frame: CGRect(x: (frameSize / 2) - (buttonSize / 2), y: 0, width: buttonSize, height: buttonSize))
+        mFiPlusHUDButtonA = UIView(frame: CGRect(x: (frameSize / 2) - (buttonSize / 2), y: frameSize - buttonSize, width: buttonSize, height: buttonSize))
+        mFiPlusHUDButtonB = UIView(frame: CGRect(x: frameSize - buttonSize, y: (frameSize / 2) - (buttonSize / 2), width: buttonSize, height: buttonSize))
+        
+        mFiPlusHUDButtonX?.borderColor = UIColor(white: 1.0, alpha: 0.3)
+        mFiPlusHUDButtonY?.borderColor = UIColor(white: 1.0, alpha: 0.3)
+        mFiPlusHUDButtonA?.borderColor = UIColor(white: 1.0, alpha: 0.3)
+        mFiPlusHUDButtonB?.borderColor = UIColor(white: 1.0, alpha: 0.3)
+        
+        mFiPlusHUDButtonX?.layer.borderWidth = 1.5
+        mFiPlusHUDButtonY?.layer.borderWidth = 1.5
+        mFiPlusHUDButtonA?.layer.borderWidth = 1.5
+        mFiPlusHUDButtonB?.layer.borderWidth = 1.5
+        
+        mFiPlusHUDButtonX?.layer.cornerRadius = buttonSize / 2
+        mFiPlusHUDButtonY?.layer.cornerRadius = buttonSize / 2
+        mFiPlusHUDButtonA?.layer.cornerRadius = buttonSize / 2
+        mFiPlusHUDButtonB?.layer.cornerRadius = buttonSize / 2
+        
+        mFiPlusHUDButtonsView?.addSubview(mFiPlusHUDButtonX!)
+        mFiPlusHUDButtonsView?.addSubview(mFiPlusHUDButtonY!)
+        mFiPlusHUDButtonsView?.addSubview(mFiPlusHUDButtonA!)
+        mFiPlusHUDButtonsView?.addSubview(mFiPlusHUDButtonB!)
+        
+
+        
+        self.view.addSubview(mFiPlusHUDDPadView!)
+        self.view.addSubview(mFiPlusHUDButtonsView!)
+        mFiPlusHUDDPadView?.superview?.bringSubview(toFront: mFiPlusHUDDPadView!)
+        mFiPlusHUDButtonsView?.superview?.bringSubview(toFront: mFiPlusHUDButtonsView!)
+    }
+    
+    func layoutMFiPlusHUD() {
+        let yPadding: CGFloat = 60
+        let xPadding: CGFloat = UIScreen.main.bounds.width / 16
+        let frameSize: CGFloat = 28
+        let frameL = CGRect(x: safeAreaInsets.left + xPadding, y: safeAreaInsets.top + yPadding, width: frameSize, height: frameSize)
+        let frameR = CGRect(x: UIScreen.main.bounds.width - xPadding - frameSize, y: safeAreaInsets.top + yPadding, width: frameSize, height: frameSize)
+        mFiPlusHUDDPadView?.frame = frameL
+        mFiPlusHUDButtonsView?.frame = frameR
+    }
+    
+    func showMFiPlusHUD() {
+        UIView.animate(withDuration: 1.0, delay: 0.0, options: [.curveEaseInOut], animations: {
+            self.mFiPlusHUDDPadView?.alpha = 1.0
+            self.mFiPlusHUDButtonsView?.alpha = 1.0
+        }, completion: nil )
+    }
+    
+    func hideMFiPlusHUD() {
+        UIView.animate(withDuration: 1.5, delay: 0.0, options: [.curveEaseInOut], animations: {
+            self.mFiPlusHUDDPadView?.alpha = 0.0
+            self.mFiPlusHUDButtonsView?.alpha = 0.0
+        }, completion: nil)
+    }
 
     @objc
     func hideTouchControls(for controller: GCController) {
