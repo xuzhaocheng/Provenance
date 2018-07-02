@@ -12,6 +12,7 @@ import QuartzCore
 import UIKit
 import RealmSwift
 import PVLibrary
+import GameController
 
 #if os(iOS)
 import XLActionController
@@ -71,6 +72,7 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
 
     var core: PVEmulatorCore
     var game: PVGame
+    var system: PVSystem
 
     var batterySavesPath = ""
     var saveStatePath = ""
@@ -89,10 +91,48 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
     var isShowingMenu: Bool = false
 
     let minimumPlayTimeToMakeAutosave : Double = 60
+    
+    var hasMFiPlus = false
+    var shouldShowMFiPlusDemo = false
+    var mFiPlusComboView: UIView?
+    var mFiPlusComboViewIsActive = false
+    var mfiPlusisActive = false
+    var mFiPlusControllerTopView = UIImageView(image: #imageLiteral(resourceName: "mFi-HUD-comboExtOFF").withRenderingMode(.alwaysOriginal))
+    var mFiPlusControllerCombo = UIImageView(image: #imageLiteral(resourceName: "mFi-HUD-comboLR12").withRenderingMode(.alwaysOriginal))
+    var mFiPlusHUDDPadView: UIView?
+    var mFiPlusHUDDPadLeft: UIImageView?
+    var mFiPlusHUDDPadUp: UIImageView?
+    var mFiPlusHUDDPadDown: UIImageView?
+    var mFiPlusHUDDPadRight: UIImageView?
+    var mFiPlusHUDDPadLeftLabel: UILabel?
+    var mFiPlusHUDDPadUpLabel: UILabel?
+    var mFiPlusHUDDPadDownLabel: UILabel?
+    var mFiPlusHUDDPadRightLabel: UILabel?
+    var mFiPlusHUDButtonsView: UIView?
+    var mFiPlusHUDButtonX: UIView?
+    var mFiPlusHUDButtonY: UIView?
+    var mFiPlusHUDButtonA: UIView?
+    var mFiPlusHUDButtonB: UIView?
+    var mFiPlusHUDButtonXLabel: UILabel?
+    var mFiPlusHUDButtonYLabel: UILabel?
+    var mFiPlusHUDButtonALabel: UILabel?
+    var mFiPlusHUDButtonBLabel: UILabel?
+    var mFiPlusHUDGradientView: UIView?
+    var mFiPlusHUDGradientLayer: CAGradientLayer!
+    
+    var mFiButtonXisPressed = false
+    var mFiButtonYisPressed = false
+    var mFiButtonAisPressed = false
+    var mFiButtonBisPressed = false
+    var mFiDPadLeftisPressed = false
+    var mFiDPadUpisPressed = false
+    var mFiDPadDownisPressed = false
+    var mFiDPadRightisPressed = false
 
-    required init(game: PVGame, core: PVEmulatorCore) {
+    required init(game: PVGame, core: PVEmulatorCore, system: PVSystem) {
         self.core = core
         self.game = game
+        self.system = system
 
         controllerViewController = PVCoreFactory.controllerViewController(forSystem: game.system, core: core)
 
@@ -162,6 +202,7 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
 		NotificationCenter.default.addObserver(self, selector: #selector(PVEmulatorViewController.appWillResignActive(_:)), name: .UIApplicationWillResignActive, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(PVEmulatorViewController.appDidBecomeActive(_:)), name: .UIApplicationDidBecomeActive, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(PVEmulatorViewController.controllerDidConnect(_:)), name: .GCControllerDidConnect, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(PVEmulatorViewController.connectControllers(_:)), name: .GCControllerDidConnect, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(PVEmulatorViewController.controllerDidDisconnect(_:)), name: .GCControllerDidDisconnect, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(PVEmulatorViewController.screenDidConnect(_:)), name: .UIScreenDidConnect, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(PVEmulatorViewController.screenDidDisconnect(_:)), name: .UIScreenDidDisconnect, object: nil)
@@ -266,6 +307,7 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
         NotificationCenter.default.addObserver(self, selector: #selector(PVEmulatorViewController.appWillResignActive(_:)), name: .UIApplicationWillResignActive, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(PVEmulatorViewController.appDidBecomeActive(_:)), name: .UIApplicationDidBecomeActive, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(PVEmulatorViewController.controllerDidConnect(_:)), name: .GCControllerDidConnect, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(PVEmulatorViewController.connectControllers(_:)), name: .GCControllerDidConnect, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(PVEmulatorViewController.controllerDidDisconnect(_:)), name: .GCControllerDidDisconnect, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(PVEmulatorViewController.screenDidConnect(_:)), name: .UIScreenDidConnect, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(PVEmulatorViewController.screenDidDisconnect(_:)), name: .UIScreenDidDisconnect, object: nil)
@@ -390,6 +432,19 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
             }
         }
 #endif
+        
+        // Setup MFi+ Views
+        if system.shortName == "N64" || system.shortName == "PSX" {
+            hasMFiPlus = true
+        }
+        
+        if PVControllerManager.shared.hasControllers && hasMFiPlus {
+            PVControllerManager.shared.allLiveControllers.forEach({ (key, controller) in
+                self.setupMFiPlusViews(for: controller)
+                self.shouldShowMFiPlusDemo = true
+            })
+        }
+        
     }
 
     override public func viewDidAppear(_ animated: Bool) {
@@ -402,14 +457,16 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
         }
         #endif
 
-        #if os(iOS)
-        //Ignore Smart Invert
-        self.view.ignoresInvertColors = true
-        #endif
-
 		if PVSettingsModel.shared.timedAutoSaves {
 			createAutosaveTimer()
 		}
+        
+        // If Should… Show MFi+ Demo
+        if shouldShowMFiPlusDemo && !mFiPlusComboViewIsActive {
+            showMFiPlusDemo()
+            showMFiPlusHUD()
+        }
+        connectControllers()
     }
 
     override public func viewWillDisappear(_ animated: Bool) {
@@ -419,8 +476,28 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
 
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        #if os(iOS)
+        //Ignore Smart Invert
+        self.view.ignoresInvertColors = true
+        #endif
+        
+        // (Re)Layout MFi+ Views
+        layoutMFiPlusCombo()
+        layoutMFiPlusHUD()
     }
-
+    
+    open override func didMove(toParentViewController parent: UIViewController?) {
+        super.didMove(toParentViewController: parent)
+        
+        // If Should… Show MFi+ Demo
+//        connectControllers()
+//        if shouldShowMFiPlusCombo && !mFiPlusComboViewIsActive {
+//            showMFiPlusCombo()
+//            showMFiPlusHUD()
+//        }
+    }
+    
 	var autosaveTimer : Timer?
 	func destroyAutosaveTimer() {
 		autosaveTimer?.invalidate()
@@ -505,6 +582,16 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
 #if os(iOS)
         layoutMenuButton()
 #endif
+        // (Re)Layout MFi+ Views
+        layoutMFiPlusCombo()
+        layoutMFiPlusHUD()
+        
+        // If Should… Show MFi+ Demo
+        if shouldShowMFiPlusDemo {
+            showMFiPlusDemo()
+            mFiPlusComboViewIsActive = true
+        }
+
     }
 
 #if os(iOS)
@@ -570,7 +657,7 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
         gameAudio?.start()
     }
 
-    func enableContorllerInput(_ enabled: Bool) {
+    func enableControllerInput(_ enabled: Bool) {
 #if os(tvOS)
         controllerUserInteractionEnabled = enabled
 #else
@@ -580,6 +667,799 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
         //        self.controllerUserInteractionEnabled = enabled;
         //    }
 #endif
+    }
+    
+    func connectControllers() {
+        for controller in GCController.controllers() {
+            if (controller.extendedGamepad != nil ) {
+                controller.extendedGamepad?.valueChangedHandler = nil
+                setUpExtendedController(controller: controller)
+            }  else if (controller.gamepad != nil ) {
+                controller.gamepad?.valueChangedHandler = nil
+                setUpStandardController(controller: controller)
+            }
+        }
+    }
+    
+    func setUpExtendedController(controller: GCController) {
+        controller.extendedGamepad?.valueChangedHandler = {
+            (gamepad: GCExtendedGamepad, element:GCControllerElement) in
+            
+            if self.system.shortName == "PSX" && gamepad.leftShoulder.isPressed && gamepad.rightShoulder.isPressed && gamepad.rightTrigger.isPressed && gamepad.leftTrigger.isPressed == true {
+                self.mfiPlusisActive = true
+            } else if self.system.shortName == "N64" && gamepad.leftShoulder.isPressed && gamepad.rightShoulder.isPressed {
+                self.mfiPlusisActive = true
+            } else {
+                self.mfiPlusisActive = false
+            }
+            
+            
+            //Check D-Pad States
+            if (gamepad.dpad == element) {
+                if gamepad.dpad.left.isPressed {
+                    self.mFiDPadLeftisPressed = true
+                } else if !gamepad.dpad.left.isPressed {
+                    self.mFiDPadLeftisPressed = false
+                }
+                if gamepad.dpad.up.isPressed {
+                    self.mFiDPadUpisPressed = true
+                } else if !gamepad.dpad.up.isPressed {
+                    self.mFiDPadUpisPressed = false
+                }
+                if gamepad.dpad.down.isPressed {
+                    self.mFiDPadDownisPressed = true
+                } else if !gamepad.dpad.down.isPressed {
+                    self.mFiDPadDownisPressed = false
+                }
+                if gamepad.dpad.right.isPressed {
+                    self.mFiDPadRightisPressed = true
+                } else if !gamepad.dpad.right.isPressed {
+                    self.mFiDPadRightisPressed = false
+                }
+            }
+                
+                //Check Button States
+            else if (gamepad.buttonX == element) {
+                if gamepad.buttonX.isPressed {
+                    self.mFiButtonXisPressed = true
+                } else if !gamepad.buttonX.isPressed {
+                    self.mFiButtonXisPressed = false
+                }
+            } else if (gamepad.buttonY == element) {
+                if gamepad.buttonY.isPressed{
+                    self.mFiButtonYisPressed = true
+                } else if !gamepad.buttonY.isPressed {
+                    self.mFiButtonYisPressed = false
+                }
+            } else if (gamepad.buttonA == element) {
+                if gamepad.buttonA.isPressed{
+                    self.mFiButtonAisPressed = true
+                } else if !gamepad.buttonA.isPressed {
+                    self.mFiButtonAisPressed = false
+                }
+            } else if (gamepad.buttonB == element) {
+                if gamepad.buttonB.isPressed {
+                    self.mFiButtonBisPressed = true
+                } else if !gamepad.buttonB.isPressed {
+                    self.mFiButtonBisPressed = false
+                }
+            }
+            
+            self.updateMFiHUD()
+            
+            if self.mfiPlusisActive {
+                if self.mFiPlusHUDButtonsView?.alpha == 0.0 {
+                    self.showMFiPlusHUD()
+                }
+            } else if !self.mFiPlusComboViewIsActive {
+                self.hideMFiPlusHUD()
+            }
+            
+        }
+    }
+    
+    func setUpStandardController(controller: GCController) {
+        controller.gamepad?.valueChangedHandler = {
+            (gamepad: GCGamepad, element:GCControllerElement) in
+            
+            if self.system.shortName == "PSX" && gamepad.leftShoulder.isPressed && gamepad.rightShoulder.isPressed {
+                self.mfiPlusisActive = true
+            } else if self.system.shortName == "N64" && gamepad.rightShoulder.isPressed {
+                self.mfiPlusisActive = true
+            } else {
+                self.mfiPlusisActive = false
+            }
+            
+            //Check D-Pad States
+            if (gamepad.dpad == element) {
+                if gamepad.dpad.left.isPressed {
+                    self.mFiDPadLeftisPressed = true
+                } else if !gamepad.dpad.left.isPressed {
+                    self.mFiDPadLeftisPressed = false
+                }
+                if gamepad.dpad.up.isPressed {
+                    self.mFiDPadUpisPressed = true
+                } else if !gamepad.dpad.up.isPressed {
+                    self.mFiDPadUpisPressed = false
+                }
+                if gamepad.dpad.down.isPressed {
+                    self.mFiDPadDownisPressed = true
+                } else if !gamepad.dpad.down.isPressed {
+                    self.mFiDPadDownisPressed = false
+                }
+                if gamepad.dpad.right.isPressed {
+                    self.mFiDPadRightisPressed = true
+                } else if !gamepad.dpad.right.isPressed {
+                    self.mFiDPadRightisPressed = false
+                }
+            }
+                
+                //Check Button States
+            else if (gamepad.buttonX == element) {
+                if gamepad.buttonX.isPressed {
+                    self.mFiButtonXisPressed = true
+                } else if !gamepad.buttonX.isPressed {
+                    self.mFiButtonXisPressed = false
+                }
+            } else if (gamepad.buttonY == element) {
+                if gamepad.buttonY.isPressed{
+                    self.mFiButtonYisPressed = true
+                } else if !gamepad.buttonY.isPressed {
+                    self.mFiButtonYisPressed = false
+                }
+            } else if (gamepad.buttonA == element) {
+                if gamepad.buttonA.isPressed{
+                    self.mFiButtonAisPressed = true
+                } else if !gamepad.buttonA.isPressed {
+                    self.mFiButtonAisPressed = false
+                }
+            } else if (gamepad.buttonB == element) {
+                if gamepad.buttonB.isPressed {
+                    self.mFiButtonBisPressed = true
+                } else if !gamepad.buttonB.isPressed {
+                    self.mFiButtonBisPressed = false
+                }
+            }
+            
+            self.updateMFiHUD()
+            
+            if self.mfiPlusisActive {
+                if self.mFiPlusHUDButtonsView?.alpha == 0.0 {
+                    self.showMFiPlusHUD()
+                }
+            } else if !self.mFiPlusComboViewIsActive {
+                self.hideMFiPlusHUD()
+            }
+            
+            
+        }
+    }
+    
+    func updateMFiHUD() {
+        
+        let assignedButtonColor = UIColor(white: 1.0, alpha: 0.85)
+        //        let assignedButtonBorder = 1.5
+        //        let pressedButtonBorder = 0.0
+        let assignedLabelColor = UIColor(white: 1.0, alpha: 0.65)
+        let pressedColor = UIColor(white: 1.0, alpha: 1.0)
+        
+        //D-Pad Updates
+        if mFiDPadLeftisPressed {
+            mFiPlusHUDDPadLeft?.image = #imageLiteral(resourceName: "mFi-HUD-DPad-Press-Left").withRenderingMode(.alwaysOriginal)
+            mFiPlusHUDDPadLeftLabel?.textColor = pressedColor
+        } else {
+            mFiPlusHUDDPadLeft?.image = #imageLiteral(resourceName: "mFi-HUD-DPad-HiLi-Left").withRenderingMode(.alwaysOriginal)
+            mFiPlusHUDDPadLeftLabel?.textColor = assignedLabelColor
+        }
+        if mFiDPadUpisPressed {
+            mFiPlusHUDDPadUp?.image = #imageLiteral(resourceName: "mFi-HUD-DPad-Press-Up").withRenderingMode(.alwaysOriginal)
+            mFiPlusHUDDPadUpLabel?.textColor = pressedColor
+        } else {
+            mFiPlusHUDDPadUp?.image = #imageLiteral(resourceName: "mFi-HUD-DPad-HiLi-Up").withRenderingMode(.alwaysOriginal)
+            mFiPlusHUDDPadUpLabel?.textColor = assignedLabelColor
+        }
+        if mFiDPadDownisPressed {
+            mFiPlusHUDDPadDown?.image = #imageLiteral(resourceName: "mFi-HUD-DPad-Press-Down").withRenderingMode(.alwaysOriginal)
+            mFiPlusHUDDPadDownLabel?.textColor = pressedColor
+        } else {
+            mFiPlusHUDDPadDown?.image = #imageLiteral(resourceName: "mFi-HUD-DPad-HiLi-Down").withRenderingMode(.alwaysOriginal)
+            mFiPlusHUDDPadDownLabel?.textColor = assignedLabelColor
+        }
+        if mFiDPadRightisPressed {
+            mFiPlusHUDDPadRight?.image = #imageLiteral(resourceName: "mFi-HUD-DPad-Press-Right").withRenderingMode(.alwaysOriginal)
+            mFiPlusHUDDPadRightLabel?.textColor = pressedColor
+        } else {
+            mFiPlusHUDDPadRight?.image = #imageLiteral(resourceName: "mFi-HUD-DPad-HiLi-Right").withRenderingMode(.alwaysOriginal)
+            mFiPlusHUDDPadRightLabel?.textColor = assignedLabelColor
+        }
+        
+        if mFiButtonXisPressed && mFiPlusHUDButtonX?.borderColor == assignedButtonColor {
+            mFiPlusHUDButtonX?.backgroundColor = pressedColor
+            mFiPlusHUDButtonXLabel?.textColor = pressedColor
+        } else {
+            mFiPlusHUDButtonX?.backgroundColor = .clear
+            mFiPlusHUDButtonXLabel?.textColor = assignedLabelColor
+        }
+        if mFiButtonYisPressed && mFiPlusHUDButtonY?.borderColor == assignedButtonColor {
+            mFiPlusHUDButtonY?.backgroundColor = pressedColor
+            mFiPlusHUDButtonYLabel?.textColor = pressedColor
+        } else {
+            mFiPlusHUDButtonY?.backgroundColor = .clear
+            mFiPlusHUDButtonYLabel?.textColor = assignedLabelColor
+        }
+        if mFiButtonAisPressed && mFiPlusHUDButtonA?.borderColor == assignedButtonColor {
+            mFiPlusHUDButtonA?.backgroundColor = pressedColor
+            mFiPlusHUDButtonALabel?.textColor = pressedColor
+        } else {
+            mFiPlusHUDButtonA?.backgroundColor = .clear
+            mFiPlusHUDButtonALabel?.textColor = assignedLabelColor
+        }
+        if mFiButtonBisPressed && mFiPlusHUDButtonB?.borderColor == assignedButtonColor {
+            mFiPlusHUDButtonB?.backgroundColor = pressedColor
+            mFiPlusHUDButtonBLabel?.textColor = pressedColor
+        } else {
+            mFiPlusHUDButtonB?.backgroundColor = .clear
+            mFiPlusHUDButtonBLabel?.textColor = assignedLabelColor
+        }
+    }
+    
+    func setupMFiPlusViews(for controller: GCController) {
+        let yPadding: CGFloat = 54
+        #if os(iOS)
+        var safeAreaInsets: UIEdgeInsets {
+            if #available(iOS 11.0, tvOS 11.0, *) {
+                return view.safeAreaInsets
+            } else {
+                return UIEdgeInsets.zero
+            }
+        }
+        let margin = safeAreaInsets
+        #else
+        let margin = UIEdgeInsets.zero
+        #endif
+        let comboFrame = CGRect(x: (UIScreen.main.bounds.width / 2) - ((mFiPlusControllerTopView.image?.size.width)! / 2), y: margin.top + yPadding, width: (mFiPlusControllerTopView.image?.size.width)!, height: (mFiPlusControllerTopView.image?.size.height)!)
+        let gradientHeight: CGFloat =  187
+        let gradientFrame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: gradientHeight)
+        mFiPlusComboView = UIView(frame: comboFrame)
+        mFiPlusHUDGradientView = UIView(frame: gradientFrame)
+        mFiPlusHUDGradientLayer = CAGradientLayer()
+        mFiPlusHUDGradientLayer.frame = (mFiPlusHUDGradientView?.bounds)!
+        mFiPlusHUDGradientLayer.colors = [UIColor.black.withAlphaComponent(0.77).cgColor, UIColor.clear.cgColor]
+        mFiPlusHUDGradientView?.layer.addSublayer(mFiPlusHUDGradientLayer)
+        mFiPlusHUDGradientView?.alpha = 0.0
+        self.view.addSubview(mFiPlusHUDGradientView!)
+        
+        setupMFiPlusHUD()
+        updateMFiPlusViews(for: controller)
+        mFiPlusComboView?.addSubview(mFiPlusControllerTopView)
+        mFiPlusComboView?.addSubview(mFiPlusControllerCombo)
+        mFiPlusComboView?.alpha = 0.0
+        self.view.addSubview(mFiPlusComboView!)
+        mFiPlusComboView?.superview?.bringSubview(toFront: mFiPlusComboView!)
+        
+        let assignedButtonColor = UIColor(white: 1.0, alpha: 0.85)
+        let assignedLabelColor = UIColor(white: 1.0, alpha: 0.65)
+        switch system.shortName {
+        case "PSX":
+            mFiPlusHUDDPadRightLabel?.text = "SELECT"
+            mFiPlusHUDDPadRightLabel?.textColor = assignedLabelColor
+            mFiPlusHUDDPadRight?.isHidden = false
+            mFiPlusHUDButtonXLabel?.text = "START"
+            mFiPlusHUDButtonXLabel?.textColor = assignedLabelColor
+            mFiPlusHUDButtonX?.borderColor = assignedButtonColor
+            mFiPlusHUDButtonALabel?.text = "R3"
+            mFiPlusHUDButtonALabel?.textColor = assignedLabelColor
+            mFiPlusHUDButtonA?.borderColor = assignedButtonColor
+            mFiPlusHUDDPadDownLabel?.text = "L3"
+            mFiPlusHUDDPadDownLabel?.textColor = assignedLabelColor
+            mFiPlusHUDDPadDown?.isHidden = false
+        case "N64":
+            mFiPlusHUDButtonXLabel?.text = "C◀"
+            mFiPlusHUDButtonYLabel?.text = "C▲"
+            mFiPlusHUDButtonALabel?.text = "C▼"
+            mFiPlusHUDButtonBLabel?.text = "C▶"
+            mFiPlusHUDButtonXLabel?.textColor = assignedLabelColor
+            mFiPlusHUDButtonYLabel?.textColor = assignedLabelColor
+            mFiPlusHUDButtonALabel?.textColor = assignedLabelColor
+            mFiPlusHUDButtonBLabel?.textColor = assignedLabelColor
+//            mFiPlusHUDDPadRightLabel?.text = "START"
+//            mFiPlusHUDDPadRightLabel?.textColor = assignedLabelColor
+//            mFiPlusHUDDPadRight?.isHidden = false
+            mFiPlusHUDButtonX?.borderColor = assignedButtonColor
+            mFiPlusHUDButtonY?.borderColor = assignedButtonColor
+            mFiPlusHUDButtonA?.borderColor = assignedButtonColor
+            mFiPlusHUDButtonB?.borderColor = assignedButtonColor
+        default:
+            break
+        }
+    }
+    
+    func updateMFiPlusViews(for controller: GCController) {
+        if (controller.extendedGamepad != nil) {
+            mFiPlusControllerTopView.image = #imageLiteral(resourceName: "mFi-HUD-comboExtOFF").withRenderingMode(.alwaysOriginal)
+        } else if (controller.gamepad != nil) {
+            mFiPlusControllerTopView.image = #imageLiteral(resourceName: "mFi-HUD-comboStdOFF").withRenderingMode(.alwaysOriginal)
+        }
+        
+        switch system.shortName {
+        case "PSX":
+            if (controller.extendedGamepad != nil) {
+                mFiPlusControllerCombo.image = #imageLiteral(resourceName: "mFi-HUD-comboLR12").withRenderingMode(.alwaysOriginal)
+            } else if (controller.gamepad != nil) {
+                mFiPlusControllerCombo.image = #imageLiteral(resourceName: "mFi-HUD-comboLR1").withRenderingMode(.alwaysOriginal)
+            }
+        case "N64":
+            if (controller.extendedGamepad != nil) {
+                mFiPlusControllerCombo.image = #imageLiteral(resourceName: "mFi-HUD-comboLR1").withRenderingMode(.alwaysOriginal)
+            } else if (controller.gamepad != nil) {
+                mFiPlusControllerCombo.image = #imageLiteral(resourceName: "mFi-HUD-comboR1").withRenderingMode(.alwaysOriginal)
+            }
+        default:
+            break
+        }
+        
+        layoutMFiPlusCombo()
+        layoutMFiPlusHUD()
+    }
+    
+    func pulseMFiCombo() {
+        UIView.animate(withDuration: 0.6, delay: 0.1, options: [.curveEaseInOut], animations: {
+            self.mFiPlusControllerCombo.alpha = 1.0
+            self.mFiPlusHUDButtonsView?.alpha = 1.0
+            self.mFiPlusHUDDPadView?.alpha = 1.0
+        }, completion: { (finished: Bool) in
+            UIView.animate(withDuration: 0.6, delay: 0.1, options: [.curveEaseInOut], animations: {
+                self.mFiPlusControllerCombo.alpha = 0.0
+                self.mFiPlusHUDButtonsView?.alpha = 0.6
+                self.mFiPlusHUDDPadView?.alpha = 0.6
+            }, completion: { (finished: Bool) in
+                UIView.animate(withDuration: 0.3, delay: 0.1, options: [.curveEaseInOut], animations: {
+                    self.mFiPlusControllerCombo.alpha = 1.0
+                    self.mFiPlusHUDButtonsView?.alpha = 1.0
+                    self.mFiPlusHUDDPadView?.alpha = 1.0
+                }, completion: { (finished: Bool) in
+                    UIView.animate(withDuration: 0.6, delay: 0.1, options: [.curveEaseInOut], animations: {
+                        self.mFiPlusControllerCombo.alpha = 0.0
+                        self.mFiPlusHUDButtonsView?.alpha = 0.6
+                        self.mFiPlusHUDDPadView?.alpha = 0.6
+                    }, completion: { (finished: Bool) in
+                        UIView.animate(withDuration: 0.3, delay: 0.1, options: [.curveEaseInOut], animations: {
+                            self.mFiPlusControllerCombo.alpha = 1.0
+                            self.mFiPlusHUDButtonsView?.alpha = 1.0
+                            self.mFiPlusHUDDPadView?.alpha = 1.0
+                        }, completion: { (finished: Bool) in
+                            self.hideMFiPlusDemo()
+                        })
+                    })
+                })
+            })
+        })
+    }
+    
+    func layoutMFiPlusCombo() {
+        #if os(iOS)
+        var safeAreaInsets: UIEdgeInsets {
+            if #available(iOS 11.0, tvOS 11.0, *) {
+                return view.safeAreaInsets
+            } else {
+                return UIEdgeInsets.zero
+            }
+        }
+        let margin = safeAreaInsets
+        #else
+        let margin = UIEdgeInsets.zero
+        #endif
+        let yPadding: CGFloat = 54
+        let frame = CGRect(x: (UIScreen.main.bounds.width / 2) - ((mFiPlusControllerTopView.image?.size.width)! / 2), y: margin.top + yPadding, width: (mFiPlusControllerTopView.image?.size.width)!, height: (mFiPlusControllerTopView.image?.size.height)!)
+        mFiPlusComboView?.frame = frame
+        let gradientHeight: CGFloat = 187
+        let gradientFrame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: gradientHeight)
+        mFiPlusHUDGradientView?.frame = gradientFrame
+        mFiPlusHUDGradientLayer?.frame = gradientFrame
+    }
+    
+    func showMFiPlusDemo() {
+        mFiPlusComboViewIsActive = true
+        UIView.animate(withDuration: 1.5, delay: 0.0, options: [.curveEaseInOut], animations: {
+            self.mFiPlusHUDGradientView?.alpha = 1.0
+        }, completion: nil)
+        UIView.animate(withDuration: 1.0, delay: 0.0, options: [.curveEaseInOut], animations: {
+            self.mFiPlusComboView?.alpha = 1.0
+        }, completion: { (finished: Bool) in
+            self.pulseMFiCombo()
+        })
+    }
+    
+    func hideMFiPlusDemo() {
+        UIView.animate(withDuration: 1.0, delay: 0.5, options: [.curveEaseInOut], animations: {
+            self.mFiPlusControllerCombo.alpha = 0.0
+            self.mFiPlusHUDDPadView?.alpha = 0.0
+            self.mFiPlusHUDButtonsView?.alpha = 0.0
+        }, completion: { (finished: Bool) in
+            UIView.animate(withDuration: 1.0, delay: 0.0, options: [.curveEaseInOut], animations: {
+                self.mFiPlusHUDGradientView?.alpha = 0.0
+            }, completion: nil )
+            UIView.animate(withDuration: 0.5, delay: 0.0, options: [.curveEaseInOut], animations: {
+                self.mFiPlusComboView?.alpha = 0.0
+            }, completion: { (finished: Bool) in
+                self.mFiPlusComboViewIsActive = false
+                self.shouldShowMFiPlusDemo = false
+            })
+        })
+    }
+    
+    func setupMFiPlusHUD() {
+        #if os(iOS)
+        var safeAreaInsets: UIEdgeInsets {
+            if #available(iOS 11.0, tvOS 11.0, *) {
+                return view.safeAreaInsets
+            } else {
+                return UIEdgeInsets.zero
+            }
+        }
+        let margin = safeAreaInsets
+        #else
+        let margin = UIEdgeInsets.zero
+        #endif
+        let yPadding: CGFloat = 60
+        let xPadding: CGFloat = UIScreen.main.bounds.width / 14
+        let frameSize: CGFloat = 28
+        let frameL = CGRect(x: margin.left + xPadding, y: margin.top + yPadding, width: frameSize, height: frameSize)
+        let frameR = CGRect(x: UIScreen.main.bounds.width - margin.right - xPadding - frameSize, y: margin.top + yPadding, width: frameSize, height: frameSize)
+        mFiPlusHUDDPadView = UIView(frame: frameL)
+        mFiPlusHUDButtonsView = UIView(frame: frameR)
+        
+        let buttonSize: CGFloat = 10
+        let dPadButtonVSize = CGSize(width: 10, height: 9)
+        let dPadButtonHSize = CGSize(width: 9, height: 10)
+        let buttonBorder: CGFloat = 1.5
+        let labelSpace: CGFloat = 4
+        let labelSize = CGSize(width: 32, height: 8)
+        let inactiveColor = UIColor(white: 1.0, alpha: 0.3)
+        let labelFont = UIFont.systemFont(ofSize: 8.0)
+        
+        //Setup HUD D-Pad
+        mFiPlusHUDDPadLeft = UIImageView(frame: CGRect(x: 0, y: (frameSize / 2) - (buttonSize / 2), width: dPadButtonHSize.width, height: dPadButtonHSize.height))
+        mFiPlusHUDDPadUp = UIImageView(frame: CGRect(x: (frameSize / 2) - (buttonSize / 2), y: 0, width: dPadButtonVSize.width, height: dPadButtonVSize.height))
+        mFiPlusHUDDPadDown = UIImageView(frame: CGRect(x: (frameSize / 2) - (buttonSize / 2), y: frameSize - buttonSize, width: dPadButtonVSize.width, height: dPadButtonVSize.height))
+        mFiPlusHUDDPadRight = UIImageView(frame: CGRect(x: frameSize - buttonSize, y: (frameSize / 2) - (buttonSize / 2), width: dPadButtonHSize.width, height: dPadButtonHSize.height))
+        
+        let dPadBackground = UIImageView(frame: CGRect(x: 0, y: 0, width: frameSize, height: frameSize))
+        dPadBackground.image = #imageLiteral(resourceName: "mFi-HUD-DPad-BG").withRenderingMode(.alwaysOriginal)
+        mFiPlusHUDDPadView?.insertSubview(dPadBackground, at: 0)
+        
+        mFiPlusHUDDPadLeft?.image = #imageLiteral(resourceName: "mFi-HUD-DPad-HiLi-Left").withRenderingMode(.alwaysOriginal)
+        mFiPlusHUDDPadUp?.image = #imageLiteral(resourceName: "mFi-HUD-DPad-HiLi-Up").withRenderingMode(.alwaysOriginal)
+        mFiPlusHUDDPadDown?.image = #imageLiteral(resourceName: "mFi-HUD-DPad-HiLi-Down").withRenderingMode(.alwaysOriginal)
+        mFiPlusHUDDPadRight?.image = #imageLiteral(resourceName: "mFi-HUD-DPad-HiLi-Right").withRenderingMode(.alwaysOriginal)
+        
+        mFiPlusHUDDPadLeft?.isHidden = true
+        mFiPlusHUDDPadUp?.isHidden = true
+        mFiPlusHUDDPadDown?.isHidden = true
+        mFiPlusHUDDPadRight?.isHidden = true
+        
+        mFiPlusHUDDPadView?.addSubview(mFiPlusHUDDPadLeft!)
+        mFiPlusHUDDPadView?.addSubview(mFiPlusHUDDPadUp!)
+        mFiPlusHUDDPadView?.addSubview(mFiPlusHUDDPadDown!)
+        mFiPlusHUDDPadView?.addSubview(mFiPlusHUDDPadRight!)
+        
+        mFiPlusHUDDPadLeftLabel = UILabel(frame: CGRect(x: 0 - labelSpace - labelSize.width, y: (frameSize / 2) - (labelSize.height / 2), width: labelSize.width, height: labelSize.height))
+        mFiPlusHUDDPadUpLabel = UILabel(frame: CGRect(x: (frameSize / 2) - (labelSize.width / 2), y: 0 - labelSpace - labelSize.height, width: labelSize.width, height: labelSize.height))
+        mFiPlusHUDDPadDownLabel = UILabel(frame: CGRect(x: (frameSize / 2) - (labelSize.width / 2), y: frameSize + labelSpace, width: labelSize.width, height: labelSize.height))
+        mFiPlusHUDDPadRightLabel = UILabel(frame: CGRect(x: frameSize + labelSpace, y: (frameSize / 2) - (labelSize.height / 2), width: labelSize.width, height: labelSize.height))
+        
+        mFiPlusHUDDPadLeftLabel?.textAlignment = .right
+        mFiPlusHUDDPadUpLabel?.textAlignment = .center
+        mFiPlusHUDDPadDownLabel?.textAlignment = .center
+        mFiPlusHUDDPadRightLabel?.textAlignment = .left
+        
+        mFiPlusHUDDPadLeftLabel?.font = labelFont
+        mFiPlusHUDDPadUpLabel?.font = labelFont
+        mFiPlusHUDDPadDownLabel?.font = labelFont
+        mFiPlusHUDDPadRightLabel?.font = labelFont
+        
+        mFiPlusHUDDPadLeftLabel?.textColor = inactiveColor
+        mFiPlusHUDDPadUpLabel?.textColor = inactiveColor
+        mFiPlusHUDDPadDownLabel?.textColor = inactiveColor
+        mFiPlusHUDDPadRightLabel?.textColor = inactiveColor
+        
+        mFiPlusHUDDPadView?.clipsToBounds = false
+        mFiPlusHUDDPadView?.addSubview(mFiPlusHUDDPadLeftLabel!)
+        mFiPlusHUDDPadView?.addSubview(mFiPlusHUDDPadUpLabel!)
+        mFiPlusHUDDPadView?.addSubview(mFiPlusHUDDPadDownLabel!)
+        mFiPlusHUDDPadView?.addSubview(mFiPlusHUDDPadRightLabel!)
+        
+        //Setup HUD Buttons
+        mFiPlusHUDButtonX = UIView(frame: CGRect(x: 0, y: (frameSize / 2) - (buttonSize / 2), width: buttonSize, height: buttonSize))
+        mFiPlusHUDButtonY = UIView(frame: CGRect(x: (frameSize / 2) - (buttonSize / 2), y: 0, width: buttonSize, height: buttonSize))
+        mFiPlusHUDButtonA = UIView(frame: CGRect(x: (frameSize / 2) - (buttonSize / 2), y: frameSize - buttonSize, width: buttonSize, height: buttonSize))
+        mFiPlusHUDButtonB = UIView(frame: CGRect(x: frameSize - buttonSize, y: (frameSize / 2) - (buttonSize / 2), width: buttonSize, height: buttonSize))
+        
+        mFiPlusHUDButtonX?.borderColor = inactiveColor
+        mFiPlusHUDButtonY?.borderColor = inactiveColor
+        mFiPlusHUDButtonA?.borderColor = inactiveColor
+        mFiPlusHUDButtonB?.borderColor = inactiveColor
+        
+        mFiPlusHUDButtonX?.layer.borderWidth = buttonBorder
+        mFiPlusHUDButtonY?.layer.borderWidth = buttonBorder
+        mFiPlusHUDButtonA?.layer.borderWidth = buttonBorder
+        mFiPlusHUDButtonB?.layer.borderWidth = buttonBorder
+        
+        mFiPlusHUDButtonX?.layer.cornerRadius = buttonSize / 2
+        mFiPlusHUDButtonY?.layer.cornerRadius = buttonSize / 2
+        mFiPlusHUDButtonA?.layer.cornerRadius = buttonSize / 2
+        mFiPlusHUDButtonB?.layer.cornerRadius = buttonSize / 2
+        
+        mFiPlusHUDButtonsView?.addSubview(mFiPlusHUDButtonX!)
+        mFiPlusHUDButtonsView?.addSubview(mFiPlusHUDButtonY!)
+        mFiPlusHUDButtonsView?.addSubview(mFiPlusHUDButtonA!)
+        mFiPlusHUDButtonsView?.addSubview(mFiPlusHUDButtonB!)
+        
+        mFiPlusHUDButtonXLabel = UILabel(frame: CGRect(x: 0 - labelSpace - labelSize.width, y: (frameSize / 2) - (labelSize.height / 2), width: labelSize.width, height: labelSize.height))
+        mFiPlusHUDButtonYLabel = UILabel(frame: CGRect(x: (frameSize / 2) - (labelSize.width / 2), y: 0 - labelSpace - labelSize.height, width: labelSize.width, height: labelSize.height))
+        mFiPlusHUDButtonALabel = UILabel(frame: CGRect(x: (frameSize / 2) - (labelSize.width / 2), y: frameSize + labelSpace, width: labelSize.width, height: labelSize.height))
+        mFiPlusHUDButtonBLabel = UILabel(frame: CGRect(x: frameSize + labelSpace, y: (frameSize / 2) - (labelSize.height / 2), width: labelSize.width, height: labelSize.height))
+        
+        mFiPlusHUDButtonXLabel?.textAlignment = .right
+        mFiPlusHUDButtonYLabel?.textAlignment = .center
+        mFiPlusHUDButtonALabel?.textAlignment = .center
+        mFiPlusHUDButtonBLabel?.textAlignment = .left
+        
+        mFiPlusHUDButtonXLabel?.textColor = inactiveColor
+        mFiPlusHUDButtonYLabel?.textColor = inactiveColor
+        mFiPlusHUDButtonALabel?.textColor = inactiveColor
+        mFiPlusHUDButtonBLabel?.textColor = inactiveColor
+        
+        mFiPlusHUDButtonXLabel?.font = labelFont
+        mFiPlusHUDButtonYLabel?.font = labelFont
+        mFiPlusHUDButtonALabel?.font = labelFont
+        mFiPlusHUDButtonBLabel?.font = labelFont
+        
+        mFiPlusHUDButtonsView?.clipsToBounds = false
+        mFiPlusHUDButtonsView?.addSubview(mFiPlusHUDButtonXLabel!)
+        mFiPlusHUDButtonsView?.addSubview(mFiPlusHUDButtonYLabel!)
+        mFiPlusHUDButtonsView?.addSubview(mFiPlusHUDButtonALabel!)
+        mFiPlusHUDButtonsView?.addSubview(mFiPlusHUDButtonBLabel!)
+        
+        mFiPlusHUDButtonsView?.layer.shadowColor = UIColor.black.cgColor
+        mFiPlusHUDButtonsView?.layer.shadowRadius = 4.0
+        mFiPlusHUDButtonsView?.layer.shadowOpacity = 0.75
+        mFiPlusHUDButtonsView?.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
+        
+        mFiPlusHUDDPadView?.layer.shadowColor = UIColor.black.cgColor
+        mFiPlusHUDDPadView?.layer.shadowRadius = 4.0
+        mFiPlusHUDDPadView?.layer.shadowOpacity = 0.75
+        mFiPlusHUDDPadView?.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
+        
+        self.mFiPlusHUDDPadView?.alpha = 0.0
+        self.mFiPlusHUDButtonsView?.alpha = 0.0
+        
+        self.view.addSubview(mFiPlusHUDDPadView!)
+        self.view.addSubview(mFiPlusHUDButtonsView!)
+        mFiPlusHUDDPadView?.superview?.bringSubview(toFront: mFiPlusHUDDPadView!)
+        mFiPlusHUDButtonsView?.superview?.bringSubview(toFront: mFiPlusHUDButtonsView!)
+        
+        #if os(tvOS)
+        var transform = CGAffineTransform.identity
+        let yOffset: CGFloat = yPadding * 2
+        let xOffset: CGFloat = xPadding * 2
+        let scale: CGFloat = 2
+        transform = transform.scaledBy(x: scale, y: scale)
+        mFiPlusHUDButtonsView?.transform = transform.translatedBy(x: -xOffset, y: yOffset)
+        mFiPlusHUDDPadView?.transform = transform.translatedBy(x: xOffset, y: yOffset)
+        mFiPlusComboView?.transform = transform.translatedBy(x: 0, y: yOffset)
+        #endif
+    }
+    
+    
+    func layoutMFiPlusHUD() {
+        #if os(iOS)
+        var safeAreaInsets: UIEdgeInsets {
+            if #available(iOS 11.0, tvOS 11.0, *) {
+                return view.safeAreaInsets
+            } else {
+                return UIEdgeInsets.zero
+            }
+        }
+        let margin = safeAreaInsets
+        #else
+        let margin = UIEdgeInsets.zero
+        #endif
+        let yPadding: CGFloat = 60
+        let xPadding: CGFloat = UIScreen.main.bounds.width / 14
+        let frameSize: CGFloat = 28
+        let frameL = CGRect(x: margin.left + xPadding, y: margin.top + yPadding, width: frameSize, height: frameSize)
+        let frameR = CGRect(x: UIScreen.main.bounds.width - margin.right - xPadding - frameSize, y: margin.top + yPadding, width: frameSize, height: frameSize)
+        mFiPlusHUDDPadView?.frame = frameL
+        mFiPlusHUDButtonsView?.frame = frameR
+    }
+    
+    func showMFiPlusHUD() {
+        mfiPlusisActive = true
+        var duration = 0.1
+        if shouldShowMFiPlusDemo {
+            duration = 1.0
+        }
+        UIView.animate(withDuration: duration, delay: 0.0, options: [.curveEaseInOut], animations: {
+            self.mFiPlusHUDDPadView?.alpha = 1.0
+            self.mFiPlusHUDButtonsView?.alpha = 1.0
+        }, completion: nil )
+    }
+    
+    func hideMFiPlusHUD() {
+        updateMFiHUD()
+        var duration = 0.2
+        if shouldShowMFiPlusDemo {
+            duration = 1.5
+        }
+        UIView.animate(withDuration: duration, delay: 0.0, options: [.curveEaseInOut], animations: {
+            self.mFiPlusHUDDPadView?.alpha = 0.0
+            self.mFiPlusHUDButtonsView?.alpha = 0.0
+        }, completion: nil)
+        mfiPlusisActive = false
+    }
+
+    @objc func showMenu(_ sender: Any?) {
+        enableControllerInput(true)
+        core.setPauseEmulation(true)
+        isShowingMenu = true
+        let actionsheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        if traitCollection.userInterfaceIdiom == .pad {
+            actionsheet.popoverPresentationController?.sourceView = menuButton
+            actionsheet.popoverPresentationController?.sourceRect = menuButton!.bounds
+        }
+        menuActionSheet = actionsheet
+        if PVControllerManager.shared.iCadeController != nil {
+            actionsheet.addAction(UIAlertAction(title: "Disconnect iCade", style: .default, handler: {(_ action: UIAlertAction) -> Void in
+                NotificationCenter.default.post(name: .GCControllerDidDisconnect, object: PVControllerManager.shared.iCadeController)
+                self.core.setPauseEmulation(false)
+                self.isShowingMenu = false
+                self.enableControllerInput(false)
+            }))
+        }
+
+//		if let optionCore = core as? CoreOptional {
+		if core is CoreOptional {
+			actionsheet.addAction(UIAlertAction(title: "Core Options", style: .default, handler: { (action) in
+				self.showCoreOptions()
+			}))
+		}
+
+        let controllerManager = PVControllerManager.shared
+        let wantsStartSelectInMenu: Bool = PVEmulatorConfiguration.systemIDWantsStartAndSelectInMenu(game.system.identifier)
+        var hideP1MenuActions = false
+        if let player1 = controllerManager.player1 {
+#if os(iOS)
+            if PVSettingsModel.shared.startSelectAlwaysOn {
+                hideP1MenuActions = true
+            }
+#endif
+            if (player1.extendedGamepad != nil || wantsStartSelectInMenu) && !hideP1MenuActions {
+                // left trigger bound to Start
+                // right trigger bound to Select
+                actionsheet.addAction(UIAlertAction(title: "P1 Start", style: .default, handler: {(_ action: UIAlertAction) -> Void in
+                    self.core.setPauseEmulation(false)
+                    self.isShowingMenu = false
+                    self.controllerViewController?.pressStart(forPlayer: 0)
+                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: {() -> Void in
+                        self.controllerViewController?.releaseStart(forPlayer: 0)
+                    })
+                    self.enableControllerInput(false)
+                }))
+                actionsheet.addAction(UIAlertAction(title: "P1 Select", style: .default, handler: {(_ action: UIAlertAction) -> Void in
+                    self.core.setPauseEmulation(false)
+                    self.isShowingMenu = false
+                    self.controllerViewController?.pressSelect(forPlayer: 0)
+                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: {() -> Void in
+                        self.controllerViewController?.releaseSelect(forPlayer: 0)
+                    })
+                    self.enableControllerInput(false)
+                }))
+            }
+        }
+        if let player2 = controllerManager.player2 {
+            if (player2.extendedGamepad != nil || wantsStartSelectInMenu) {
+                actionsheet.addAction(UIAlertAction(title: "P2 Start", style: .default, handler: {(_ action: UIAlertAction) -> Void in
+                    self.core.setPauseEmulation(false)
+                    self.isShowingMenu = false
+                    self.controllerViewController?.pressStart(forPlayer: 1)
+                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2, execute: {() -> Void in
+                        self.controllerViewController?.releaseStart(forPlayer: 1)
+                    })
+                    self.enableControllerInput(false)
+                }))
+                actionsheet.addAction(UIAlertAction(title: "P2 Select", style: .default, handler: {(_ action: UIAlertAction) -> Void in
+                    self.core.setPauseEmulation(false)
+                    self.isShowingMenu = false
+                    self.controllerViewController?.pressSelect(forPlayer: 1)
+                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2, execute: {() -> Void in
+                        self.controllerViewController?.releaseSelect(forPlayer: 1)
+                    })
+                    self.enableControllerInput(false)
+                }))
+            }
+        }
+        if let swappableCore = core as? DiscSwappable, swappableCore.currentGameSupportsMultipleDiscs {
+            actionsheet.addAction(UIAlertAction(title: "Swap Disc", style: .default, handler: {(_ action: UIAlertAction) -> Void in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
+                    self.showSwapDiscsMenu()
+                })
+            }))
+        }
+
+		if let actionableCore = core as? CoreActions, let actions = actionableCore.coreActions {
+			actions.forEach { coreAction in
+				actionsheet.addAction(UIAlertAction(title: coreAction.title, style: .default, handler: {(_ action: UIAlertAction) -> Void in
+					DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
+						actionableCore.selected(action: coreAction)
+						self.core.setPauseEmulation(false)
+						if coreAction.requiresReset {
+							self.core.resetEmulation()
+						}
+						self.isShowingMenu = false
+						self.enableControllerInput(false)
+					})
+				}))
+			}
+		}
+#if os(iOS)
+        actionsheet.addAction(UIAlertAction(title: "Save Screenshot", style: .default, handler: {(_ action: UIAlertAction) -> Void in
+            self.perform(#selector(self.takeScreenshot), with: nil, afterDelay: 0.1)
+        }))
+#endif
+        actionsheet.addAction(UIAlertAction(title: "Game Info", style: .default, handler: {(_ action: UIAlertAction) -> Void in
+            let sb = UIStoryboard(name: "Provenance", bundle: nil)
+            let moreInfoViewContrller = sb.instantiateViewController(withIdentifier: "gameMoreInfoVC") as? PVGameMoreInfoViewController
+            moreInfoViewContrller?.game = self.game
+            moreInfoViewContrller?.showsPlayButton = false
+            moreInfoViewContrller?.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.hideModeInfo))
+            let newNav = UINavigationController(rootViewController: moreInfoViewContrller ?? UIViewController())
+            self.present(newNav, animated: true) {() -> Void in }
+            self.isShowingMenu = false
+            self.enableControllerInput(false)
+        }))
+        actionsheet.addAction(UIAlertAction(title: "Game Speed", style: .default, handler: {(_ action: UIAlertAction) -> Void in
+            self.perform(#selector(self.showSpeedMenu), with: nil, afterDelay: 0.1)
+        }))
+        if core.supportsSaveStates {
+            actionsheet.addAction(UIAlertAction(title: "Save States", style: .default, handler: {(_ action: UIAlertAction) -> Void in
+                self.perform(#selector(self.showSaveStateMenu), with: nil, afterDelay: 0.1)
+            }))
+        }
+        actionsheet.addAction(UIAlertAction(title: "Reset", style: .default, handler: {(_ action: UIAlertAction) -> Void in
+            if PVSettingsModel.sharedInstance().autoSave, self.core.supportsSaveStates {
+                try? self.autoSaveState()
+            }
+            self.core.setPauseEmulation(false)
+            self.core.resetEmulation()
+            self.isShowingMenu = false
+            self.enableControllerInput(false)
+        }))
+        var quitTitle = "Quit"
+		let lastPlayed = game.lastPlayed ?? Date()
+		var shouldSave = PVSettingsModel.shared.autoSave
+		shouldSave = shouldSave && abs(lastPlayed.timeIntervalSinceNow) > minimumPlayTimeToMakeAutosave
+		shouldSave = shouldSave && (game.lastAutosaveAge ?? minutes(2)) > minutes(1)
+		shouldSave = shouldSave && abs(game.saveStates.sorted(byKeyPath: "date", ascending: true).last?.date.timeIntervalSinceNow ?? minutes(2)) > minutes(1)
+        if shouldSave {
+            quitTitle = "Save & Quit"
+        }
+
+        actionsheet.addAction(UIAlertAction(title: quitTitle, style: .destructive, handler: {(_ action: UIAlertAction) -> Void in
+            self.quit()
+        }))
+        let resumeAction = UIAlertAction(title: "Resume", style: .cancel, handler: {(_ action: UIAlertAction) -> Void in
+                self.core.setPauseEmulation(false)
+                self.isShowingMenu = false
+                self.enableControllerInput(false)
+            })
+        actionsheet.addAction(resumeAction)
+        if #available(iOS 9.0, *) {
+            actionsheet.preferredAction = resumeAction
+        }
+        present(actionsheet, animated: true, completion: {() -> Void in
+            PVControllerManager.shared.iCadeController?.refreshListener()
+        })
     }
 
     @objc func hideModeInfo() {
@@ -593,14 +1473,8 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
     }
 
     func hideMenu() {
-        enableContorllerInput(false)
-		#if os(iOS)
-		if presentedViewController is EmulatorActionController {
-			dismiss(animated: true) {() -> Void in }
-			isShowingMenu = false
-		}
-		#elseif os(tvOS)
-		if presentedViewController is UIAlertController {
+        enableControllerInput(false)
+        if menuActionSheet != nil {
             dismiss(animated: true) {() -> Void in }
             isShowingMenu = false
         }
@@ -822,7 +1696,7 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
 			}
 			self.core.setPauseEmulation(false)
 			self.isShowingMenu = false
-			self.enableContorllerInput(false)
+			self.enableControllerInput(false)
 		}
 
 		if core.projectVersion != state.createdWithCoreVersion {
@@ -841,7 +1715,7 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
 		dismiss(animated: true, completion: nil)
 		self.core.setPauseEmulation(false)
 		self.isShowingMenu = false
-		self.enableContorllerInput(false)
+		self.enableControllerInput(false)
 	}
 
 	func saveStatesViewControllerCreateNewState(_ saveStatesViewController: PVSaveStatesViewController) throws {
@@ -912,7 +1786,7 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
                 self.core.gameSpeed = GameSpeed(rawValue: idx) ?? .normal
                 self.core.setPauseEmulation(false)
                 self.isShowingMenu = false
-                self.enableContorllerInput(false)
+                self.enableControllerInput(false)
             }))
         }
         present(actionSheet, animated: true, completion: {() -> Void in
@@ -936,9 +1810,11 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
         fpsTimer?.invalidate()
         fpsTimer = nil
         gameAudio?.stop()
-
-		dismiss(animated: true, completion: completion)
-        enableContorllerInput(false)
+#if os(iOS)
+        UIApplication.shared.setStatusBarHidden(false, with: .fade)
+#endif
+        dismiss(animated: true, completion: completion)
+        enableControllerInput(false)
         updatePlayedDuration()
     }
 
@@ -968,7 +1844,7 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
 
     @objc func controllerDidConnect(_ note: Notification?) {
         let controller = note?.object as? GCController
-        // 8Bitdo controllers don't have a pause button, so don't hide the menu
+        // 8Bitdo controllers doesn't have a pause button, so don't hide the menu
         if !(controller is PViCade8BitdoController || controller is PViCade8BitdoZeroController) {
             menuButton?.isHidden = true
                 // In instances where the controller is connected *after* the VC has been shown, we need to set the pause handler
@@ -982,6 +1858,13 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
             }
 #endif
         }
+        
+        // Setup MFi+ Views
+        setupMFiPlusViews(for: controller!)
+        shouldShowMFiPlusDemo = true
+        
+        connectControllers()
+        
     }
 
     @objc func controllerDidDisconnect(_ note: Notification?) {
@@ -991,6 +1874,11 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
             setNeedsUpdateOfHomeIndicatorAutoHidden()
         }
 #endif
+        //Hide MFi+ Views
+//        if !mFiPlusComboViewIsActive && !shouldShowMFiPlusCombo {
+//            hideMFIPlusCombo()
+//            hideMFiPlusHUD()
+//        }
     }
 
     @objc func handleControllerManagerControllerReassigned(_ notification: Notification?) {
@@ -1053,7 +1941,7 @@ extension PVEmulatorViewController {
         guard let core = self.core as? (PVEmulatorCore & DiscSwappable) else {
 			presentError("Internal error: No core found.")
 			self.isShowingMenu = false
-			self.enableContorllerInput(false)
+			self.enableControllerInput(false)
             return
         }
 
@@ -1062,7 +1950,7 @@ extension PVEmulatorViewController {
             presentError("Game only supports 1 disc.")
 			core.setPauseEmulation(false)
 			self.isShowingMenu = false
-			self.enableContorllerInput(false)
+			self.enableControllerInput(false)
             return
         }
 
@@ -1078,7 +1966,7 @@ extension PVEmulatorViewController {
 
                 core.setPauseEmulation(false)
                 self.isShowingMenu = false
-                self.enableContorllerInput(false)
+                self.enableControllerInput(false)
             }))
         }
 
@@ -1086,7 +1974,7 @@ extension PVEmulatorViewController {
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: {[unowned self] (sheet) in
             core.setPauseEmulation(false)
             self.isShowingMenu = false
-			self.enableContorllerInput(false)
+			self.enableControllerInput(false)
         }))
 
         // Present

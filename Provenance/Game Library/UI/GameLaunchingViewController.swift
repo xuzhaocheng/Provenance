@@ -547,7 +547,7 @@ extension GameLaunchingViewController where Self : UIViewController {
 			return
 		}
 
-		let emulatorViewController = PVEmulatorViewController(game: game, core: coreInstance)
+        let emulatorViewController = PVEmulatorViewController(game: game, core: coreInstance, system: game.system)
 
 		// Configure emulator VC
 		// NOTE: These technically could be derived in PVEmulatorViewController directly
