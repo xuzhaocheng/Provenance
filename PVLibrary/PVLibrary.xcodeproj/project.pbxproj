@@ -44,6 +44,22 @@
 		B3067F662106B8690091437F /* UTI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D252106B4D600DDEBD6 /* UTI.swift */; };
 		B3067F742106B9130091437F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3067F732106B9130091437F /* CoreGraphics.framework */; };
 		B3067F762106B9190091437F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3067F752106B9180091437F /* MobileCoreServices.framework */; };
+		B3174AC6217ABD7F006EB928 /* BIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3174AC5217ABD7F006EB928 /* BIOS.swift */; };
+		B3174AC7217ABD7F006EB928 /* BIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3174AC5217ABD7F006EB928 /* BIOS.swift */; };
+		B3174ACB217ABDFE006EB928 /* RealmRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3174AC9217ABDFE006EB928 /* RealmRepresentable.swift */; };
+		B3174ACC217ABDFE006EB928 /* RealmRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3174AC9217ABDFE006EB928 /* RealmRepresentable.swift */; };
+		B3174ACD217ABDFE006EB928 /* DomainConvertibleType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3174ACA217ABDFE006EB928 /* DomainConvertibleType.swift */; };
+		B3174ACE217ABDFE006EB928 /* DomainConvertibleType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3174ACA217ABDFE006EB928 /* DomainConvertibleType.swift */; };
+		B3174AD2217AC361006EB928 /* FileInfoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3174AD1217AC361006EB928 /* FileInfoProvider.swift */; };
+		B3174AD3217AC361006EB928 /* FileInfoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3174AD1217AC361006EB928 /* FileInfoProvider.swift */; };
+		B3174AD6217AC709006EB928 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3174AD5217AC709006EB928 /* Repository.swift */; };
+		B3174AD7217AC709006EB928 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3174AD5217AC709006EB928 /* Repository.swift */; };
+		B3174ADE217AC746006EB928 /* RunLoopThreadScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3174ADA217AC746006EB928 /* RunLoopThreadScheduler.swift */; };
+		B3174ADF217AC746006EB928 /* RunLoopThreadScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3174ADA217AC746006EB928 /* RunLoopThreadScheduler.swift */; };
+		B3174AE0217AC746006EB928 /* Observable+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3174ADC217AC746006EB928 /* Observable+Ext.swift */; };
+		B3174AE1217AC746006EB928 /* Observable+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3174ADC217AC746006EB928 /* Observable+Ext.swift */; };
+		B3174AE2217AC746006EB928 /* Realm+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3174ADD217AC746006EB928 /* Realm+Ext.swift */; };
+		B3174AE3217AC746006EB928 /* Realm+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3174ADD217AC746006EB928 /* Realm+Ext.swift */; };
 		B32155462107D2AC0085B18E /* PVSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B32155452107D2AC0085B18E /* PVSupport.framework */; };
 		B3274E602106BA1300857F52 /* PVAppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3274E5E2106BA1200857F52 /* PVAppConstants.swift */; };
 		B3274E612106BA5B00857F52 /* PVMediaCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D222106B4D600DDEBD6 /* PVMediaCache.swift */; };
@@ -52,24 +68,24 @@
 		B3274E682106BAF600857F52 /* UIImage+Scaling.m in Sources */ = {isa = PBXBuildFile; fileRef = B3274E662106BAF500857F52 /* UIImage+Scaling.m */; };
 		B3274E692106BAF600857F52 /* UIImage+Scaling.h in Headers */ = {isa = PBXBuildFile; fileRef = B3274E672106BAF500857F52 /* UIImage+Scaling.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B3274E6B2106BBA500857F52 /* PlistDataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D2C2106B4D700DDEBD6 /* PlistDataModels.swift */; };
-		B3274E6C2106BC1D00857F52 /* PVBIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D272106B4D700DDEBD6 /* PVBIOS.swift */; };
-		B3274E6D2106BC1D00857F52 /* PVLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D282106B4D700DDEBD6 /* PVLibrary.swift */; };
-		B3274E6E2106BC1D00857F52 /* PVSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D292106B4D700DDEBD6 /* PVSystem.swift */; };
-		B3274E6F2106BC1D00857F52 /* PVGame+Spotlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D2A2106B4D700DDEBD6 /* PVGame+Spotlight.swift */; };
-		B3274E702106BC1D00857F52 /* PVGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D2B2106B4D700DDEBD6 /* PVGame.swift */; };
-		B3274E712106BC1D00857F52 /* PVSaveState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D2D2106B4D700DDEBD6 /* PVSaveState.swift */; };
-		B3274E722106BC1D00857F52 /* PVGame+BoxArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D2E2106B4D700DDEBD6 /* PVGame+BoxArt.swift */; };
-		B3274E732106BC1D00857F52 /* PVRecentGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D2F2106B4D700DDEBD6 /* PVRecentGame.swift */; };
-		B3274E742106BC1D00857F52 /* PVFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D302106B4D700DDEBD6 /* PVFile.swift */; };
-		B3274E752106BC1D00857F52 /* PVCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D312106B4D700DDEBD6 /* PVCore.swift */; };
-		B3274E772106BC4E00857F52 /* PVFiled.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3274E762106BC4E00857F52 /* PVFiled.swift */; };
+		B3274E6C2106BC1D00857F52 /* RMBIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D272106B4D700DDEBD6 /* RMBIOS.swift */; };
+		B3274E6D2106BC1D00857F52 /* RMLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D282106B4D700DDEBD6 /* RMLibrary.swift */; };
+		B3274E6E2106BC1D00857F52 /* RMSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D292106B4D700DDEBD6 /* RMSystem.swift */; };
+		B3274E6F2106BC1D00857F52 /* RMGame+Spotlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D2A2106B4D700DDEBD6 /* RMGame+Spotlight.swift */; };
+		B3274E702106BC1D00857F52 /* RMGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D2B2106B4D700DDEBD6 /* RMGame.swift */; };
+		B3274E712106BC1D00857F52 /* RMSaveState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D2D2106B4D700DDEBD6 /* RMSaveState.swift */; };
+		B3274E722106BC1D00857F52 /* RMGame+BoxArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D2E2106B4D700DDEBD6 /* RMGame+BoxArt.swift */; };
+		B3274E732106BC1D00857F52 /* RMRecentGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D2F2106B4D700DDEBD6 /* RMRecentGame.swift */; };
+		B3274E742106BC1D00857F52 /* RMFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D302106B4D700DDEBD6 /* RMFile.swift */; };
+		B3274E752106BC1D00857F52 /* RMCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D312106B4D700DDEBD6 /* RMCore.swift */; };
+		B3274E772106BC4E00857F52 /* FileBackedConformance.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3274E762106BC4E00857F52 /* FileBackedConformance.swift */; };
 		B3274E792106BC8800857F52 /* PVObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3274E782106BC8800857F52 /* PVObject.swift */; };
 		B3274E7A2106BCA700857F52 /* RomDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D1F2106B4D600DDEBD6 /* RomDatabase.swift */; };
 		B3274E7B2106BCEE00857F52 /* PVEmulatorConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3274E5D2106BA1200857F52 /* PVEmulatorConfiguration.swift */; };
 		B3274E7E2106BD7600857F52 /* NSFileManager+Hashing.m in Sources */ = {isa = PBXBuildFile; fileRef = B3274E7C2106BD7500857F52 /* NSFileManager+Hashing.m */; };
 		B3274E7F2106BD7600857F52 /* NSFileManager+Hashing.h in Headers */ = {isa = PBXBuildFile; fileRef = B3274E7D2106BD7500857F52 /* NSFileManager+Hashing.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B3274E802106BDD300857F52 /* PVGameImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D342106B4D700DDEBD6 /* PVGameImporter.swift */; };
-		B3274E842106BF2F00857F52 /* PVImageFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3274E832106BF2F00857F52 /* PVImageFile.swift */; };
+		B3274E842106BF2F00857F52 /* RMImageFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3274E832106BF2F00857F52 /* RMImageFile.swift */; };
 		B3274E862106BFD000857F52 /* ImportCandidateFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3274E852106BFD000857F52 /* ImportCandidateFile.swift */; };
 		B3274E952106C2F800857F52 /* CocoaLumberExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3274E942106C2F800857F52 /* CocoaLumberExtensions.swift */; };
 		B34AB8632106F2E900C45F09 /* PVLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = B3579D122106B11D00DDEBD6 /* PVLibrary.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -205,6 +221,10 @@
 		B3AF47D721071FCD002211EE /* PropVariant.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF46DF21071CA6002211EE /* PropVariant.cpp */; };
 		B3AF47DE21072AD4002211EE /* openvgdb.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = B3AF47DC21072AD3002211EE /* openvgdb.sqlite */; };
 		B3AF47DF21072AD4002211EE /* systems.plist in Resources */ = {isa = PBXBuildFile; fileRef = B3AF47DD21072AD3002211EE /* systems.plist */; };
+		B3B0DA7A217AD7120006F760 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B0DA79217AD7120006F760 /* Cache.swift */; };
+		B3B0DA7B217AD7120006F760 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B0DA79217AD7120006F760 /* Cache.swift */; };
+		B3B0DA7D217B06E70006F760 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B0DA7C217B06E70006F760 /* Protocols.swift */; };
+		B3B0DA7E217B06E70006F760 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B0DA7C217B06E70006F760 /* Protocols.swift */; };
 		B3C04A8D21077B3100E7AF79 /* NSData+Hashing.h in Headers */ = {isa = PBXBuildFile; fileRef = B3579D362106B4D700DDEBD6 /* NSData+Hashing.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B3C04A8E21077B3100E7AF79 /* UIImage+Scaling.h in Headers */ = {isa = PBXBuildFile; fileRef = B3274E672106BAF500857F52 /* UIImage+Scaling.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B3C04A8F21077B3100E7AF79 /* PVLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = B3579D122106B11D00DDEBD6 /* PVLibrary.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -222,14 +242,14 @@
 		B3C04A9C21077B3100E7AF79 /* MethodProps.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF46BA21071CA6002211EE /* MethodProps.cpp */; };
 		B3C04A9D21077B3100E7AF79 /* OESQLiteDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = B3579D202106B4D600DDEBD6 /* OESQLiteDatabase.m */; };
 		B3C04A9E21077B3100E7AF79 /* CreateCoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF46D121071CA6002211EE /* CreateCoder.cpp */; };
-		B3C04A9F21077B3100E7AF79 /* PVCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D312106B4D700DDEBD6 /* PVCore.swift */; };
+		B3C04A9F21077B3100E7AF79 /* RMCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D312106B4D700DDEBD6 /* RMCore.swift */; };
 		B3C04AA021077B3100E7AF79 /* ByteSwap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF466821071CA6002211EE /* ByteSwap.cpp */; };
 		B3C04AA121077B3100E7AF79 /* Sha256Reg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF461B21071CA5002211EE /* Sha256Reg.cpp */; };
 		B3C04AA221077B3100E7AF79 /* InOutTempBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF46C221071CA6002211EE /* InOutTempBuffer.cpp */; };
 		B3C04AA321077B3100E7AF79 /* BcjCoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF466421071CA6002211EE /* BcjCoder.cpp */; };
 		B3C04AA421077B3100E7AF79 /* PpmdRegister.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF466B21071CA6002211EE /* PpmdRegister.cpp */; };
 		B3C04AA521077B3100E7AF79 /* LzmaSDKObjC.mm in Sources */ = {isa = PBXBuildFile; fileRef = B3AF473421071CA6002211EE /* LzmaSDKObjC.mm */; settings = {COMPILER_FLAGS = "-Wno-everything"; }; };
-		B3C04AA621077B3100E7AF79 /* PVFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D302106B4D700DDEBD6 /* PVFile.swift */; };
+		B3C04AA621077B3100E7AF79 /* RMFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D302106B4D700DDEBD6 /* RMFile.swift */; };
 		B3C04AA721077B3100E7AF79 /* UIImage+Scaling.m in Sources */ = {isa = PBXBuildFile; fileRef = B3274E662106BAF500857F52 /* UIImage+Scaling.m */; };
 		B3C04AA821077B3100E7AF79 /* OutBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF46AF21071CA6002211EE /* OutBuffer.cpp */; };
 		B3C04AA921077B3100E7AF79 /* LzmaSDKObjCFileDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF474021071CA6002211EE /* LzmaSDKObjCFileDecoder.cpp */; settings = {COMPILER_FLAGS = "-Wno-everything"; }; };
@@ -252,7 +272,7 @@
 		B3C04ABA21077B3100E7AF79 /* Bra86.c in Sources */ = {isa = PBXBuildFile; fileRef = B3AF46F621071CA6002211EE /* Bra86.c */; settings = {COMPILER_FLAGS = "-Wno-everything"; }; };
 		B3C04ABB21077B3100E7AF79 /* Bra.c in Sources */ = {isa = PBXBuildFile; fileRef = B3AF46F421071CA6002211EE /* Bra.c */; settings = {COMPILER_FLAGS = "-Wno-everything"; }; };
 		B3C04ABC21077B3100E7AF79 /* LzmaSDKObjCWriter.mm in Sources */ = {isa = PBXBuildFile; fileRef = B3AF474921071CA6002211EE /* LzmaSDKObjCWriter.mm */; settings = {COMPILER_FLAGS = "-Wno-everything"; }; };
-		B3C04ABD21077B3100E7AF79 /* PVBIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D272106B4D700DDEBD6 /* PVBIOS.swift */; };
+		B3C04ABD21077B3100E7AF79 /* RMBIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D272106B4D700DDEBD6 /* RMBIOS.swift */; };
 		B3C04ABE21077B3100E7AF79 /* 7zAes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF464F21071CA5002211EE /* 7zAes.cpp */; };
 		B3C04ABF21077B3100E7AF79 /* LzmaSDKObjCMutableItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = B3AF474A21071CA6002211EE /* LzmaSDKObjCMutableItem.mm */; settings = {COMPILER_FLAGS = "-Wno-everything"; }; };
 		B3C04AC021077B3100E7AF79 /* LzFind.c in Sources */ = {isa = PBXBuildFile; fileRef = B3AF46EC21071CA6002211EE /* LzFind.c */; };
@@ -272,9 +292,9 @@
 		B3C04ACE21077B3100E7AF79 /* 7zDecode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF46A221071CA6002211EE /* 7zDecode.cpp */; };
 		B3C04ACF21077B3100E7AF79 /* XzIn.c in Sources */ = {isa = PBXBuildFile; fileRef = B3AF46FA21071CA6002211EE /* XzIn.c */; settings = {COMPILER_FLAGS = "-Wno-everything"; }; };
 		B3C04AD021077B3100E7AF79 /* 7zUpdate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF469C21071CA6002211EE /* 7zUpdate.cpp */; };
-		B3C04AD121077B3100E7AF79 /* PVGame+Spotlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D2A2106B4D700DDEBD6 /* PVGame+Spotlight.swift */; };
+		B3C04AD121077B3100E7AF79 /* RMGame+Spotlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D2A2106B4D700DDEBD6 /* RMGame+Spotlight.swift */; };
 		B3C04AD221077B3100E7AF79 /* 7zOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF469A21071CA6002211EE /* 7zOut.cpp */; };
-		B3C04AD321077B3100E7AF79 /* PVGame+BoxArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D2E2106B4D700DDEBD6 /* PVGame+BoxArt.swift */; };
+		B3C04AD321077B3100E7AF79 /* RMGame+BoxArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D2E2106B4D700DDEBD6 /* RMGame+BoxArt.swift */; };
 		B3C04AD421077B3100E7AF79 /* 7zHeader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF468F21071CA6002211EE /* 7zHeader.cpp */; };
 		B3C04AD521077B3100E7AF79 /* Xz.c in Sources */ = {isa = PBXBuildFile; fileRef = B3AF472721071CA6002211EE /* Xz.c */; };
 		B3C04AD621077B3100E7AF79 /* MyString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF462721071CA5002211EE /* MyString.cpp */; };
@@ -287,12 +307,12 @@
 		B3C04ADD21077B3100E7AF79 /* 7zHandlerOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF469621071CA6002211EE /* 7zHandlerOut.cpp */; settings = {COMPILER_FLAGS = "-Wno-everything"; }; };
 		B3C04ADE21077B3100E7AF79 /* Bcj2Enc.c in Sources */ = {isa = PBXBuildFile; fileRef = B3AF472421071CA6002211EE /* Bcj2Enc.c */; };
 		B3C04ADF21077B3100E7AF79 /* LzmaSDKObjCReader.mm in Sources */ = {isa = PBXBuildFile; fileRef = B3AF473F21071CA6002211EE /* LzmaSDKObjCReader.mm */; settings = {COMPILER_FLAGS = "-Wno-everything"; }; };
-		B3C04AE021077B3100E7AF79 /* PVRecentGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D2F2106B4D700DDEBD6 /* PVRecentGame.swift */; };
+		B3C04AE021077B3100E7AF79 /* RMRecentGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D2F2106B4D700DDEBD6 /* RMRecentGame.swift */; };
 		B3C04AE121077B3100E7AF79 /* Ppmd7Dec.c in Sources */ = {isa = PBXBuildFile; fileRef = B3AF46E421071CA6002211EE /* Ppmd7Dec.c */; };
-		B3C04AE221077B3100E7AF79 /* PVSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D292106B4D700DDEBD6 /* PVSystem.swift */; };
+		B3C04AE221077B3100E7AF79 /* RMSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D292106B4D700DDEBD6 /* RMSystem.swift */; };
 		B3C04AE321077B3100E7AF79 /* PpmdEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF466F21071CA6002211EE /* PpmdEncoder.cpp */; };
 		B3C04AE421077B3100E7AF79 /* LzmaSDKObjCUpdateCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = B3AF473521071CA6002211EE /* LzmaSDKObjCUpdateCallback.mm */; settings = {COMPILER_FLAGS = "-Wno-everything"; }; };
-		B3C04AE521077B3100E7AF79 /* PVLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D282106B4D700DDEBD6 /* PVLibrary.swift */; };
+		B3C04AE521077B3100E7AF79 /* RMLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D282106B4D700DDEBD6 /* RMLibrary.swift */; };
 		B3C04AE621077B3100E7AF79 /* CocoaLumberExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3274E942106C2F800857F52 /* CocoaLumberExtensions.swift */; };
 		B3C04AE721077B3100E7AF79 /* LzmaEnc.c in Sources */ = {isa = PBXBuildFile; fileRef = B3AF46E321071CA6002211EE /* LzmaEnc.c */; settings = {COMPILER_FLAGS = "-Wno-everything"; }; };
 		B3C04AE821077B3100E7AF79 /* XzDec.c in Sources */ = {isa = PBXBuildFile; fileRef = B3AF46E821071CA6002211EE /* XzDec.c */; settings = {COMPILER_FLAGS = "-Wno-everything"; }; };
@@ -308,7 +328,7 @@
 		B3C04AF221077B3100E7AF79 /* LzmaSDKObjCInFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF474D21071CA6002211EE /* LzmaSDKObjCInFile.cpp */; settings = {COMPILER_FLAGS = "-Wno-everything"; }; };
 		B3C04AF321077B3100E7AF79 /* Lzma2Decoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF465621071CA5002211EE /* Lzma2Decoder.cpp */; settings = {COMPILER_FLAGS = "-Wno-everything"; }; };
 		B3C04AF421077B3100E7AF79 /* LzmaSDKObjCOutFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF474E21071CA6002211EE /* LzmaSDKObjCOutFile.cpp */; settings = {COMPILER_FLAGS = "-Wno-everything"; }; };
-		B3C04AF521077B3100E7AF79 /* PVGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D2B2106B4D700DDEBD6 /* PVGame.swift */; };
+		B3C04AF521077B3100E7AF79 /* RMGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D2B2106B4D700DDEBD6 /* RMGame.swift */; };
 		B3C04AF621077B3100E7AF79 /* 7zIn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF469721071CA6002211EE /* 7zIn.cpp */; settings = {COMPILER_FLAGS = "-Wno-everything"; }; };
 		B3C04AF721077B3100E7AF79 /* 7zFolderInStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF468B21071CA6002211EE /* 7zFolderInStream.cpp */; };
 		B3C04AF821077B3100E7AF79 /* CodecExports.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF465221071CA5002211EE /* CodecExports.cpp */; };
@@ -330,7 +350,7 @@
 		B3C04B0821077B3100E7AF79 /* IntToString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF462A21071CA5002211EE /* IntToString.cpp */; };
 		B3C04B0921077B3100E7AF79 /* MyWindows.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF463C21071CA5002211EE /* MyWindows.cpp */; };
 		B3C04B0A21077B3100E7AF79 /* LzmaSDKObjCExtern.mm in Sources */ = {isa = PBXBuildFile; fileRef = B3AF475121071CA6002211EE /* LzmaSDKObjCExtern.mm */; settings = {COMPILER_FLAGS = "-Wno-everything"; }; };
-		B3C04B0B21077B3100E7AF79 /* PVImageFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3274E832106BF2F00857F52 /* PVImageFile.swift */; };
+		B3C04B0B21077B3100E7AF79 /* RMImageFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3274E832106BF2F00857F52 /* RMImageFile.swift */; };
 		B3C04B0C21077B3100E7AF79 /* Ppmd7Enc.c in Sources */ = {isa = PBXBuildFile; fileRef = B3AF470521071CA6002211EE /* Ppmd7Enc.c */; };
 		B3C04B0D21077B3100E7AF79 /* XzEnc.c in Sources */ = {isa = PBXBuildFile; fileRef = B3AF46FB21071CA6002211EE /* XzEnc.c */; settings = {COMPILER_FLAGS = "-Wno-everything"; }; };
 		B3C04B0E21077B3100E7AF79 /* 7zCrc.c in Sources */ = {isa = PBXBuildFile; fileRef = B3AF471C21071CA6002211EE /* 7zCrc.c */; };
@@ -355,7 +375,7 @@
 		B3C04B2121077B3100E7AF79 /* 7zExtract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF468A21071CA6002211EE /* 7zExtract.cpp */; };
 		B3C04B2221077B3100E7AF79 /* 7zProperties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF469321071CA6002211EE /* 7zProperties.cpp */; };
 		B3C04B2321077B3100E7AF79 /* Alloc.c in Sources */ = {isa = PBXBuildFile; fileRef = B3AF470121071CA6002211EE /* Alloc.c */; };
-		B3C04B2421077B3100E7AF79 /* PVFiled.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3274E762106BC4E00857F52 /* PVFiled.swift */; };
+		B3C04B2421077B3100E7AF79 /* FileBackedConformance.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3274E762106BC4E00857F52 /* FileBackedConformance.swift */; };
 		B3C04B2521077B3100E7AF79 /* CpuArch.c in Sources */ = {isa = PBXBuildFile; fileRef = B3AF472221071CA6002211EE /* CpuArch.c */; };
 		B3C04B2621077B3100E7AF79 /* Delta.c in Sources */ = {isa = PBXBuildFile; fileRef = B3AF471821071CA6002211EE /* Delta.c */; };
 		B3C04B2721077B3100E7AF79 /* LzmaSDKObjCCommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF473721071CA6002211EE /* LzmaSDKObjCCommon.cpp */; settings = {COMPILER_FLAGS = "-Wno-everything"; }; };
@@ -367,7 +387,7 @@
 		B3C04B2D21077B3100E7AF79 /* CoderMixer2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF468221071CA6002211EE /* CoderMixer2.cpp */; };
 		B3C04B2E21077B3100E7AF79 /* BranchRegister.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3AF465F21071CA5002211EE /* BranchRegister.cpp */; };
 		B3C04B2F21077B3100E7AF79 /* PVObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3274E782106BC8800857F52 /* PVObject.swift */; };
-		B3C04B3021077B3100E7AF79 /* PVSaveState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D2D2106B4D700DDEBD6 /* PVSaveState.swift */; };
+		B3C04B3021077B3100E7AF79 /* RMSaveState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D2D2106B4D700DDEBD6 /* RMSaveState.swift */; };
 		B3C04B3F21077B3100E7AF79 /* openvgdb.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = B3AF47DC21072AD3002211EE /* openvgdb.sqlite */; };
 		B3C04B4021077B3100E7AF79 /* systems.plist in Resources */ = {isa = PBXBuildFile; fileRef = B3AF47DD21072AD3002211EE /* systems.plist */; };
 		B3C04B4821077BEC00E7AF79 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3C04B4621077BEC00E7AF79 /* Realm.framework */; };
@@ -461,6 +481,14 @@
 		B3067F4F2106B5D00091437F /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = ../Carthage/Build/iOS/Realm.framework; sourceTree = "<group>"; };
 		B3067F732106B9130091437F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		B3067F752106B9180091437F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		B3174AC5217ABD7F006EB928 /* BIOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BIOS.swift; sourceTree = "<group>"; };
+		B3174AC9217ABDFE006EB928 /* RealmRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmRepresentable.swift; sourceTree = "<group>"; };
+		B3174ACA217ABDFE006EB928 /* DomainConvertibleType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DomainConvertibleType.swift; sourceTree = "<group>"; };
+		B3174AD1217AC361006EB928 /* FileInfoProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileInfoProvider.swift; sourceTree = "<group>"; };
+		B3174AD5217AC709006EB928 /* Repository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
+		B3174ADA217AC746006EB928 /* RunLoopThreadScheduler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunLoopThreadScheduler.swift; sourceTree = "<group>"; };
+		B3174ADC217AC746006EB928 /* Observable+Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+Ext.swift"; sourceTree = "<group>"; };
+		B3174ADD217AC746006EB928 /* Realm+Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Realm+Ext.swift"; sourceTree = "<group>"; };
 		B32155452107D2AC0085B18E /* PVSupport.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PVSupport.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3274E552106B97B00857F52 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		B3274E572106B9B100857F52 /* CoreSpotlight.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreSpotlight.framework; path = System/Library/Frameworks/CoreSpotlight.framework; sourceTree = SDKROOT; };
@@ -471,11 +499,11 @@
 		B3274E632106BAA200857F52 /* NSString+Hashing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Hashing.h"; sourceTree = "<group>"; };
 		B3274E662106BAF500857F52 /* UIImage+Scaling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Scaling.m"; sourceTree = "<group>"; };
 		B3274E672106BAF500857F52 /* UIImage+Scaling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Scaling.h"; sourceTree = "<group>"; };
-		B3274E762106BC4E00857F52 /* PVFiled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PVFiled.swift; sourceTree = "<group>"; };
+		B3274E762106BC4E00857F52 /* FileBackedConformance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileBackedConformance.swift; sourceTree = "<group>"; };
 		B3274E782106BC8800857F52 /* PVObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PVObject.swift; sourceTree = "<group>"; };
 		B3274E7C2106BD7500857F52 /* NSFileManager+Hashing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+Hashing.m"; sourceTree = "<group>"; };
 		B3274E7D2106BD7500857F52 /* NSFileManager+Hashing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+Hashing.h"; sourceTree = "<group>"; };
-		B3274E832106BF2F00857F52 /* PVImageFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PVImageFile.swift; sourceTree = "<group>"; };
+		B3274E832106BF2F00857F52 /* RMImageFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMImageFile.swift; sourceTree = "<group>"; };
 		B3274E852106BFD000857F52 /* ImportCandidateFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportCandidateFile.swift; sourceTree = "<group>"; };
 		B3274E942106C2F800857F52 /* CocoaLumberExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CocoaLumberExtensions.swift; sourceTree = "<group>"; };
 		B3579D0F2106B11D00DDEBD6 /* PVLibrary.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PVLibrary.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -487,17 +515,17 @@
 		B3579D222106B4D600DDEBD6 /* PVMediaCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PVMediaCache.swift; sourceTree = "<group>"; };
 		B3579D242106B4D600DDEBD6 /* Time Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Time Utilities.swift"; sourceTree = "<group>"; };
 		B3579D252106B4D600DDEBD6 /* UTI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTI.swift; sourceTree = "<group>"; };
-		B3579D272106B4D700DDEBD6 /* PVBIOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PVBIOS.swift; sourceTree = "<group>"; };
-		B3579D282106B4D700DDEBD6 /* PVLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PVLibrary.swift; sourceTree = "<group>"; };
-		B3579D292106B4D700DDEBD6 /* PVSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PVSystem.swift; sourceTree = "<group>"; };
-		B3579D2A2106B4D700DDEBD6 /* PVGame+Spotlight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PVGame+Spotlight.swift"; sourceTree = "<group>"; };
-		B3579D2B2106B4D700DDEBD6 /* PVGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PVGame.swift; sourceTree = "<group>"; };
+		B3579D272106B4D700DDEBD6 /* RMBIOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMBIOS.swift; sourceTree = "<group>"; };
+		B3579D282106B4D700DDEBD6 /* RMLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMLibrary.swift; sourceTree = "<group>"; };
+		B3579D292106B4D700DDEBD6 /* RMSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMSystem.swift; sourceTree = "<group>"; };
+		B3579D2A2106B4D700DDEBD6 /* RMGame+Spotlight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RMGame+Spotlight.swift"; sourceTree = "<group>"; };
+		B3579D2B2106B4D700DDEBD6 /* RMGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMGame.swift; sourceTree = "<group>"; };
 		B3579D2C2106B4D700DDEBD6 /* PlistDataModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlistDataModels.swift; sourceTree = "<group>"; };
-		B3579D2D2106B4D700DDEBD6 /* PVSaveState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PVSaveState.swift; sourceTree = "<group>"; };
-		B3579D2E2106B4D700DDEBD6 /* PVGame+BoxArt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PVGame+BoxArt.swift"; sourceTree = "<group>"; };
-		B3579D2F2106B4D700DDEBD6 /* PVRecentGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PVRecentGame.swift; sourceTree = "<group>"; };
-		B3579D302106B4D700DDEBD6 /* PVFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PVFile.swift; sourceTree = "<group>"; };
-		B3579D312106B4D700DDEBD6 /* PVCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PVCore.swift; sourceTree = "<group>"; };
+		B3579D2D2106B4D700DDEBD6 /* RMSaveState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMSaveState.swift; sourceTree = "<group>"; };
+		B3579D2E2106B4D700DDEBD6 /* RMGame+BoxArt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RMGame+BoxArt.swift"; sourceTree = "<group>"; };
+		B3579D2F2106B4D700DDEBD6 /* RMRecentGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMRecentGame.swift; sourceTree = "<group>"; };
+		B3579D302106B4D700DDEBD6 /* RMFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMFile.swift; sourceTree = "<group>"; };
+		B3579D312106B4D700DDEBD6 /* RMCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMCore.swift; sourceTree = "<group>"; };
 		B3579D332106B4D700DDEBD6 /* PVDirectoryWatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PVDirectoryWatcher.swift; sourceTree = "<group>"; };
 		B3579D342106B4D700DDEBD6 /* PVGameImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PVGameImporter.swift; sourceTree = "<group>"; };
 		B3579D362106B4D700DDEBD6 /* NSData+Hashing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSData+Hashing.h"; sourceTree = "<group>"; };
@@ -826,6 +854,8 @@
 		B3AF475E21071DE0002211EE /* ZipArchive.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ZipArchive.framework; path = Carthage/Build/iOS/ZipArchive.framework; sourceTree = "<group>"; };
 		B3AF47DC21072AD3002211EE /* openvgdb.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = openvgdb.sqlite; sourceTree = "<group>"; };
 		B3AF47DD21072AD3002211EE /* systems.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = systems.plist; sourceTree = "<group>"; };
+		B3B0DA79217AD7120006F760 /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
+		B3B0DA7C217B06E70006F760 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		B3C04B4421077B3100E7AF79 /* PVLibrary.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PVLibrary.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3C04B4621077BEC00E7AF79 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = ../Carthage/Build/tvOS/Realm.framework; sourceTree = "<group>"; };
 		B3C04B4721077BEC00E7AF79 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = ../Carthage/Build/tvOS/RealmSwift.framework; sourceTree = "<group>"; };
@@ -941,6 +971,91 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		B3174AC3217ABCBB006EB928 /* RealmPlatform */ = {
+			isa = PBXGroup;
+			children = (
+				B3174AC8217ABDFE006EB928 /* Convertion */,
+				B3579D262106B4D700DDEBD6 /* Entities */,
+				B3174AD4217AC709006EB928 /* Repository */,
+				B3174AD8217AC746006EB928 /* Utility */,
+				B3274E782106BC8800857F52 /* PVObject.swift */,
+				B3579D1F2106B4D600DDEBD6 /* RomDatabase.swift */,
+			);
+			path = RealmPlatform;
+			sourceTree = "<group>";
+		};
+		B3174AC4217ABD64006EB928 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				B3174AD0217AC34C006EB928 /* Protocols */,
+				B3174AC5217ABD7F006EB928 /* BIOS.swift */,
+				B3579D2C2106B4D700DDEBD6 /* PlistDataModels.swift */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		B3174AC8217ABDFE006EB928 /* Convertion */ = {
+			isa = PBXGroup;
+			children = (
+				B3174AC9217ABDFE006EB928 /* RealmRepresentable.swift */,
+				B3174ACA217ABDFE006EB928 /* DomainConvertibleType.swift */,
+			);
+			path = Convertion;
+			sourceTree = "<group>";
+		};
+		B3174ACF217AC110006EB928 /* RMFiles */ = {
+			isa = PBXGroup;
+			children = (
+				B3274E762106BC4E00857F52 /* FileBackedConformance.swift */,
+				B3579D302106B4D700DDEBD6 /* RMFile.swift */,
+				B3274E832106BF2F00857F52 /* RMImageFile.swift */,
+			);
+			path = RMFiles;
+			sourceTree = "<group>";
+		};
+		B3174AD0217AC34C006EB928 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				B3174AD1217AC361006EB928 /* FileInfoProvider.swift */,
+				B3B0DA7C217B06E70006F760 /* Protocols.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		B3174AD4217AC709006EB928 /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				B3174AD5217AC709006EB928 /* Repository.swift */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
+		B3174AD8217AC746006EB928 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				B3174AD9217AC746006EB928 /* RxUnits */,
+				B3174ADB217AC746006EB928 /* Extensions */,
+			);
+			path = Utility;
+			sourceTree = "<group>";
+		};
+		B3174AD9217AC746006EB928 /* RxUnits */ = {
+			isa = PBXGroup;
+			children = (
+				B3174ADA217AC746006EB928 /* RunLoopThreadScheduler.swift */,
+			);
+			path = RxUnits;
+			sourceTree = "<group>";
+		};
+		B3174ADB217AC746006EB928 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				B3174ADC217AC746006EB928 /* Observable+Ext.swift */,
+				B3174ADD217AC746006EB928 /* Realm+Ext.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		B3274E5C2106BA1200857F52 /* Configuration */ = {
 			isa = PBXGroup;
 			children = (
@@ -974,12 +1089,12 @@
 		B3579D112106B11D00DDEBD6 /* PVLibrary */ = {
 			isa = PBXGroup;
 			children = (
-				B3274E942106C2F800857F52 /* CocoaLumberExtensions.swift */,
+				B3174AC4217ABD64006EB928 /* Domain */,
+				B3174AC3217ABCBB006EB928 /* RealmPlatform */,
 				B3274E5C2106BA1200857F52 /* Configuration */,
 				B3579D1D2106B4D600DDEBD6 /* Database */,
 				B3579D212106B4D600DDEBD6 /* Game Media */,
 				B3579D322106B4D700DDEBD6 /* Importer */,
-				B3579D262106B4D700DDEBD6 /* Models */,
 				B3579D352106B4D700DDEBD6 /* NSExtensions */,
 				B3579D232106B4D600DDEBD6 /* Util */,
 				B3AF460A21071CA5002211EE /* LzmaSDKObjC */,
@@ -995,8 +1110,6 @@
 			children = (
 				B3579D1E2106B4D600DDEBD6 /* OESQLiteDatabase.h */,
 				B3579D202106B4D600DDEBD6 /* OESQLiteDatabase.m */,
-				B3579D1F2106B4D600DDEBD6 /* RomDatabase.swift */,
-				B3274E782106BC8800857F52 /* PVObject.swift */,
 			);
 			path = Database;
 			sourceTree = "<group>";
@@ -1012,30 +1125,29 @@
 		B3579D232106B4D600DDEBD6 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				B3274E942106C2F800857F52 /* CocoaLumberExtensions.swift */,
 				B3579D242106B4D600DDEBD6 /* Time Utilities.swift */,
 				B3579D252106B4D600DDEBD6 /* UTI.swift */,
+				B3B0DA79217AD7120006F760 /* Cache.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
 		};
-		B3579D262106B4D700DDEBD6 /* Models */ = {
+		B3579D262106B4D700DDEBD6 /* Entities */ = {
 			isa = PBXGroup;
 			children = (
-				B3579D272106B4D700DDEBD6 /* PVBIOS.swift */,
-				B3579D282106B4D700DDEBD6 /* PVLibrary.swift */,
-				B3579D292106B4D700DDEBD6 /* PVSystem.swift */,
-				B3579D2B2106B4D700DDEBD6 /* PVGame.swift */,
-				B3579D2A2106B4D700DDEBD6 /* PVGame+Spotlight.swift */,
-				B3579D2C2106B4D700DDEBD6 /* PlistDataModels.swift */,
-				B3579D2D2106B4D700DDEBD6 /* PVSaveState.swift */,
-				B3579D2E2106B4D700DDEBD6 /* PVGame+BoxArt.swift */,
-				B3579D2F2106B4D700DDEBD6 /* PVRecentGame.swift */,
-				B3579D302106B4D700DDEBD6 /* PVFile.swift */,
-				B3274E832106BF2F00857F52 /* PVImageFile.swift */,
-				B3579D312106B4D700DDEBD6 /* PVCore.swift */,
-				B3274E762106BC4E00857F52 /* PVFiled.swift */,
+				B3174ACF217AC110006EB928 /* RMFiles */,
+				B3579D272106B4D700DDEBD6 /* RMBIOS.swift */,
+				B3579D282106B4D700DDEBD6 /* RMLibrary.swift */,
+				B3579D292106B4D700DDEBD6 /* RMSystem.swift */,
+				B3579D2B2106B4D700DDEBD6 /* RMGame.swift */,
+				B3579D2A2106B4D700DDEBD6 /* RMGame+Spotlight.swift */,
+				B3579D2D2106B4D700DDEBD6 /* RMSaveState.swift */,
+				B3579D2E2106B4D700DDEBD6 /* RMGame+BoxArt.swift */,
+				B3579D2F2106B4D700DDEBD6 /* RMRecentGame.swift */,
+				B3579D312106B4D700DDEBD6 /* RMCore.swift */,
 			);
-			path = Models;
+			path = Entities;
 			sourceTree = "<group>";
 		};
 		B3579D322106B4D700DDEBD6 /* Importer */ = {
@@ -1754,17 +1866,19 @@
 				B3AF47AD21071F43002211EE /* MethodProps.cpp in Sources */,
 				B3067F5E2106B8590091437F /* OESQLiteDatabase.m in Sources */,
 				B3AF47A621071F43002211EE /* CreateCoder.cpp in Sources */,
-				B3274E752106BC1D00857F52 /* PVCore.swift in Sources */,
+				B3274E752106BC1D00857F52 /* RMCore.swift in Sources */,
 				B3AF47BA21071F76002211EE /* ByteSwap.cpp in Sources */,
 				B3AF47D121071FC0002211EE /* Sha256Reg.cpp in Sources */,
 				B3AF47AA21071F43002211EE /* InOutTempBuffer.cpp in Sources */,
 				B3AF47B621071F76002211EE /* BcjCoder.cpp in Sources */,
 				B3AF47C621071F76002211EE /* PpmdRegister.cpp in Sources */,
 				B3AF476021071E28002211EE /* LzmaSDKObjC.mm in Sources */,
-				B3274E742106BC1D00857F52 /* PVFile.swift in Sources */,
+				B3274E742106BC1D00857F52 /* RMFile.swift in Sources */,
+				B3174AE0217AC746006EB928 /* Observable+Ext.swift in Sources */,
 				B3274E682106BAF600857F52 /* UIImage+Scaling.m in Sources */,
 				B3AF47AE21071F43002211EE /* OutBuffer.cpp in Sources */,
 				B3AF476C21071E2D002211EE /* LzmaSDKObjCFileDecoder.cpp in Sources */,
+				B3B0DA7D217B06E70006F760 /* Protocols.swift in Sources */,
 				B3AF42F42107145C002211EE /* PVDirectoryWatcher.swift in Sources */,
 				B3AF47C021071F76002211EE /* Lzma2Register.cpp in Sources */,
 				B3067F642106B8650091437F /* NSData+Hashing.m in Sources */,
@@ -1774,6 +1888,7 @@
 				B3AF47C921071F92002211EE /* MyAes.cpp in Sources */,
 				B3274E7A2106BCA700857F52 /* RomDatabase.swift in Sources */,
 				B3AF478D21071E85002211EE /* XzCrc64Opt.c in Sources */,
+				B3174AD2217AC361006EB928 /* FileInfoProvider.swift in Sources */,
 				B3AF477721071E85002211EE /* Bcj2.c in Sources */,
 				B3AF47A521071EFC002211EE /* LzmaHandler.cpp in Sources */,
 				B3AF478321071E85002211EE /* LzmaDec.c in Sources */,
@@ -1784,7 +1899,7 @@
 				B3AF477A21071E85002211EE /* Bra86.c in Sources */,
 				B3AF477921071E85002211EE /* Bra.c in Sources */,
 				B3AF476921071E28002211EE /* LzmaSDKObjCWriter.mm in Sources */,
-				B3274E6C2106BC1D00857F52 /* PVBIOS.swift in Sources */,
+				B3274E6C2106BC1D00857F52 /* RMBIOS.swift in Sources */,
 				B3AF47C721071F92002211EE /* 7zAes.cpp in Sources */,
 				B3AF476621071E28002211EE /* LzmaSDKObjCMutableItem.mm in Sources */,
 				B3AF477E21071E85002211EE /* LzFind.c in Sources */,
@@ -1804,28 +1919,34 @@
 				B3AF479121071EC1002211EE /* 7zDecode.cpp in Sources */,
 				B3AF479021071E85002211EE /* XzIn.c in Sources */,
 				B3AF479D21071EC1002211EE /* 7zUpdate.cpp in Sources */,
-				B3274E6F2106BC1D00857F52 /* PVGame+Spotlight.swift in Sources */,
+				B3274E6F2106BC1D00857F52 /* RMGame+Spotlight.swift in Sources */,
 				B3AF479921071EC1002211EE /* 7zOut.cpp in Sources */,
-				B3274E722106BC1D00857F52 /* PVGame+BoxArt.swift in Sources */,
+				B3274E722106BC1D00857F52 /* RMGame+BoxArt.swift in Sources */,
 				B3AF479721071EC1002211EE /* 7zHeader.cpp in Sources */,
 				B3AF478B21071E85002211EE /* Xz.c in Sources */,
 				B3AF47CF21071FC0002211EE /* MyString.cpp in Sources */,
+				B3174AE2217AC746006EB928 /* Realm+Ext.swift in Sources */,
 				B3AF47A221071EE9002211EE /* ItemNameUtils.cpp in Sources */,
 				B3AF478121071E85002211EE /* Lzma2DecMt.c in Sources */,
+				B3174AD6217AC709006EB928 /* Repository.swift in Sources */,
 				B3AF476D21071E2D002211EE /* LzmaSDKObjCFileEncoder.cpp in Sources */,
 				B3AF476421071E28002211EE /* LzmaSDKObjCExtractCallback.mm in Sources */,
 				B3AF47A421071EFC002211EE /* DllExports2.cpp in Sources */,
+				B3174ACB217ABDFE006EB928 /* RealmRepresentable.swift in Sources */,
 				B3AF477221071E85002211EE /* 7zCrcOpt.c in Sources */,
 				B3AF479621071EC1002211EE /* 7zHandlerOut.cpp in Sources */,
 				B3AF477821071E85002211EE /* Bcj2Enc.c in Sources */,
 				B3AF476721071E28002211EE /* LzmaSDKObjCReader.mm in Sources */,
-				B3274E732106BC1D00857F52 /* PVRecentGame.swift in Sources */,
+				B3174AC6217ABD7F006EB928 /* BIOS.swift in Sources */,
+				B3274E732106BC1D00857F52 /* RMRecentGame.swift in Sources */,
+				B3174ADE217AC746006EB928 /* RunLoopThreadScheduler.swift in Sources */,
 				B3AF478721071E85002211EE /* Ppmd7Dec.c in Sources */,
-				B3274E6E2106BC1D00857F52 /* PVSystem.swift in Sources */,
+				B3274E6E2106BC1D00857F52 /* RMSystem.swift in Sources */,
 				B3AF47C521071F76002211EE /* PpmdEncoder.cpp in Sources */,
 				B3AF476821071E28002211EE /* LzmaSDKObjCUpdateCallback.mm in Sources */,
-				B3274E6D2106BC1D00857F52 /* PVLibrary.swift in Sources */,
+				B3274E6D2106BC1D00857F52 /* RMLibrary.swift in Sources */,
 				B3274E952106C2F800857F52 /* CocoaLumberExtensions.swift in Sources */,
+				B3174ACD217ABDFE006EB928 /* DomainConvertibleType.swift in Sources */,
 				B3AF478421071E85002211EE /* LzmaEnc.c in Sources */,
 				B3AF478E21071E85002211EE /* XzDec.c in Sources */,
 				B3274E802106BDD300857F52 /* PVGameImporter.swift in Sources */,
@@ -1841,7 +1962,7 @@
 				B3AF476E21071E2D002211EE /* LzmaSDKObjCInFile.cpp in Sources */,
 				B3AF47BE21071F76002211EE /* Lzma2Decoder.cpp in Sources */,
 				B3AF477021071E2D002211EE /* LzmaSDKObjCOutFile.cpp in Sources */,
-				B3274E702106BC1D00857F52 /* PVGame.swift in Sources */,
+				B3274E702106BC1D00857F52 /* RMGame.swift in Sources */,
 				B3AF479821071EC1002211EE /* 7zIn.cpp in Sources */,
 				B3AF479421071EC1002211EE /* 7zFolderInStream.cpp in Sources */,
 				B3AF47BB21071F76002211EE /* CodecExports.cpp in Sources */,
@@ -1863,7 +1984,7 @@
 				B3AF47CE21071FC0002211EE /* IntToString.cpp in Sources */,
 				B3AF47D021071FC0002211EE /* MyWindows.cpp in Sources */,
 				B3AF476321071E28002211EE /* LzmaSDKObjCExtern.mm in Sources */,
-				B3274E842106BF2F00857F52 /* PVImageFile.swift in Sources */,
+				B3274E842106BF2F00857F52 /* RMImageFile.swift in Sources */,
 				B3AF478821071E85002211EE /* Ppmd7Enc.c in Sources */,
 				B3AF478F21071E85002211EE /* XzEnc.c in Sources */,
 				B3AF477121071E85002211EE /* 7zCrc.c in Sources */,
@@ -1888,9 +2009,10 @@
 				B3AF479321071EC1002211EE /* 7zExtract.cpp in Sources */,
 				B3AF479A21071EC1002211EE /* 7zProperties.cpp in Sources */,
 				B3AF477621071E85002211EE /* Alloc.c in Sources */,
-				B3274E772106BC4E00857F52 /* PVFiled.swift in Sources */,
+				B3274E772106BC4E00857F52 /* FileBackedConformance.swift in Sources */,
 				B3AF477C21071E85002211EE /* CpuArch.c in Sources */,
 				B3AF477D21071E85002211EE /* Delta.c in Sources */,
+				B3B0DA7A217AD7120006F760 /* Cache.swift in Sources */,
 				B3AF476B21071E2D002211EE /* LzmaSDKObjCCommon.cpp in Sources */,
 				B3AF478A21071E85002211EE /* Threads.c in Sources */,
 				B3AF47A821071F43002211EE /* FileStreams.cpp in Sources */,
@@ -1900,7 +2022,7 @@
 				B3AF479F21071EE9002211EE /* CoderMixer2.cpp in Sources */,
 				B3AF47B921071F76002211EE /* BranchRegister.cpp in Sources */,
 				B3274E792106BC8800857F52 /* PVObject.swift in Sources */,
-				B3274E712106BC1D00857F52 /* PVSaveState.swift in Sources */,
+				B3274E712106BC1D00857F52 /* RMSaveState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1911,17 +2033,19 @@
 				B3C04A9C21077B3100E7AF79 /* MethodProps.cpp in Sources */,
 				B3C04A9D21077B3100E7AF79 /* OESQLiteDatabase.m in Sources */,
 				B3C04A9E21077B3100E7AF79 /* CreateCoder.cpp in Sources */,
-				B3C04A9F21077B3100E7AF79 /* PVCore.swift in Sources */,
+				B3C04A9F21077B3100E7AF79 /* RMCore.swift in Sources */,
 				B3C04AA021077B3100E7AF79 /* ByteSwap.cpp in Sources */,
 				B3C04AA121077B3100E7AF79 /* Sha256Reg.cpp in Sources */,
 				B3C04AA221077B3100E7AF79 /* InOutTempBuffer.cpp in Sources */,
 				B3C04AA321077B3100E7AF79 /* BcjCoder.cpp in Sources */,
 				B3C04AA421077B3100E7AF79 /* PpmdRegister.cpp in Sources */,
 				B3C04AA521077B3100E7AF79 /* LzmaSDKObjC.mm in Sources */,
-				B3C04AA621077B3100E7AF79 /* PVFile.swift in Sources */,
+				B3C04AA621077B3100E7AF79 /* RMFile.swift in Sources */,
+				B3174AE1217AC746006EB928 /* Observable+Ext.swift in Sources */,
 				B3C04AA721077B3100E7AF79 /* UIImage+Scaling.m in Sources */,
 				B3C04AA821077B3100E7AF79 /* OutBuffer.cpp in Sources */,
 				B3C04AA921077B3100E7AF79 /* LzmaSDKObjCFileDecoder.cpp in Sources */,
+				B3B0DA7E217B06E70006F760 /* Protocols.swift in Sources */,
 				B3C04AAA21077B3100E7AF79 /* PVDirectoryWatcher.swift in Sources */,
 				B3C04AAB21077B3100E7AF79 /* Lzma2Register.cpp in Sources */,
 				B3C04AAC21077B3100E7AF79 /* NSData+Hashing.m in Sources */,
@@ -1931,6 +2055,7 @@
 				B3C04AB021077B3100E7AF79 /* MyAes.cpp in Sources */,
 				B3C04AB121077B3100E7AF79 /* RomDatabase.swift in Sources */,
 				B3C04AB221077B3100E7AF79 /* XzCrc64Opt.c in Sources */,
+				B3174AD3217AC361006EB928 /* FileInfoProvider.swift in Sources */,
 				B3C04AB321077B3100E7AF79 /* Bcj2.c in Sources */,
 				B3C04AB421077B3100E7AF79 /* LzmaHandler.cpp in Sources */,
 				B3C04AB521077B3100E7AF79 /* LzmaDec.c in Sources */,
@@ -1941,7 +2066,7 @@
 				B3C04ABA21077B3100E7AF79 /* Bra86.c in Sources */,
 				B3C04ABB21077B3100E7AF79 /* Bra.c in Sources */,
 				B3C04ABC21077B3100E7AF79 /* LzmaSDKObjCWriter.mm in Sources */,
-				B3C04ABD21077B3100E7AF79 /* PVBIOS.swift in Sources */,
+				B3C04ABD21077B3100E7AF79 /* RMBIOS.swift in Sources */,
 				B3C04ABE21077B3100E7AF79 /* 7zAes.cpp in Sources */,
 				B3C04ABF21077B3100E7AF79 /* LzmaSDKObjCMutableItem.mm in Sources */,
 				B3C04AC021077B3100E7AF79 /* LzFind.c in Sources */,
@@ -1961,28 +2086,34 @@
 				B3C04ACE21077B3100E7AF79 /* 7zDecode.cpp in Sources */,
 				B3C04ACF21077B3100E7AF79 /* XzIn.c in Sources */,
 				B3C04AD021077B3100E7AF79 /* 7zUpdate.cpp in Sources */,
-				B3C04AD121077B3100E7AF79 /* PVGame+Spotlight.swift in Sources */,
+				B3C04AD121077B3100E7AF79 /* RMGame+Spotlight.swift in Sources */,
 				B3C04AD221077B3100E7AF79 /* 7zOut.cpp in Sources */,
-				B3C04AD321077B3100E7AF79 /* PVGame+BoxArt.swift in Sources */,
+				B3C04AD321077B3100E7AF79 /* RMGame+BoxArt.swift in Sources */,
 				B3C04AD421077B3100E7AF79 /* 7zHeader.cpp in Sources */,
 				B3C04AD521077B3100E7AF79 /* Xz.c in Sources */,
 				B3C04AD621077B3100E7AF79 /* MyString.cpp in Sources */,
+				B3174AE3217AC746006EB928 /* Realm+Ext.swift in Sources */,
 				B3C04AD721077B3100E7AF79 /* ItemNameUtils.cpp in Sources */,
 				B3C04AD821077B3100E7AF79 /* Lzma2DecMt.c in Sources */,
+				B3174AD7217AC709006EB928 /* Repository.swift in Sources */,
 				B3C04AD921077B3100E7AF79 /* LzmaSDKObjCFileEncoder.cpp in Sources */,
 				B3C04ADA21077B3100E7AF79 /* LzmaSDKObjCExtractCallback.mm in Sources */,
 				B3C04ADB21077B3100E7AF79 /* DllExports2.cpp in Sources */,
+				B3174ACC217ABDFE006EB928 /* RealmRepresentable.swift in Sources */,
 				B3C04ADC21077B3100E7AF79 /* 7zCrcOpt.c in Sources */,
 				B3C04ADD21077B3100E7AF79 /* 7zHandlerOut.cpp in Sources */,
 				B3C04ADE21077B3100E7AF79 /* Bcj2Enc.c in Sources */,
 				B3C04ADF21077B3100E7AF79 /* LzmaSDKObjCReader.mm in Sources */,
-				B3C04AE021077B3100E7AF79 /* PVRecentGame.swift in Sources */,
+				B3174AC7217ABD7F006EB928 /* BIOS.swift in Sources */,
+				B3C04AE021077B3100E7AF79 /* RMRecentGame.swift in Sources */,
+				B3174ADF217AC746006EB928 /* RunLoopThreadScheduler.swift in Sources */,
 				B3C04AE121077B3100E7AF79 /* Ppmd7Dec.c in Sources */,
-				B3C04AE221077B3100E7AF79 /* PVSystem.swift in Sources */,
+				B3C04AE221077B3100E7AF79 /* RMSystem.swift in Sources */,
 				B3C04AE321077B3100E7AF79 /* PpmdEncoder.cpp in Sources */,
 				B3C04AE421077B3100E7AF79 /* LzmaSDKObjCUpdateCallback.mm in Sources */,
-				B3C04AE521077B3100E7AF79 /* PVLibrary.swift in Sources */,
+				B3C04AE521077B3100E7AF79 /* RMLibrary.swift in Sources */,
 				B3C04AE621077B3100E7AF79 /* CocoaLumberExtensions.swift in Sources */,
+				B3174ACE217ABDFE006EB928 /* DomainConvertibleType.swift in Sources */,
 				B3C04AE721077B3100E7AF79 /* LzmaEnc.c in Sources */,
 				B3C04AE821077B3100E7AF79 /* XzDec.c in Sources */,
 				B3C04AE921077B3100E7AF79 /* PVGameImporter.swift in Sources */,
@@ -1998,7 +2129,7 @@
 				B3C04AF221077B3100E7AF79 /* LzmaSDKObjCInFile.cpp in Sources */,
 				B3C04AF321077B3100E7AF79 /* Lzma2Decoder.cpp in Sources */,
 				B3C04AF421077B3100E7AF79 /* LzmaSDKObjCOutFile.cpp in Sources */,
-				B3C04AF521077B3100E7AF79 /* PVGame.swift in Sources */,
+				B3C04AF521077B3100E7AF79 /* RMGame.swift in Sources */,
 				B3C04AF621077B3100E7AF79 /* 7zIn.cpp in Sources */,
 				B3C04AF721077B3100E7AF79 /* 7zFolderInStream.cpp in Sources */,
 				B3C04AF821077B3100E7AF79 /* CodecExports.cpp in Sources */,
@@ -2020,7 +2151,7 @@
 				B3C04B0821077B3100E7AF79 /* IntToString.cpp in Sources */,
 				B3C04B0921077B3100E7AF79 /* MyWindows.cpp in Sources */,
 				B3C04B0A21077B3100E7AF79 /* LzmaSDKObjCExtern.mm in Sources */,
-				B3C04B0B21077B3100E7AF79 /* PVImageFile.swift in Sources */,
+				B3C04B0B21077B3100E7AF79 /* RMImageFile.swift in Sources */,
 				B3C04B0C21077B3100E7AF79 /* Ppmd7Enc.c in Sources */,
 				B3C04B0D21077B3100E7AF79 /* XzEnc.c in Sources */,
 				B3C04B0E21077B3100E7AF79 /* 7zCrc.c in Sources */,
@@ -2045,9 +2176,10 @@
 				B3C04B2121077B3100E7AF79 /* 7zExtract.cpp in Sources */,
 				B3C04B2221077B3100E7AF79 /* 7zProperties.cpp in Sources */,
 				B3C04B2321077B3100E7AF79 /* Alloc.c in Sources */,
-				B3C04B2421077B3100E7AF79 /* PVFiled.swift in Sources */,
+				B3C04B2421077B3100E7AF79 /* FileBackedConformance.swift in Sources */,
 				B3C04B2521077B3100E7AF79 /* CpuArch.c in Sources */,
 				B3C04B2621077B3100E7AF79 /* Delta.c in Sources */,
+				B3B0DA7B217AD7120006F760 /* Cache.swift in Sources */,
 				B3C04B2721077B3100E7AF79 /* LzmaSDKObjCCommon.cpp in Sources */,
 				B3C04B2821077B3100E7AF79 /* Threads.c in Sources */,
 				B3C04B2921077B3100E7AF79 /* FileStreams.cpp in Sources */,
@@ -2057,7 +2189,7 @@
 				B3C04B2D21077B3100E7AF79 /* CoderMixer2.cpp in Sources */,
 				B3C04B2E21077B3100E7AF79 /* BranchRegister.cpp in Sources */,
 				B3C04B2F21077B3100E7AF79 /* PVObject.swift in Sources */,
-				B3C04B3021077B3100E7AF79 /* PVSaveState.swift in Sources */,
+				B3C04B3021077B3100E7AF79 /* RMSaveState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2250,7 +2382,7 @@
 				PRODUCT_NAME = PVLibrary;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -2294,7 +2426,7 @@
 				PRODUCT_NAME = PVLibrary;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -2357,7 +2489,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.1;
 			};
@@ -2405,7 +2537,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.1;
 			};

@@ -62,7 +62,8 @@ public struct Core : Codable {
 extension Core : Equatable {
 	public static func == (lhs: Core, rhs: Core) -> Bool {
 		return lhs.identifier == rhs.identifier
-	}}
+	}
+}
 
 public extension Core {
 	public init(with core : PVCore) {

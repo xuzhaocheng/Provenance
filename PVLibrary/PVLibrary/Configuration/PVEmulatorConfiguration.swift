@@ -10,7 +10,7 @@ import RealmSwift
 import PVSupport
 
 public struct SystemDictionaryKeys {
-    public static let BIOSEntries         = "PVBIOSNames"
+    public static let BIOSEntries         = "RMBIOSNames"
     public static let ControlLayout       = "PVControlLayout"
     public static let DatabaseID          = "PVDatabaseID"
     public static let RequiresBIOS        = "PVRequiresBIOS"
@@ -105,7 +105,7 @@ public enum SystemIdentifier: String {
 //        return PVEmulatorConfiguration.requiresBIOS(forSystemIdentifier: self)
 //    }
 //
-//    var biosEntries : [PVBIOS]? {
+//    var biosEntries : [RMBIOS]? {
 //        return PVEmulatorConfiguration.biosEntries(forSystemIdentifier: self)
 //    }
 //
@@ -217,8 +217,8 @@ public final class PVEmulatorConfiguration: NSObject {
         })
     }()
 
-    static public var biosEntries: Results<PVBIOS> {
-        return PVBIOS.all
+    static public var biosEntries: Results<RMBIOS> {
+        return RMBIOS.all
     }
 
     // MARK: - Filesystem Helpers
@@ -301,11 +301,11 @@ public final class PVEmulatorConfiguration: NSObject {
         })
     }
 
-    class public func biosEntry(forMD5 md5: String) -> PVBIOS? {
-        return RomDatabase.sharedInstance.all(PVBIOS.self, where: "expectedMD5", value: md5).first
+    class public func biosEntry(forMD5 md5: String) -> RMBIOS? {
+        return RomDatabase.sharedInstance.all(RMBIOS.self, where: "expectedMD5", value: md5).first
     }
 
-    class public func biosEntry(forFilename filename: String) -> PVBIOS? {
+    class public func biosEntry(forFilename filename: String) -> RMBIOS? {
         return biosEntries.first { $0.expectedFilename == filename }
     }
 
@@ -399,7 +399,7 @@ public extension PVEmulatorConfiguration {
         return biosPath(forSystemIdentifier: game.systemIdentifier)
     }
 
-    class func biosEntries(forSystemIdentifier systemID: String) -> [PVBIOS]? {
+    class func biosEntries(forSystemIdentifier systemID: String) -> [RMBIOS]? {
         if let bioses = system(forIdentifier: systemID)?.bioses {
             return Array(bioses)
         } else {
@@ -443,7 +443,7 @@ public extension PVEmulatorConfiguration {
         return biosPath(forSystemIdentifier: systemID.rawValue)
     }
 
-    class func biosEntries(forSystemIdentifier systemID: SystemIdentifier) -> [PVBIOS]? {
+    class func biosEntries(forSystemIdentifier systemID: SystemIdentifier) -> [RMBIOS]? {
         return biosEntries(forSystemIdentifier: systemID.rawValue)
     }
 

@@ -402,7 +402,7 @@ public extension RomDatabase {
 			}
 		}
 
-		if !game.file.missing {
+		if game.file.online {
 			do {
 				try FileManager.default.removeItem(at: romURL)
 			} catch {

@@ -652,7 +652,7 @@ public extension PVGameImporter {
         }
 
         // Create new Data from scaled image
-        guard let coverArtScaledData = UIImagePNGRepresentation(coverArtScaledImage) else {
+		guard let coverArtScaledData = coverArtScaledImage.pngData() else {
             ELOG("Failed to create data respresentation of scaled image")
             return nil
         }
@@ -1230,20 +1230,20 @@ extension PVGameImporter {
 		let destinationDir = (system.identifier as NSString)
         let partialPath: String = destinationDir.appendingPathComponent(filename)
 
-        let file = PVFile(withURL: path)
+        let file = RMLocalFile(withURL: path)
 
         let game = PVGame(withFile: file, system: system)
         game.romPath = partialPath
         game.title = title
         game.requiresSync = true
 
-		var relatedPVFiles = [PVFile]()
+		var relatedRMFiles = [RMLocalFile]()
 		if let relatedFiles = relatedFiles {
 			for relatedFile in relatedFiles {
 				let fileName = relatedFile.lastPathComponent
 				let partialRelatedPath = destinationDir.appendingPathComponent(fileName)
-				let newRelatedPVFile = PVFile(withPartialPath: partialRelatedPath)
-				relatedPVFiles.append(newRelatedPVFile)
+				let newRelatedRMFile = RMLocalFile(withPartialPath: partialRelatedPath)
+				relatedRMFiles.append(newRelatedRMFile)
 			}
 		}
 
@@ -1252,7 +1252,7 @@ extension PVGameImporter {
             return nil
         }
 
-		game.relatedFiles.append(objectsIn: relatedPVFiles)
+		game.relatedFiles.append(objectsIn: relatedRMFiles)
 
         game.md5Hash = md5
 
@@ -1291,7 +1291,7 @@ extension PVGameImporter {
         getArtwork(forGame: game)
     }
 
-    public func biosEntryMatcing(candidateFile: ImportCandidateFile) -> PVBIOS? {
+    public func biosEntryMatcing(candidateFile: ImportCandidateFile) -> RMBIOS? {
         // Check if BIOS by filename - should possibly just only check MD5?
         if let bios = PVEmulatorConfiguration.biosEntry(forFilename: candidateFile.filePath.lastPathComponent) {
             return bios
@@ -1402,7 +1402,7 @@ extension PVGameImporter {
                 }
 
                 try RomDatabase.sharedInstance.writeTransaction {
-                    let file = PVFile.init(withURL: destinationPath)
+                    let file = RMLocalFile.init(withURL: destinationPath)
                     biosEntry.file = file
                 }
             } catch {
@@ -1439,7 +1439,7 @@ extension PVGameImporter {
                     ILOG("Moved <\(filePath.lastPathComponent)> to \(directory.lastPathComponent)")
 					// Add it as an associated file
 					try RomDatabase.sharedInstance.writeTransaction {
-						let file = PVFile.init(withURL: destinationPath)
+						let file = RMLocalFile.init(withURL: destinationPath)
 						game.relatedFiles.append(file)
 					}
                 } catch {

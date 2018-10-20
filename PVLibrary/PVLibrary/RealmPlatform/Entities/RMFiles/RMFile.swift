@@ -1,5 +1,5 @@
 //
-//  PVFile.swift
+//  RMLocalFile.swift
 //  Provenance
 //
 //  Created by Joseph Mattiello on 3/11/18.
@@ -61,7 +61,9 @@ public enum RelativeRoot: Int {
 }
 
 @objcMembers
-public class PVFile: Object, Codable {
+public class RMLocalFile: Object, LocalFileProvider, Codable, DomainConvertibleType {
+	typealias DomainType = LocalFile
+
     @objc internal dynamic var partialPath: String = ""
     @objc private dynamic var md5Cache: String?
     @objc private(set) dynamic public var createdDate = Date()
@@ -80,7 +82,7 @@ public class PVFile: Object, Codable {
     }
 }
 
-public extension PVFile {
+public extension RMLocalFile {
     public internal(set) var relativeRoot: RelativeRoot {
         get {
             return RelativeRoot(rawValue: _relativeRoot)!
@@ -141,8 +143,8 @@ public extension PVFile {
         return fileSize
     }
 
-    public var missing: Bool {
-        return !FileManager.default.fileExists(atPath: url.path)
+    public var online: Bool {
+        return FileManager.default.fileExists(atPath: url.path)
     }
 
     public var pathExtension: String {
@@ -157,3 +159,4 @@ public extension PVFile {
         return url.deletingPathExtension().lastPathComponent
     }
 }
+

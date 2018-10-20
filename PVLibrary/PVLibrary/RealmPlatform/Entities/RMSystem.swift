@@ -33,6 +33,8 @@ public struct SystemOptions : OptionSet, Codable {
 }
 
 public protocol SystemProtocol {
+	associatedtype BIOSInfoProviderType : BIOSInfoProvider
+
 	var name : String {get}
 	var shortName : String {get}
 	var shortNameAlt : String? {get}
@@ -48,7 +50,7 @@ public protocol SystemProtocol {
 	var requiresBIOS : Bool {get}
 	var options : SystemOptions {get}
 
-	var BIOSes : [BIOS]? {get}
+	var BIOSes : [BIOSInfoProviderType]? {get}
 	var extensions : [String] {get}
 
 	var gameStructs : [Game] {get}
@@ -58,6 +60,7 @@ public protocol SystemProtocol {
 
 @objcMembers
 public final class PVSystem: Object, SystemProtocol {
+	public typealias BIOSInfoProviderType = RMBIOS
 
     dynamic public var name: String = ""
     dynamic public var shortName: String = ""
@@ -88,10 +91,8 @@ public final class PVSystem: Object, SystemProtocol {
 
     public private(set) var supportedExtensions = List<String>()
 
-	public var BIOSes: [BIOS]? {
-		return bioses.compactMap {
-			return BIOS(with: $0)
-		}
+	public var BIOSes: [RMBIOS]? {
+		return Array(bioses)
 	}
 
 	public var extensions: [String] {
@@ -99,7 +100,7 @@ public final class PVSystem: Object, SystemProtocol {
 	}
 
     // Reverse Links
-    public private(set) var bioses = LinkingObjects(fromType: PVBIOS.self, property: "system")
+    public private(set) var bioses = LinkingObjects(fromType: RMBIOS.self, property: "system")
     public private(set) var games = LinkingObjects(fromType: PVGame.self, property: "system")
     public private(set) var cores = LinkingObjects(fromType: PVCore.self, property: "supportedSystems")
 
@@ -216,7 +217,7 @@ public struct System : Codable, SystemProtocol {
 }
 
 public extension System {
-	public init(with system : SystemProtocol) {
+	public init<S:SystemProtocol>(with system : S) where S.BIOSInfoProviderType : BIOSFileProvider {
 		name = system.name
 		identifier = system.identifier
 		shortName = system.shortName
@@ -229,7 +230,43 @@ public extension System {
 		openvgDatabaseID = system.openvgDatabaseID
 
 		options = system.options
-		BIOSes = system.BIOSes
+		BIOSes = system.BIOSes?.map { (bios: BIOSInfoProvider) in
+
+			#warning ("FIX ME, file shoudl be able to beread from incoming if we can test type conformance confidiontally")
+			var file : LocalFile? = nil
+//			if bios is LocalFileBacked {
+//				file = (bios as! LocalFileBacked).file
+//			}
+
+			let status : BIOSStatus
+			if let sp = bios as? BIOSStatusProvider {
+				status = sp.status
+			} else {
+				let available :  Bool
+				let state : BIOSStatus.State
+
+				if let file = file {
+					available = file.online
+					state = BIOSStatus.State(expectations: bios, file: file)
+				} else {
+					available = false
+					state = .missing
+				}
+
+				status = BIOSStatus(available: available, required: !bios.optional, state: state)
+			}
+
+			return BIOS(descriptionText: bios.descriptionText,
+						regions: bios.regions,
+						version: bios.version,
+						expectedMD5: bios.expectedMD5,
+						expectedSize: bios.expectedSize,
+						expectedFilename: bios.expectedFilename,
+						optional: bios.optional,
+						status: status,
+						file: file)
+		}
+
 		extensions = system.extensions
 		requiresBIOS = system.requiresBIOS
 		gameStructs = system.gameStructs
@@ -254,17 +291,17 @@ public extension PVSystem {
         return SystemIdentifier(rawValue: identifier) ?? .Unknown
     }
 
-    public var biosesHave: [PVBIOS]? {
+    public var biosesHave: [RMBIOS]? {
         let have = bioses.filter({ (bios) -> Bool in
-            return !bios.missing
+            return bios.online
         })
 
         return !have.isEmpty ? Array(have) : nil
     }
 
-    public var missingBIOSes: [PVBIOS]? {
+    public var missingBIOSes: [RMBIOS]? {
         let missing = bioses.filter({ (bios) -> Bool in
-            return bios.missing
+            return !bios.online
         })
 
         return !missing.isEmpty ? Array(missing) : nil

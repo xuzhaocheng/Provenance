@@ -24,8 +24,8 @@ public final class PVGame: Object, PVLibraryEntry {
     // The other option is to only use the filename and then path(forGame:) would determine the
     // fully qualified path, but if we add network / cloud storage that may or may not change that.
     dynamic public var romPath: String            = ""
-    dynamic public var file: PVFile!
-	public private(set) var relatedFiles = List<PVFile>()
+    dynamic public var file: RMLocalFile!
+	public private(set) var relatedFiles = List<RMLocalFile>()
 
     dynamic public var customArtworkURL: String   = ""
     dynamic public var originalArtworkURL: String = ""
@@ -84,7 +84,7 @@ public final class PVGame: Object, PVLibraryEntry {
     dynamic public var systemShortName: String?
 	dynamic public var language: String?
 
-    public convenience init(withFile file: PVFile, system: PVSystem) {
+    public convenience init(withFile file: RMLocalFile, system: PVSystem) {
         self.init()
         self.file = file
         self.system = system

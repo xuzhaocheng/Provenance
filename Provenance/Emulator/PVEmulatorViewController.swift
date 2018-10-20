@@ -679,7 +679,7 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
 
 				let newURL = URL(fileURLWithPath: saveStatePath).appendingPathComponent("\(game.md5Hash)|\(Date().timeIntervalSinceReferenceDate)")
 				try fileManager.moveItem(at: autoSaveURL, to: newURL)
-				let saveFile = PVFile(withURL: newURL)
+				let saveFile = RMLocalFile(withURL: newURL)
 				let newState = PVSaveState(withGame: game, core: core, file: saveFile, image: nil, isAutosave: true)
 				try realm.write {
 					realm.add(newState)
@@ -699,7 +699,7 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
 
 					let newURL = URL(fileURLWithPath: saveStatePath).appendingPathComponent("\(game.md5Hash)|\(Date().timeIntervalSinceReferenceDate)")
 					try fileManager.moveItem(at: url, to: newURL)
-					let saveFile = PVFile(withURL: newURL)
+					let saveFile = RMLocalFile(withURL: newURL)
 					let newState = PVSaveState(withGame: game, core: core, file: saveFile, image: nil, isAutosave: false)
 					try realm.write {
 						realm.add(newState)
@@ -742,7 +742,7 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
 			throw SaveStateError.saveStatesUnsupportedByCore
 		}
 
-		let saveFile = PVFile(withURL: URL(fileURLWithPath: saveStatePath).appendingPathComponent("\(game.md5Hash)|\(Date().timeIntervalSinceReferenceDate).svs"))
+		let saveFile = RMLocalFile(withURL: URL(fileURLWithPath: saveStatePath).appendingPathComponent("\(game.md5Hash)|\(Date().timeIntervalSinceReferenceDate).svs"))
 
 		var imageFile: PVImageFile?
 		if let screenshot = screenshot {

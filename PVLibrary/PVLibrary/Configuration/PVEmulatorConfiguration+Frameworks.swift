@@ -124,8 +124,8 @@ public extension PVEmulatorConfiguration {
         pvSystem.supportedExtensions.append(objectsIn: system.PVSupportedExtensions)
         let database = RomDatabase.sharedInstance
 
-        system.PVBIOSNames?.forEach { entry in
-            if let existingBIOS = database.object(ofType: PVBIOS.self, wherePrimaryKeyEquals: entry.Name) {
+        system.RMBIOSNames?.forEach { entry in
+            if let existingBIOS = database.object(ofType: RMBIOS.self, wherePrimaryKeyEquals: entry.Name) {
                 if database.realm.isInWriteTransaction {
                     existingBIOS.system = pvSystem
                 } else {
@@ -134,7 +134,7 @@ public extension PVEmulatorConfiguration {
                     }
                 }
             } else {
-                let newBIOS = PVBIOS(withSystem: pvSystem, descriptionText: entry.Description, optional: entry.Optional ?? false, expectedMD5: entry.MD5, expectedSize: entry.Size, expectedFilename: entry.Name)
+                let newBIOS = RMBIOS(withSystem: pvSystem, descriptionText: entry.Description, optional: entry.Optional ?? false, expectedMD5: entry.MD5, expectedSize: entry.Size, expectedFilename: entry.Name)
 
                 if database.realm.isInWriteTransaction {
                     database.realm.add(newBIOS)
