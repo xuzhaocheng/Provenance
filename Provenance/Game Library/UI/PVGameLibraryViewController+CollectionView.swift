@@ -96,14 +96,14 @@ extension PVGameLibraryViewController: UICollectionViewDelegateFlowLayout {
 			let numberOfRows : CGFloat = 1.0
 			let width = viewWidth - collectionView.contentInset.left - collectionView.contentInset.right / 4
 			let height = tvOSCellUnit * numberOfRows + PageIndicatorHeight
-			return PVSaveStateCollectionViewCell.cellSize(forImageSize: CGSize(width: width, height: height))
+			return RMSaveStaveCollectionViewCell.cellSize(forImageSize: CGSize(width: width, height: height))
 		}
 
 		if indexPath.section == recentGamesSection || indexPath.section == favoritesSection {
 			let numberOfRows : CGFloat = 1.0
 			let width = viewWidth - collectionView.contentInset.left - collectionView.contentInset.right / 5
 			let height :CGFloat = tvOSCellUnit * numberOfRows + PageIndicatorHeight
-            return PVSaveStateCollectionViewCell.cellSize(forImageSize: CGSize(width: width, height: height))
+            return RMSaveStaveCollectionViewCell.cellSize(forImageSize: CGSize(width: width, height: height))
 //            return PVGameLibraryCollectionViewCell.cellSize(forImageSize: CGSize(width: width, height: height / PVGameBoxArtAspectRatio.tall.rawValue))
 		}
 

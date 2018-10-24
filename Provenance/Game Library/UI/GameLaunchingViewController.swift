@@ -34,8 +34,8 @@ public func PVMaxRecentsCount() -> Int {
 public protocol GameLaunchingViewController: class {
     var mustRefreshDataSource: Bool {get set}
     func canLoad(_ game: PVGame) throws
-	func load(_ game: PVGame, sender : Any?, core: PVCore?, saveState: PVSaveState?)
-	func openSaveState(_ saveState: PVSaveState)
+	func load(_ game: PVGame, sender : Any?, core: PVCore?, saveState: RMSaveStave?)
+	func openSaveState(_ saveState: RMSaveStave)
     func updateRecentGames(_ game: PVGame)
     func register3DTouchShortcuts()
 	func presentCoreSelection(forGame game : PVGame, sender : Any?)
@@ -445,7 +445,7 @@ extension GameLaunchingViewController where Self : UIViewController {
 		present(coreChoiceAlert, animated: true)
 	}
 
-	func load(_ game: PVGame, sender : Any?, core: PVCore?, saveState : PVSaveState? = nil) {
+	func load(_ game: PVGame, sender : Any?, core: PVCore?, saveState : RMSaveStave? = nil) {
         guard !(presentedViewController is PVEmulatorViewController) else {
             let currentGameVC = presentedViewController as! PVEmulatorViewController
             displayAndLogError(withTitle: "Cannot open new game", message: "A game is already running the game \(currentGameVC.game.title).")
@@ -540,7 +540,7 @@ extension GameLaunchingViewController where Self : UIViewController {
         }
     }
 
-	private func presentEMU(withCore core : PVCore, forGame game: PVGame, fromSaveState saveState: PVSaveState? = nil) {
+	private func presentEMU(withCore core : PVCore, forGame game: PVGame, fromSaveState saveState: RMSaveStave? = nil) {
 		guard let coreInstance = core.createInstance(forSystem: game.system) else {
 			displayAndLogError(withTitle: "Cannot open game", message: "Failed to create instance of core '\(core.projectName)'.")
 			ELOG("Failed to init core instance")
@@ -565,8 +565,8 @@ extension GameLaunchingViewController where Self : UIViewController {
 		}
 	}
 
-	// Used to just show and then optionally quickly load any passed in PVSaveStates
-	private func presentEMUVC(_ emulatorViewController : PVEmulatorViewController, withGame game: PVGame, loadingSaveState saveState: PVSaveState? = nil) {
+	// Used to just show and then optionally quickly load any passed in RMSaveStaves
+	private func presentEMUVC(_ emulatorViewController : PVEmulatorViewController, withGame game: PVGame, loadingSaveState saveState: RMSaveStave? = nil) {
 		// Present the emulator VC
 		emulatorViewController.modalTransitionStyle = .crossDissolve
 		emulatorViewController.glViewController?.view.isHidden = saveState != nil
@@ -608,7 +608,7 @@ extension GameLaunchingViewController where Self : UIViewController {
 		self.updateRecentGames(game)
 	}
 
-	private func checkForSaveStateThenRun(withCore core : PVCore, forGame game: PVGame, completion: @escaping (PVSaveState?) -> Void) {
+	private func checkForSaveStateThenRun(withCore core : PVCore, forGame game: PVGame, completion: @escaping (RMSaveStave?) -> Void) {
 		if let latestSaveState = game.saveStates.filter("core.identifier == \"\(core.identifier)\"").sorted(byKeyPath: "date", ascending: false).first {
 			let shouldAskToLoadSaveState: Bool = PVSettingsModel.sharedInstance().askToAutoLoad
 			let shouldAutoLoadSaveState: Bool = PVSettingsModel.sharedInstance().autoLoadSaves
@@ -754,7 +754,7 @@ extension GameLaunchingViewController where Self : UIViewController {
         register3DTouchShortcuts()
     }
 
-	func openSaveState(_ saveState: PVSaveState) {
+	func openSaveState(_ saveState: RMSaveStave) {
 		if let gameVC = presentedViewController as? PVEmulatorViewController {
 
 			try? RomDatabase.sharedInstance.writeTransaction {

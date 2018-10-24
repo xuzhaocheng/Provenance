@@ -379,7 +379,7 @@ class PVGameLibraryViewController: UIViewController, UITextFieldDelegate, UINavi
         becomeFirstResponder()
     }
     var systems: Results<PVSystem>?
-	var saveStates: Results<PVSaveState>?
+	var saveStates: Results<RMSaveStave>?
     var favoriteGames: Results<PVGame>?
     var recentGames: Results<PVRecentGame>?
 
@@ -611,7 +611,7 @@ class PVGameLibraryViewController: UIViewController, UITextFieldDelegate, UINavi
 		}
 
 		systems = PVSystem.all.filter("games.@count > 0").sorted(byKeyPath: #keyPath(PVSystem.identifier))
-		saveStates = PVSaveState.all.filter("game != nil").sorted(byKeyPath: #keyPath(PVSaveState.lastOpened), ascending: false).sorted(byKeyPath: #keyPath(PVSaveState.date), ascending: false)
+		saveStates = RMSaveStave.all.filter("game != nil").sorted(byKeyPath: #keyPath(RMSaveStave.lastOpened), ascending: false).sorted(byKeyPath: #keyPath(RMSaveStave.date), ascending: false)
         recentGames = PVRecentGame.all.filter("game != nil").sorted(byKeyPath: #keyPath(PVRecentGame.lastPlayedDate), ascending: false)
         favoriteGames = PVGame.all.filter("isFavorite == YES").sorted(byKeyPath: #keyPath(PVGame.title), ascending: false)
     }
@@ -1557,7 +1557,7 @@ class PVGameLibraryViewController: UIViewController, UITextFieldDelegate, UINavi
 
 				actionSheet.addAction(UIAlertAction(title: "Yes", style: .destructive) {[unowned self] action in
 					do {
-						try PVSaveState.delete(saveState)
+						try RMSaveStave.delete(saveState)
 					} catch let error {
 						self.presentError("Error deleting save state: \(error.localizedDescription)")
 					}
@@ -1676,11 +1676,11 @@ class PVGameLibraryViewController: UIViewController, UITextFieldDelegate, UINavi
 
 			if !game.saveStates.isEmpty {
 				actionSheet.addAction(UIAlertAction(title: "View Save States", style: .default, handler: {(_ action: UIAlertAction) -> Void in
-					guard let saveStatesNavController = UIStoryboard(name: "SaveStates", bundle: nil).instantiateViewController(withIdentifier: "PVSaveStatesViewControllerNav") as? UINavigationController else {
+					guard let saveStatesNavController = UIStoryboard(name: "SaveStates", bundle: nil).instantiateViewController(withIdentifier: "RMSaveStavesViewControllerNav") as? UINavigationController else {
 						return
 					}
 
-					if let saveStatesViewController = saveStatesNavController.viewControllers.first as? PVSaveStatesViewController {
+					if let saveStatesViewController = saveStatesNavController.viewControllers.first as? RMSaveStavesViewController {
 						saveStatesViewController.saveStates = game.saveStates
 						saveStatesViewController.delegate = self
 					}
@@ -2040,7 +2040,7 @@ extension PVGameLibraryViewController : RealmCollectinViewCellDelegate {
 		} else if let recentGame = object as? PVRecentGame {
 			let cell = collectionView?.cellForItem(at: IndexPath(row: 0, section: recentGamesSection))
 			load(recentGame.game, sender: cell, core: recentGame.core, saveState: nil)
-		} else if let saveState = object as? PVSaveState {
+		} else if let saveState = object as? RMSaveStave {
 			let cell = collectionView?.cellForItem(at: IndexPath(row: 0, section: saveStateSection))
 			load(saveState.game, sender: cell, core: saveState.core, saveState: saveState)
 		}
@@ -2295,20 +2295,20 @@ extension PVGameLibraryViewController: UITableViewDelegate {
     }
 }
 
-extension PVGameLibraryViewController : PVSaveStatesViewControllerDelegate {
-	func saveStatesViewControllerDone(_ saveStatesViewController: PVSaveStatesViewController) {
+extension PVGameLibraryViewController : RMSaveStavesViewControllerDelegate {
+	func saveStatesViewControllerDone(_ saveStatesViewController: RMSaveStavesViewController) {
 		dismiss(animated: true, completion: nil)
 	}
 
-	func saveStatesViewControllerCreateNewState(_ saveStatesViewController: PVSaveStatesViewController) throws {
+	func saveStatesViewControllerCreateNewState(_ saveStatesViewController: RMSaveStavesViewController) throws {
 
 	}
 
-	func saveStatesViewControllerOverwriteState(_ saveStatesViewController: PVSaveStatesViewController, state: PVSaveState) throws {
+	func saveStatesViewControllerOverwriteState(_ saveStatesViewController: RMSaveStavesViewController, state: RMSaveStave) throws {
 
 	}
 
-	func saveStatesViewController(_ saveStatesViewController: PVSaveStatesViewController, load state: PVSaveState) {
+	func saveStatesViewController(_ saveStatesViewController: RMSaveStavesViewController, load state: RMSaveStave) {
 		dismiss(animated: true, completion: nil)
 		load(state.game, sender: self, core: state.core, saveState: state)
 	}

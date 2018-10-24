@@ -476,9 +476,9 @@ class FavoritesPlayedCollectionCell: RealmCollectinViewCell<PVGameLibraryCollect
 	}
 }
 
-class SaveStatesCollectionCell: RealmCollectinViewCell<PVSaveStateCollectionViewCell, PVSaveState> {
-	typealias SelectionObject = PVSaveState
-	typealias CellClass = PVSaveStateCollectionViewCell
+class SaveStatesCollectionCell: RealmCollectinViewCell<RMSaveStaveCollectionViewCell, RMSaveStave> {
+	typealias SelectionObject = RMSaveStave
+	typealias CellClass = RMSaveStaveCollectionViewCell
 
 //	override var subCellSize : CGSize {
 //		#if os(tvOS)
@@ -507,9 +507,9 @@ class SaveStatesCollectionCell: RealmCollectinViewCell<PVSaveStateCollectionView
 
 	override func registerSubCellClass() {
 		#if os(tvOS)
-		internalCollectionView.register(UINib(nibName: "PVSaveStateCollectionViewCell~tvOS", bundle: nil), forCellWithReuseIdentifier: "SaveStateView")
+		internalCollectionView.register(UINib(nibName: "RMSaveStaveCollectionViewCell~tvOS", bundle: nil), forCellWithReuseIdentifier: "SaveStateView")
 		#else
-		internalCollectionView.register(UINib(nibName: "PVSaveStateCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "SaveStateView")
+		internalCollectionView.register(UINib(nibName: "RMSaveStaveCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "SaveStateView")
 		#endif
 	}
 
@@ -517,7 +517,7 @@ class SaveStatesCollectionCell: RealmCollectinViewCell<PVSaveStateCollectionView
 		fatalError("init(coder:) has not been implemented")
 	}
 
-	override func setCellObject(_ object: SelectionObject, cell: PVSaveStateCollectionViewCell) {
+	override func setCellObject(_ object: SelectionObject, cell: RMSaveStaveCollectionViewCell) {
 		cell.saveState = object
 	}
 }

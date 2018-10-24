@@ -1,5 +1,5 @@
 //
-//  PVSaveStateHeaderView.swift
+//  RMSaveStaveHeaderView.swift
 //  Provenance
 //
 //  Created by James Addyman on 30/03/2018.
@@ -8,6 +8,6 @@
 
 import UIKit
 
-class PVSaveStateHeaderView: UICollectionReusableView {
+class RMSaveStaveHeaderView: UICollectionReusableView {
 	@IBOutlet weak var label: UILabel!
 }

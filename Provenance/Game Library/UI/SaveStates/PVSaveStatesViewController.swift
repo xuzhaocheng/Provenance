@@ -1,5 +1,5 @@
 //
-//  PVSaveStatesViewController.swift
+//  RMSaveStavesViewController.swift
 //  Provenance
 //
 //  Created by James Addyman on 30/03/2018.
@@ -12,27 +12,27 @@ import RealmSwift
 import PVLibrary
 import PVSupport
 
-protocol PVSaveStatesViewControllerDelegate: class {
-	func saveStatesViewControllerDone(_ saveStatesViewController: PVSaveStatesViewController)
-	func saveStatesViewControllerCreateNewState(_ saveStatesViewController: PVSaveStatesViewController) throws
-    func saveStatesViewControllerOverwriteState(_ saveStatesViewController: PVSaveStatesViewController, state: PVSaveState) throws
-	func saveStatesViewController(_ saveStatesViewController: PVSaveStatesViewController, load state: PVSaveState)
+protocol RMSaveStavesViewControllerDelegate: class {
+	func saveStatesViewControllerDone(_ saveStatesViewController: RMSaveStavesViewController)
+	func saveStatesViewControllerCreateNewState(_ saveStatesViewController: RMSaveStavesViewController) throws
+    func saveStatesViewControllerOverwriteState(_ saveStatesViewController: RMSaveStavesViewController, state: RMSaveStave) throws
+	func saveStatesViewController(_ saveStatesViewController: RMSaveStavesViewController, load state: RMSaveStave)
 }
 
-class PVSaveStatesViewController: UICollectionViewController {
+class RMSaveStavesViewController: UICollectionViewController {
 
 	private var autoSaveStatesObserverToken: NotificationToken!
 	private var manualSaveStatesObserverToken: NotificationToken!
 
-	weak var delegate: PVSaveStatesViewControllerDelegate?
+	weak var delegate: RMSaveStavesViewControllerDelegate?
 
-	var saveStates: LinkingObjects<PVSaveState>!
+	var saveStates: LinkingObjects<RMSaveStave>!
 	var screenshot: UIImage?
 
 	var coreID : String?
 
-	private var autoSaves: Results<PVSaveState>!
-	private var manualSaves: Results<PVSaveState>!
+	private var autoSaves: Results<RMSaveStave>!
+	private var manualSaves: Results<RMSaveStave>!
 
 	deinit {
 		autoSaveStatesObserverToken.invalidate()
@@ -48,12 +48,12 @@ class PVSaveStatesViewController: UICollectionViewController {
 		title = "Save States"
 #endif
 		#if os(tvOS)
-		collectionView?.register(UINib(nibName: "PVSaveStateCollectionViewCell~tvOS", bundle: nil), forCellWithReuseIdentifier: "SaveStateView")
+		collectionView?.register(UINib(nibName: "RMSaveStaveCollectionViewCell~tvOS", bundle: nil), forCellWithReuseIdentifier: "SaveStateView")
 		#else
-		collectionView?.register(UINib(nibName: "PVSaveStateCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "SaveStateView")
+		collectionView?.register(UINib(nibName: "RMSaveStaveCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "SaveStateView")
 		#endif
 
-		let allSaves : Results<PVSaveState>
+		let allSaves : Results<RMSaveStave>
 		if let coreID = coreID {
 			let filter : String = "core.identifier == \"" + coreID + "\""
 			allSaves = saveStates.filter(filter).sorted(byKeyPath: "date", ascending: false)
@@ -140,7 +140,7 @@ class PVSaveStatesViewController: UICollectionViewController {
 				return
 			}
 
-			var state: PVSaveState?
+			var state: RMSaveStave?
 			switch indexPath.section {
 			case 0:
 				state = autoSaves[indexPath.item]
@@ -158,7 +158,7 @@ class PVSaveStatesViewController: UICollectionViewController {
 			let alert = UIAlertController(title: "Delete this save state?", message: nil, preferredStyle: .alert)
 			alert.addAction(UIAlertAction(title: "Yes", style: .destructive) {[unowned self] action in
 				do {
-					try PVSaveState.delete(saveState)
+					try RMSaveStave.delete(saveState)
 				} catch {
 					self.presentError("Error deleting save state: \(error.localizedDescription)")
 				}
@@ -183,7 +183,7 @@ class PVSaveStatesViewController: UICollectionViewController {
 		}
 	}
 
-    func showSaveStateOptions(saveState: PVSaveState) {
+    func showSaveStateOptions(saveState: RMSaveStave) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Load", style: .default, handler: { (action: UIAlertAction) in
             self.delegate?.saveStatesViewController(self, load: saveState)
@@ -197,7 +197,7 @@ class PVSaveStatesViewController: UICollectionViewController {
         }))
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { (action: UIAlertAction) in
 			do {
-				try PVSaveState.delete(saveState)
+				try RMSaveStave.delete(saveState)
 			} catch {
                 self.presentError("Error deleting save state: \(error.localizedDescription)")
             }
@@ -211,7 +211,7 @@ class PVSaveStatesViewController: UICollectionViewController {
 	}
 
 	override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-		let reusableView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "SaveStateHeader", for: indexPath) as! PVSaveStateHeaderView
+		let reusableView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "SaveStateHeader", for: indexPath) as! RMSaveStaveHeaderView
 		switch indexPath.section {
 		case 0:
 			reusableView.label.text = "Auto Save"
@@ -236,8 +236,8 @@ class PVSaveStatesViewController: UICollectionViewController {
 	}
 
 	override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SaveStateView", for: indexPath) as! PVSaveStateCollectionViewCell
-		var saveState: PVSaveState?
+		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SaveStateView", for: indexPath) as! RMSaveStaveCollectionViewCell
+		var saveState: RMSaveStave?
 		switch indexPath.section {
 		case 0:
 			saveState = autoSaves[indexPath.item]
@@ -258,7 +258,7 @@ class PVSaveStatesViewController: UICollectionViewController {
 			let saveState = autoSaves[indexPath.item]
 			delegate?.saveStatesViewController(self, load: saveState)
 		case 1:
-            var saveState: PVSaveState?
+            var saveState: RMSaveStave?
 			saveState = manualSaves[indexPath.item]
             guard let state = saveState else {
                 ELOG("No save state at indexPath: \(indexPath)")

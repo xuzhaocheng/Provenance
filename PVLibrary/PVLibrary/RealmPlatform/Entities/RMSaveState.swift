@@ -1,5 +1,5 @@
 //
-//  PVSaveState.swift
+//  RMSaveStave.swift
 //  Provenance
 //
 //  Created by Joseph Mattiello on 3/11/18.
@@ -11,7 +11,7 @@ import RealmSwift
 import PVSupport
 
 @objcMembers
-public final class PVSaveState: Object {
+public final class RMSaveStave: Object {
 
     dynamic public var game: PVGame!
 	dynamic public var core: PVCore!
@@ -33,7 +33,7 @@ public final class PVSaveState: Object {
 		createdWithCoreVersion = core.projectVersion
     }
 
-    public class func delete(_ state: PVSaveState) throws {
+    public class func delete(_ state: RMSaveStave) throws {
         do {
 			// Temp store these URLs
 			let fileURL = state.file.url
@@ -61,18 +61,22 @@ public final class PVSaveState: Object {
 		return isNewest
 	}
 
-	public static func == (lhs: PVSaveState, rhs: PVSaveState) -> Bool {
+	public static func == (lhs: RMSaveStave, rhs: RMSaveStave) -> Bool {
 		return lhs.file.url == rhs.file.url
 	}
 }
 
-extension PVSaveState : DomainConvertibleType {
+extension RMSaveStave : DomainConvertibleType {
+	public typealias DomainType = SaveState
 
+	func asDomain() -> SaveState {
+		return SaveState(with: self)
+	}
 }
 
 extension SaveState: RealmRepresentable {
 
-	func asRealm() -> RMAlbum {
+	func asRealm() -> RMSaveState {
 		return RMAlbum.build { object in
 			object.title = title
 			object.uid = uid

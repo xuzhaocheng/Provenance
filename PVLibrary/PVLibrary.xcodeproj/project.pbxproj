@@ -89,6 +89,12 @@
 		B3274E862106BFD000857F52 /* ImportCandidateFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3274E852106BFD000857F52 /* ImportCandidateFile.swift */; };
 		B3274E952106C2F800857F52 /* CocoaLumberExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3274E942106C2F800857F52 /* CocoaLumberExtensions.swift */; };
 		B34AB8632106F2E900C45F09 /* PVLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = B3579D122106B11D00DDEBD6 /* PVLibrary.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B35D6695218194510005A992 /* SaveState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B35D6694218194510005A992 /* SaveState.swift */; };
+		B35D6696218194510005A992 /* SaveState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B35D6694218194510005A992 /* SaveState.swift */; };
+		B35D6698218194E30005A992 /* LocalFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B35D6697218194E30005A992 /* LocalFile.swift */; };
+		B35D6699218194E30005A992 /* LocalFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B35D6697218194E30005A992 /* LocalFile.swift */; };
+		B35D669B2181953A0005A992 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = B35D669A2181953A0005A992 /* Game.swift */; };
+		B35D669C2181953A0005A992 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = B35D669A2181953A0005A992 /* Game.swift */; };
 		B38D8FFD21577AFC00F7D25A /* ZipArchive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3AF475E21071DE0002211EE /* ZipArchive.framework */; };
 		B3AF42F42107145C002211EE /* PVDirectoryWatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D332106B4D700DDEBD6 /* PVDirectoryWatcher.swift */; };
 		B3AF475621071CDB002211EE /* LzmaSDKObjC.h in Headers */ = {isa = PBXBuildFile; fileRef = B3AF475221071CA6002211EE /* LzmaSDKObjC.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -530,6 +536,9 @@
 		B3579D342106B4D700DDEBD6 /* PVGameImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PVGameImporter.swift; sourceTree = "<group>"; };
 		B3579D362106B4D700DDEBD6 /* NSData+Hashing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSData+Hashing.h"; sourceTree = "<group>"; };
 		B3579D372106B4D700DDEBD6 /* NSData+Hashing.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSData+Hashing.m"; sourceTree = "<group>"; };
+		B35D6694218194510005A992 /* SaveState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveState.swift; sourceTree = "<group>"; };
+		B35D6697218194E30005A992 /* LocalFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFile.swift; sourceTree = "<group>"; };
+		B35D669A2181953A0005A992 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		B3AF45E32107188D002211EE /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		B3AF45E521071894002211EE /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		B3AF45E72107189E002211EE /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
@@ -990,6 +999,9 @@
 				B3174AD0217AC34C006EB928 /* Protocols */,
 				B3174AC5217ABD7F006EB928 /* BIOS.swift */,
 				B3579D2C2106B4D700DDEBD6 /* PlistDataModels.swift */,
+				B35D6694218194510005A992 /* SaveState.swift */,
+				B35D6697218194E30005A992 /* LocalFile.swift */,
+				B35D669A2181953A0005A992 /* Game.swift */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -1889,6 +1901,7 @@
 				B3274E7A2106BCA700857F52 /* RomDatabase.swift in Sources */,
 				B3AF478D21071E85002211EE /* XzCrc64Opt.c in Sources */,
 				B3174AD2217AC361006EB928 /* FileInfoProvider.swift in Sources */,
+				B35D6695218194510005A992 /* SaveState.swift in Sources */,
 				B3AF477721071E85002211EE /* Bcj2.c in Sources */,
 				B3AF47A521071EFC002211EE /* LzmaHandler.cpp in Sources */,
 				B3AF478321071E85002211EE /* LzmaDec.c in Sources */,
@@ -1949,6 +1962,7 @@
 				B3174ACD217ABDFE006EB928 /* DomainConvertibleType.swift in Sources */,
 				B3AF478421071E85002211EE /* LzmaEnc.c in Sources */,
 				B3AF478E21071E85002211EE /* XzDec.c in Sources */,
+				B35D6698218194E30005A992 /* LocalFile.swift in Sources */,
 				B3274E802106BDD300857F52 /* PVGameImporter.swift in Sources */,
 				B3C04B982107991200E7AF79 /* PVEmulatorConfiguration+Frameworks.swift in Sources */,
 				B3AF47D321071FC0002211EE /* StringToInt.cpp in Sources */,
@@ -2012,6 +2026,7 @@
 				B3274E772106BC4E00857F52 /* FileBackedConformance.swift in Sources */,
 				B3AF477C21071E85002211EE /* CpuArch.c in Sources */,
 				B3AF477D21071E85002211EE /* Delta.c in Sources */,
+				B35D669B2181953A0005A992 /* Game.swift in Sources */,
 				B3B0DA7A217AD7120006F760 /* Cache.swift in Sources */,
 				B3AF476B21071E2D002211EE /* LzmaSDKObjCCommon.cpp in Sources */,
 				B3AF478A21071E85002211EE /* Threads.c in Sources */,
@@ -2056,6 +2071,7 @@
 				B3C04AB121077B3100E7AF79 /* RomDatabase.swift in Sources */,
 				B3C04AB221077B3100E7AF79 /* XzCrc64Opt.c in Sources */,
 				B3174AD3217AC361006EB928 /* FileInfoProvider.swift in Sources */,
+				B35D6696218194510005A992 /* SaveState.swift in Sources */,
 				B3C04AB321077B3100E7AF79 /* Bcj2.c in Sources */,
 				B3C04AB421077B3100E7AF79 /* LzmaHandler.cpp in Sources */,
 				B3C04AB521077B3100E7AF79 /* LzmaDec.c in Sources */,
@@ -2116,6 +2132,7 @@
 				B3174ACE217ABDFE006EB928 /* DomainConvertibleType.swift in Sources */,
 				B3C04AE721077B3100E7AF79 /* LzmaEnc.c in Sources */,
 				B3C04AE821077B3100E7AF79 /* XzDec.c in Sources */,
+				B35D6699218194E30005A992 /* LocalFile.swift in Sources */,
 				B3C04AE921077B3100E7AF79 /* PVGameImporter.swift in Sources */,
 				B3C04B992107991200E7AF79 /* PVEmulatorConfiguration+Frameworks.swift in Sources */,
 				B3C04AEA21077B3100E7AF79 /* StringToInt.cpp in Sources */,
@@ -2179,6 +2196,7 @@
 				B3C04B2421077B3100E7AF79 /* FileBackedConformance.swift in Sources */,
 				B3C04B2521077B3100E7AF79 /* CpuArch.c in Sources */,
 				B3C04B2621077B3100E7AF79 /* Delta.c in Sources */,
+				B35D669C2181953A0005A992 /* Game.swift in Sources */,
 				B3B0DA7B217AD7120006F760 /* Cache.swift in Sources */,
 				B3C04B2721077B3100E7AF79 /* LzmaSDKObjCCommon.cpp in Sources */,
 				B3C04B2821077B3100E7AF79 /* Threads.c in Sources */,

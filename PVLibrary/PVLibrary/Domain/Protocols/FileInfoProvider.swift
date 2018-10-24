@@ -16,7 +16,7 @@ public enum FileSystemType {
 /// A type that can represent a file for library import usage
 ///
 ///
-public protocol FileInfoProvider {
+public protocol FileInfoProvider : Codable {
 	var fileName : String { get }
 	var md5 : String? { get }
 	var size : UInt64 { get }
@@ -106,4 +106,20 @@ public protocol FileBacked {
 
 public protocol LocalFileBacked : FileBacked where FileInfoProviderType : LocalFileInfoProvider {
 
+}
+
+public protocol ExpectedMD5Provider {
+	var expectedMD5 : String {get}
+}
+
+public protocol ExpectedFilenameProvider {
+	var expectedFilename : String {get}
+}
+
+public protocol ExpectedSizeProvider {
+	var expectedSize : Int {get}
+}
+
+public protocol ExpectedExistantInfoProvider {
+	var optional : Bool {get}
 }

@@ -20,7 +20,7 @@ public final class PVCore: Object {
     dynamic public var projectVersion = ""
 
 	// Reverse links
-	public var saveStates = LinkingObjects(fromType: PVSaveState.self, property: "core")
+	public var saveStates = LinkingObjects(fromType: RMSaveStave.self, property: "core")
 
     public convenience init(withIdentifier identifier: String, principleClass: String, supportedSystems: [PVSystem], name: String, url: String, version: String) {
         self.init()

@@ -49,7 +49,7 @@ public final class PVGame: Object, PVLibraryEntry {
 	dynamic public var userPreferredCoreID : String?
 
     /* Links to other objects */
-    public private(set) var saveStates = LinkingObjects<PVSaveState>(fromType: PVSaveState.self, property: "game")
+    public private(set) var saveStates = LinkingObjects<RMSaveStave>(fromType: RMSaveStave.self, property: "game")
     public private(set) var recentPlays = LinkingObjects(fromType: PVRecentGame.self, property: "game")
     public private(set) var screenShots = List<PVImageFile>()
 
@@ -124,11 +124,11 @@ public extension PVGame {
 }
 
 public extension PVGame {
-	public var autoSaves : Results<PVSaveState> {
+	public var autoSaves : Results<RMSaveStave> {
 		return saveStates.filter("isAutosave == true").sorted(byKeyPath: "date", ascending: false)
 	}
 
-	public var newestAutoSave : PVSaveState? {
+	public var newestAutoSave : RMSaveStave? {
 		return autoSaves.first
 	}
 
@@ -139,10 +139,6 @@ public extension PVGame {
 
 		return first.date.timeIntervalSinceNow * -1
 	}
-}
-
-public struct Game : Codable {
-	let title : String
 }
 
 public extension Game {
