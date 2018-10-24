@@ -65,3 +65,18 @@ public final class PVSaveState: Object {
 		return lhs.file.url == rhs.file.url
 	}
 }
+
+extension PVSaveState : DomainConvertibleType {
+
+}
+
+extension SaveState: RealmRepresentable {
+
+	func asRealm() -> RMAlbum {
+		return RMAlbum.build { object in
+			object.title = title
+			object.uid = uid
+			object.userId = userId
+		}
+	}
+}
