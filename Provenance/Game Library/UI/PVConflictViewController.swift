@@ -12,10 +12,10 @@ import PVLibrary
 import PVSupport
 
 class PVConflictViewController: UITableViewController {
-    var gameImporter: PVGameImporter?
+    var gameImporter: RMGameImporter?
     var conflictedFiles: [URL] = [URL]()
 
-    init(gameImporter: PVGameImporter) {
+    init(gameImporter: RMGameImporter) {
         super.init(style: .plain)
 
         self.gameImporter = gameImporter

@@ -414,25 +414,25 @@ class RealmCollectinViewCell<CellClass:UICollectionViewCell, SelectionObject:Obj
 // 1) Cell class to use for sub items
 // 2) Query and return type
 
-class RecentlyPlayedCollectionCell: RealmCollectinViewCell<PVGameLibraryCollectionViewCell, PVRecentGame> {
+class RecentlyPlayedCollectionCell: RealmCollectinViewCell<RMGameLibraryCollectionViewCell, PVRecentGame> {
 	typealias SelectionObject = PVRecentGame
-	typealias CellClass = PVGameLibraryCollectionViewCell
+	typealias CellClass = RMGameLibraryCollectionViewCell
 
 	@objc init(frame: CGRect) {
 		let recentGamesQuery: Results<SelectionObject> = SelectionObject.all.filter("game != nil").sorted(byKeyPath: #keyPath(SelectionObject.lastPlayedDate), ascending: false)
-		super.init(frame: frame, query: recentGamesQuery, cellId: PVGameLibraryCollectionViewCellIdentifier)
+		super.init(frame: frame, query: recentGamesQuery, cellId: RMGameLibraryCollectionViewCellIdentifier)
 	}
 
 	override func registerSubCellClass() {
 		// TODO: Use nib for cell once we drop iOS 8 and can use layouts
 		if #available(iOS 9.0, tvOS 9.0, *) {
 			#if os(iOS)
-			internalCollectionView.register(UINib(nibName: "PVGameLibraryCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: PVGameLibraryCollectionViewCellIdentifier)
+			internalCollectionView.register(UINib(nibName: "RMGameLibraryCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: RMGameLibraryCollectionViewCellIdentifier)
 			#else
-			internalCollectionView.register(UINib(nibName: "PVGameLibraryCollectionViewCell~tvOS", bundle: nil), forCellWithReuseIdentifier: PVGameLibraryCollectionViewCellIdentifier)
+			internalCollectionView.register(UINib(nibName: "RMGameLibraryCollectionViewCell~tvOS", bundle: nil), forCellWithReuseIdentifier: RMGameLibraryCollectionViewCellIdentifier)
 			#endif
 		} else {
-			internalCollectionView.register(PVGameLibraryCollectionViewCell.self, forCellWithReuseIdentifier: PVGameLibraryCollectionViewCellIdentifier)
+			internalCollectionView.register(RMGameLibraryCollectionViewCell.self, forCellWithReuseIdentifier: RMGameLibraryCollectionViewCellIdentifier)
 		}
 	}
 
@@ -440,30 +440,30 @@ class RecentlyPlayedCollectionCell: RealmCollectinViewCell<PVGameLibraryCollecti
 		fatalError("init(coder:) has not been implemented")
 	}
 
-	override func setCellObject(_ object: PVRecentGame, cell: PVGameLibraryCollectionViewCell) {
+	override func setCellObject(_ object: PVRecentGame, cell: RMGameLibraryCollectionViewCell) {
 		cell.game = object.game
 	}
 }
 
-class FavoritesPlayedCollectionCell: RealmCollectinViewCell<PVGameLibraryCollectionViewCell, PVGame> {
-	typealias SelectionObject = PVGame
-	typealias CellClass = PVGameLibraryCollectionViewCell
+class FavoritesPlayedCollectionCell: RealmCollectinViewCell<RMGameLibraryCollectionViewCell, RMGame> {
+	typealias SelectionObject = RMGame
+	typealias CellClass = RMGameLibraryCollectionViewCell
 
 	@objc init(frame: CGRect) {
-		let favoriteGamesQuery: Results<SelectionObject> = RomDatabase.sharedInstance.all(PVGame.self, where: "isFavorite", value: true).sorted(byKeyPath: #keyPath(PVGame.title), ascending: false)
-		super.init(frame: frame, query: favoriteGamesQuery, cellId: PVGameLibraryCollectionViewCellIdentifier)
+		let favoriteGamesQuery: Results<SelectionObject> = RomDatabase.sharedInstance.all(RMGame.self, where: "isFavorite", value: true).sorted(byKeyPath: #keyPath(RMGame.title), ascending: false)
+		super.init(frame: frame, query: favoriteGamesQuery, cellId: RMGameLibraryCollectionViewCellIdentifier)
 	}
 
 	override func registerSubCellClass() {
 		// TODO: Use nib for cell once we drop iOS 8 and can use layouts
 		if #available(iOS 9.0, tvOS 9.0, *) {
 			#if os(iOS)
-			internalCollectionView.register(UINib(nibName: "PVGameLibraryCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: PVGameLibraryCollectionViewCellIdentifier)
+			internalCollectionView.register(UINib(nibName: "RMGameLibraryCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: RMGameLibraryCollectionViewCellIdentifier)
 			#else
-			internalCollectionView.register(UINib(nibName: "PVGameLibraryCollectionViewCell~tvOS", bundle: nil), forCellWithReuseIdentifier: PVGameLibraryCollectionViewCellIdentifier)
+			internalCollectionView.register(UINib(nibName: "RMGameLibraryCollectionViewCell~tvOS", bundle: nil), forCellWithReuseIdentifier: RMGameLibraryCollectionViewCellIdentifier)
 			#endif
 		} else {
-			internalCollectionView.register(PVGameLibraryCollectionViewCell.self, forCellWithReuseIdentifier: PVGameLibraryCollectionViewCellIdentifier)
+			internalCollectionView.register(RMGameLibraryCollectionViewCell.self, forCellWithReuseIdentifier: RMGameLibraryCollectionViewCellIdentifier)
 		}
 	}
 
@@ -471,14 +471,14 @@ class FavoritesPlayedCollectionCell: RealmCollectinViewCell<PVGameLibraryCollect
 		fatalError("init(coder:) has not been implemented")
 	}
 
-	override func setCellObject(_ object: PVGame, cell: PVGameLibraryCollectionViewCell) {
+	override func setCellObject(_ object: RMGame, cell: RMGameLibraryCollectionViewCell) {
 		cell.game = object
 	}
 }
 
-class SaveStatesCollectionCell: RealmCollectinViewCell<RMSaveStaveCollectionViewCell, RMSaveStave> {
-	typealias SelectionObject = RMSaveStave
-	typealias CellClass = RMSaveStaveCollectionViewCell
+class SaveStatesCollectionCell: RealmCollectinViewCell<RMSaveStateCollectionViewCell, RMSaveState> {
+	typealias SelectionObject = RMSaveState
+	typealias CellClass = RMSaveStateCollectionViewCell
 
 //	override var subCellSize : CGSize {
 //		#if os(tvOS)
@@ -507,9 +507,9 @@ class SaveStatesCollectionCell: RealmCollectinViewCell<RMSaveStaveCollectionView
 
 	override func registerSubCellClass() {
 		#if os(tvOS)
-		internalCollectionView.register(UINib(nibName: "RMSaveStaveCollectionViewCell~tvOS", bundle: nil), forCellWithReuseIdentifier: "SaveStateView")
+		internalCollectionView.register(UINib(nibName: "RMSaveStateCollectionViewCell~tvOS", bundle: nil), forCellWithReuseIdentifier: "SaveStateView")
 		#else
-		internalCollectionView.register(UINib(nibName: "RMSaveStaveCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "SaveStateView")
+		internalCollectionView.register(UINib(nibName: "RMSaveStateCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "SaveStateView")
 		#endif
 	}
 
@@ -517,7 +517,7 @@ class SaveStatesCollectionCell: RealmCollectinViewCell<RMSaveStaveCollectionView
 		fatalError("init(coder:) has not been implemented")
 	}
 
-	override func setCellObject(_ object: SelectionObject, cell: RMSaveStaveCollectionViewCell) {
+	override func setCellObject(_ object: SelectionObject, cell: RMSaveStateCollectionViewCell) {
 		cell.saveState = object
 	}
 }

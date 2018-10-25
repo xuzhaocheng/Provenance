@@ -11,8 +11,8 @@ import Foundation
 public let PVMaxRecentsShortcutCount: Int = 4
 public let PVAppGroupId                    = "group.joemattiello.provenance"
 public let kInterfaceDidChangeNotification = "kInterfaceDidChangeNotification"
-public let PVGameControllerKey             = "PlayController"
-public let PVGameMD5Key                    = "md5"
+public let RMGameControllerKey             = "PlayController"
+public let RMGameMD5Key                    = "md5"
 public let PVAppURLKey                     = "provenance"
 
 #if os(tvOS)

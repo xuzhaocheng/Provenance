@@ -1,5 +1,5 @@
 //
-//  RMSaveStaveInfoViewController.swift
+//  RMSaveStateInfoViewController.swift
 //  Provenance
 //
 //  Created by Joseph Mattiello on 4/1/18.
@@ -11,7 +11,7 @@ import RealmSwift
 import PVLibrary
 import PVSupport
 
-class RMSaveStaveInfoViewController: UIViewController, GameLaunchingViewController {
+class RMSaveStateInfoViewController: UIViewController, GameLaunchingViewController {
 	var mustRefreshDataSource: Bool = false
 
 	@IBOutlet weak var imageView: UIImageView!
@@ -25,7 +25,7 @@ class RMSaveStaveInfoViewController: UIViewController, GameLaunchingViewControll
 
 	@IBOutlet weak var playBarButtonItem: UIBarButtonItem!
 
-	var saveState : RMSaveStave? {
+	var saveState : RMSaveState? {
 		didSet {
 			assert(saveState != nil, "Set a nil game")
 
@@ -92,13 +92,13 @@ class RMSaveStaveInfoViewController: UIViewController, GameLaunchingViewControll
 		coreLabel.text = saveState.core.projectName
 		coreVersionLabel.text = saveState.createdWithCoreVersion
 
-		let createdText = "\(RMSaveStaveInfoViewController.dateFormatter.string(from: saveState.date)), \(RMSaveStaveInfoViewController.timeFormatter.string(from: saveState.date))"
+		let createdText = "\(RMSaveStateInfoViewController.dateFormatter.string(from: saveState.date)), \(RMSaveStateInfoViewController.timeFormatter.string(from: saveState.date))"
 		createdLabel.text = createdText
 
 		title = "\(saveState.game.title) : \(createdText)"
 
 		if let lastOpened = saveState.lastOpened {
-			let lastOpenedText = "\(RMSaveStaveInfoViewController.dateFormatter.string(from: lastOpened)), \(RMSaveStaveInfoViewController.timeFormatter.string(from: lastOpened))"
+			let lastOpenedText = "\(RMSaveStateInfoViewController.dateFormatter.string(from: lastOpened)), \(RMSaveStateInfoViewController.timeFormatter.string(from: lastOpened))"
 			print("Last opened \(lastOpenedText)")
 			lastPlayedLabel.text = lastOpenedText
 		} else {
@@ -153,7 +153,7 @@ class RMSaveStaveInfoViewController: UIViewController, GameLaunchingViewControll
 }
 
 @available(iOS 9.0, *)
-extension RMSaveStaveInfoViewController {
+extension RMSaveStateInfoViewController {
 
 	// Buttons that shw up under thie VC when it's in a push/pop preview display mode
 	override var previewActionItems: [UIPreviewActionItem] {
@@ -166,7 +166,7 @@ extension RMSaveStaveInfoViewController {
 			alert.addAction(UIAlertAction(title: "Yes", style: .destructive, handler: {(_ action: UIAlertAction) -> Void in
 				if let saveState = self.saveState {
 					do {
-						try RMSaveStave.delete(saveState)
+						try RMSaveState.delete(saveState)
 					} catch {
 						self.presentError("Error deleting save state: " + error.localizedDescription)
 					}

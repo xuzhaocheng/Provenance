@@ -130,8 +130,8 @@ public extension PVSystem {
     }
 }
 
-// MARK: - PVGame convenience extension
-public extension PVGame {
+// MARK: - RMGame convenience extension
+public extension RMGame {
     // TODO: See above TODO, this should be based on the ROM systemid/md5
     public var batterSavesPath: URL {
         return PVEmulatorConfiguration.batterySavesPath(forGame: self)
@@ -395,7 +395,7 @@ public extension PVEmulatorConfiguration {
         return biosesPath.appendingPathComponent(systemID, isDirectory: true)
     }
 
-    class func biosPath(forGame game: PVGame) -> URL {
+    class func biosPath(forGame game: RMGame) -> URL {
         return biosPath(forSystemIdentifier: game.systemIdentifier)
     }
 
@@ -459,7 +459,7 @@ public extension PVEmulatorConfiguration {
 // MARK: - Rom queries
 public extension PVEmulatorConfiguration {
 
-    class func batterySavesPath(forGame game: PVGame) -> URL {
+    class func batterySavesPath(forGame game: RMGame) -> URL {
         return batterySavesPath(forROM: game.url)
     }
 
@@ -476,7 +476,7 @@ public extension PVEmulatorConfiguration {
         return batterySavesDirectory
     }
 
-    class func saveStatePath(forGame game: PVGame) -> URL {
+    class func saveStatePath(forGame game: RMGame) -> URL {
         return saveStatePath(forROM: game.url)
     }
 
@@ -493,7 +493,7 @@ public extension PVEmulatorConfiguration {
         return saveSavesPath
     }
 
-	class func screenshotsPath(forGame game: PVGame) -> URL {
+	class func screenshotsPath(forGame game: RMGame) -> URL {
 		let screenshotsPath = self.screenShotsPath.appendingPathComponent(game.system.shortName, isDirectory: true).appendingPathComponent(game.title, isDirectory: true)
 
 		do {
@@ -505,7 +505,7 @@ public extension PVEmulatorConfiguration {
 		return screenshotsPath
 	}
 
-    class func path(forGame game: PVGame) -> URL {
+    class func path(forGame game: RMGame) -> URL {
         return game.file.url
     }
 }
@@ -517,7 +517,7 @@ public extension PVEmulatorConfiguration {
     }
 
     @objc
-    class func m3uFile(forGame game: PVGame) -> URL? {
+    class func m3uFile(forGame game: RMGame) -> URL? {
         let gamePath = self.path(forGame: game)
         let gameDirectory = self.romDirectory(forSystemIdentifier: game.system.identifier)
         let filenameWithoutExtension =  stripDiscNames(fromFilename: gamePath.deletingPathExtension().lastPathComponent)

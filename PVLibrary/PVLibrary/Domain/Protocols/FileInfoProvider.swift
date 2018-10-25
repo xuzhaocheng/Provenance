@@ -13,14 +13,36 @@ public enum FileSystemType {
 	case remote
 }
 
+public struct FileInfo : Codable, FileInfoProvider {
+	public let fileName : String
+	public let size : UInt64
+	public let md5 : String?
+	public let online : Bool
+	public let local : Bool
+
+	public init(fileName : String, size : UInt64 = 0, md5 : String? = nil, online : Bool = true, local : Bool = true) {
+		self.fileName = fileName
+		self.size = size
+		self.md5 = md5
+		self.online = online
+		self.local = local
+	}
+}
+
+public typealias FileProviderFetch = (Data?) -> Void
 /// A type that can represent a file for library import usage
 ///
 ///
 public protocol FileInfoProvider : Codable {
 	var fileName : String { get }
 	var md5 : String? { get }
+//	var crc : String? { get }
 	var size : UInt64 { get }
 	var online : Bool { get }
+}
+
+public protocol FileProvider : FileInfoProvider {
+	func fetchData(completion: @escaping (Data?) -> Void)
 }
 
 public protocol LocalFileInfoProvider : FileInfoProvider {
@@ -35,10 +57,17 @@ public extension LocalFileProvider {
 	var data : Data? {
 		return try? Data(contentsOf: url)
 	}
+
+	func fetchData(completion: @escaping FileProviderFetch) {
+		DispatchQueue.global(qos: .background).async {
+			completion(self.data)
+		}
+	}
 }
 
-public protocol DataProvider {
+public protocol DataProvider : Codable {
 	var data : Data? { get }
+	func fetchData(completion: @escaping FileProviderFetch)
 }
 
 public protocol RemoteFileInfoProvider : FileInfoProvider {

@@ -54,7 +54,7 @@ extension WebServerActivatorController where Self:PVSettingsViewController {
 #if os(tvOS)
 typealias WebServerActivatorControllerRootClass = UIViewController
 #else
-typealias WebServerActivatorControllerRootClass = PVGameLibraryViewController
+typealias WebServerActivatorControllerRootClass = RMGameLibraryViewController
 #endif
 
 extension WebServerActivatorController where Self: WebServerActivatorControllerRootClass {

@@ -20,6 +20,6 @@ typedef NS_ENUM(NSUInteger, PVControllerAxisDirection) {
     PVControllerAxisDirectionDownLeft
 };
 
-@interface PVGameControllerUtilities : NSObject
+@interface RMGameControllerUtilities : NSObject
 + (PVControllerAxisDirection)axisDirectionForThumbstick:(GCControllerDirectionPad *)thumbstick;
 @end

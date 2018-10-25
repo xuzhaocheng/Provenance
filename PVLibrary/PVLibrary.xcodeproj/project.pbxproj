@@ -429,6 +429,8 @@
 		B3C04B932107973000E7AF79 /* ZIPFoundation.framework in Copy Framework */ = {isa = PBXBuildFile; fileRef = B3C04B882107972100E7AF79 /* ZIPFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B3C04B982107991200E7AF79 /* PVEmulatorConfiguration+Frameworks.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C04B972107991100E7AF79 /* PVEmulatorConfiguration+Frameworks.swift */; };
 		B3C04B992107991200E7AF79 /* PVEmulatorConfiguration+Frameworks.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C04B972107991100E7AF79 /* PVEmulatorConfiguration+Frameworks.swift */; };
+		B3F4CB1A2181A43700B7BF4E /* Core.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3F4CB192181A43700B7BF4E /* Core.swift */; };
+		B3F4CB1B2181A43700B7BF4E /* Core.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3F4CB192181A43700B7BF4E /* Core.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -888,6 +890,7 @@
 		B3C04B8A2107972200E7AF79 /* SQLite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SQLite.framework; path = Carthage/Build/iOS/SQLite.framework; sourceTree = "<group>"; };
 		B3C04B8B2107972200E7AF79 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Carthage/Build/iOS/Realm.framework; sourceTree = "<group>"; };
 		B3C04B972107991100E7AF79 /* PVEmulatorConfiguration+Frameworks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PVEmulatorConfiguration+Frameworks.swift"; sourceTree = "<group>"; };
+		B3F4CB192181A43700B7BF4E /* Core.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Core.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1002,6 +1005,7 @@
 				B35D6694218194510005A992 /* SaveState.swift */,
 				B35D6697218194E30005A992 /* LocalFile.swift */,
 				B35D669A2181953A0005A992 /* Game.swift */,
+				B3F4CB192181A43700B7BF4E /* Core.swift */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -1929,6 +1933,7 @@
 				B3274E6B2106BBA500857F52 /* PlistDataModels.swift in Sources */,
 				B3AF477B21071E85002211EE /* BraIA64.c in Sources */,
 				B3274E7E2106BD7600857F52 /* NSFileManager+Hashing.m in Sources */,
+				B3F4CB1A2181A43700B7BF4E /* Core.swift in Sources */,
 				B3AF479121071EC1002211EE /* 7zDecode.cpp in Sources */,
 				B3AF479021071E85002211EE /* XzIn.c in Sources */,
 				B3AF479D21071EC1002211EE /* 7zUpdate.cpp in Sources */,
@@ -2099,6 +2104,7 @@
 				B3C04ACB21077B3100E7AF79 /* PlistDataModels.swift in Sources */,
 				B3C04ACC21077B3100E7AF79 /* BraIA64.c in Sources */,
 				B3C04ACD21077B3100E7AF79 /* NSFileManager+Hashing.m in Sources */,
+				B3F4CB1B2181A43700B7BF4E /* Core.swift in Sources */,
 				B3C04ACE21077B3100E7AF79 /* 7zDecode.cpp in Sources */,
 				B3C04ACF21077B3100E7AF79 /* XzIn.c in Sources */,
 				B3C04AD021077B3100E7AF79 /* 7zUpdate.cpp in Sources */,

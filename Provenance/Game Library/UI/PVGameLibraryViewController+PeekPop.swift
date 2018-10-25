@@ -1,5 +1,5 @@
 //
-//  PVGameLibraryViewController+PeekPop.swift
+//  RMGameLibraryViewController+PeekPop.swift
 //  Provenance
 //
 //  Created by Joseph Mattiello on 5/26/18.
@@ -13,14 +13,14 @@ import PVSupport
 
 #if os(iOS)
 @available(iOS 9.0, *)
-extension PVGameLibraryViewController: UIViewControllerPreviewingDelegate {
+extension RMGameLibraryViewController: UIViewControllerPreviewingDelegate {
 	func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
 
-		if let moreInfoVC = viewControllerToCommit as? PVGameMoreInfoViewController {
+		if let moreInfoVC = viewControllerToCommit as? RMGameMoreInfoViewController {
 			let moreInfoGamePageVC = UIStoryboard(name: "Provenance", bundle: nil).instantiateViewController(withIdentifier: "gameMoreInfoPageVC") as! GameMoreInfoPageViewController
 			moreInfoGamePageVC.setViewControllers([moreInfoVC], direction: .forward, animated: false, completion: nil)
 			navigationController!.show(moreInfoGamePageVC, sender: self)
-		} else if let saveSaveInfoVC = viewControllerToCommit as? RMSaveStaveInfoViewController {
+		} else if let saveSaveInfoVC = viewControllerToCommit as? RMSaveStateInfoViewController {
 			navigationController!.show(saveSaveInfoVC, sender: self)
 		}
 	}
@@ -35,7 +35,7 @@ extension PVGameLibraryViewController: UIViewControllerPreviewingDelegate {
 			if searchResults == nil, indexPath.section == saveStateSection {
 				let storyBoard = UIStoryboard(name: "SaveStates", bundle: nil)
 
-				let saveStateInfoVC = storyBoard.instantiateViewController(withIdentifier: "saveStateInfoVC") as! RMSaveStaveInfoViewController
+				let saveStateInfoVC = storyBoard.instantiateViewController(withIdentifier: "saveStateInfoVC") as! RMSaveStateInfoViewController
 				let saveStatesCell = collectionView!.cellForItem(at: IndexPath(row: 0, section: saveStateSection)) as! SaveStatesCollectionCell
 
 				let location2 = saveStatesCell.internalCollectionView.convert(location, from: collectionView)
@@ -49,7 +49,7 @@ extension PVGameLibraryViewController: UIViewControllerPreviewingDelegate {
 				}
 				let storyBoard = UIStoryboard(name: "Provenance", bundle: nil)
 
-				let moreInfoViewContrller = storyBoard.instantiateViewController(withIdentifier: "gameMoreInfoVC") as! PVGameMoreInfoViewController
+				let moreInfoViewContrller = storyBoard.instantiateViewController(withIdentifier: "gameMoreInfoVC") as! RMGameMoreInfoViewController
 				moreInfoViewContrller.game = game
 				moreInfoViewContrller.showsPlayButton = true
 				return moreInfoViewContrller

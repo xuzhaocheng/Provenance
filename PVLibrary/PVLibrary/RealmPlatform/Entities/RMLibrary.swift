@@ -1,5 +1,5 @@
 //
-//  PVGame.swift
+//  RMGame.swift
 //  Provenance
 //
 //  Created by Joe Mattiello on 10/02/2018.
@@ -28,7 +28,7 @@ public final class PVLibrary: Object {
 
 	dynamic public var lastSeen : Date = Date()
 
-	public private(set) var games = List<PVGame>()
+	public private(set) var games = List<RMGame>()
 }
 
 // PVLibrary - Network

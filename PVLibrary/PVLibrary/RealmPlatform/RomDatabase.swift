@@ -61,7 +61,7 @@ public final class RealmConfiguration {
 
                 var counter = 0
                 var deletions = 0
-                migration.enumerateObjects(ofType: PVGame.className()) { oldObject, newObject in
+                migration.enumerateObjects(ofType: RMGame.className()) { oldObject, newObject in
                     let romPath = oldObject!["romPath"] as! String
                     let systemID = oldObject!["systemIdentifier"] as! String
                     let system = SystemIdentifier(rawValue: systemID)!
@@ -170,7 +170,7 @@ public final class RomDatabase {
 		newLibrary.domainname = "localhost"
 		newLibrary.name = "Default Library"
 		newLibrary.ipaddress = "127.0.0.1"
-		if let existingGames = _sharedInstance?.realm.objects(PVGame.self).filter("libraries.@count == 0") {
+		if let existingGames = _sharedInstance?.realm.objects(RMGame.self).filter("libraries.@count == 0") {
 			newLibrary.games.append(objectsIn: existingGames)
 		}
 		try! _sharedInstance?.add(newLibrary)
@@ -249,7 +249,7 @@ public extension RomDatabase {
         return T.objects(in: self.realm, with: NSPredicate(format: "\(keyPath._kvcKeyPathString) == %@", value))
     }
      
-     public func allGames(sortedByKeyPath keyPath: KeyPath<PVGame, AnyKeyPath>, ascending: Bool = true) -> Results<PVGame> {
+     public func allGames(sortedByKeyPath keyPath: KeyPath<RMGame, AnyKeyPath>, ascending: Bool = true) -> Results<RMGame> {
         return all(sortedByKeyPath: keyPath, ascending: ascending)
      }
 
@@ -292,16 +292,16 @@ public extension RomDatabase {
     }
 
     // HELPERS -- TODO: Get rid once we're all swift
-    public var allGames: Results<PVGame> {
-        return self.all(PVGame.self)
+    public var allGames: Results<RMGame> {
+        return self.all(RMGame.self)
     }
 
-    public func allGames(sortedByKeyPath keyPath: String, ascending: Bool = true) -> Results<PVGame> {
-        return all(PVGame.self, sortedByKeyPath: keyPath, ascending: ascending)
+    public func allGames(sortedByKeyPath keyPath: String, ascending: Bool = true) -> Results<RMGame> {
+        return all(RMGame.self, sortedByKeyPath: keyPath, ascending: ascending)
     }
 
-    public func allGamesSortedBySystemThenTitle() -> Results<PVGame> {
-        return realm.objects(PVGame.self).sorted(byKeyPath: "systemIdentifier").sorted(byKeyPath: "title")
+    public func allGamesSortedBySystemThenTitle() -> Results<RMGame> {
+        return realm.objects(RMGame.self).sorted(byKeyPath: "systemIdentifier").sorted(byKeyPath: "title")
     }
 }
 
@@ -355,7 +355,7 @@ public extension RomDatabase {
         }
     }
 
-	func renameGame(_ game: PVGame, toTitle title: String) {
+	func renameGame(_ game: RMGame, toTitle title: String) {
 		if !title.isEmpty {
 			do {
 				try RomDatabase.sharedInstance.writeTransaction {
@@ -364,7 +364,7 @@ public extension RomDatabase {
 
 				if game.releaseID == nil || game.releaseID!.isEmpty {
 					ILOG("Game isn't already matched, going to try to re-match after a rename")
-					PVGameImporter.shared.lookupInfo(for: game, overwrite: false)
+					RMGameImporter.shared.lookupInfo(for: game, overwrite: false)
 				}
 			} catch {
 				ELOG("Failed to rename game \(game.title)\n\(error.localizedDescription)")
@@ -372,7 +372,7 @@ public extension RomDatabase {
 		}
 	}
 
-	func delete(game: PVGame) throws {
+	func delete(game: RMGame) throws {
 		let romURL = PVEmulatorConfiguration.path(forGame: game)
 
 		if !game.customArtworkURL.isEmpty {
@@ -432,7 +432,7 @@ public extension RomDatabase {
 		}
 	}
 
-	func deleteRelatedFilesGame(_ game: PVGame) throws {
+	func deleteRelatedFilesGame(_ game: RMGame) throws {
 		guard let system = game.system else {
 			ELOG("Game \(game.title) belongs to an unknown system \(game.systemIdentifier)")
 			throw RomDeletionError.relatedFiledDeletionError
@@ -476,7 +476,7 @@ import CoreSpotlight
 
 @available(iOS 9.0, *)
 extension RomDatabase {
-	private func deleteFromSpotlight(game: PVGame) {
+	private func deleteFromSpotlight(game: RMGame) {
 		CSSearchableIndex.default().deleteSearchableItems(withIdentifiers: [game.spotlightUniqueIdentifier], completionHandler: { (error) in
 			if let error = error {
 				print("Error deleting game spotlight item: \(error)")

@@ -1,5 +1,5 @@
 //
-//  PVGameMoreInfoViewController.swift
+//  RMGameMoreInfoViewController.swift
 //  Provenance
 //
 //  Created by Joseph Mattiello on 2/13/18.
@@ -81,11 +81,11 @@ class GameMoreInfoPageViewController: UIPageViewController, UIPageViewController
         self.delegate = self
     }
 
-    var game: PVGame? {
-        return (self.viewControllers?.first as? PVGameMoreInfoViewController)?.game
+    var game: RMGame? {
+        return (self.viewControllers?.first as? RMGameMoreInfoViewController)?.game
     }
 
-    lazy var games: Results<PVGame> = {
+    lazy var games: Results<RMGame> = {
         RomDatabase.sharedInstance.allGamesSortedBySystemThenTitle()
     }()
 
@@ -139,7 +139,7 @@ class GameMoreInfoPageViewController: UIPageViewController, UIPageViewController
     // For gesture-initiated transitions, the page view controller obtains view controllers via these methods, so use of setViewControllers:direction:animated:completion: is not required.
     // MARK: - UIPageViewControllerDataSource
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard let moreInfoviewController = viewController as? PVGameMoreInfoViewController else {
+        guard let moreInfoviewController = viewController as? RMGameMoreInfoViewController else {
             ELOG("Wrong controller type \(viewController.debugDescription)")
             return nil
         }
@@ -147,7 +147,7 @@ class GameMoreInfoPageViewController: UIPageViewController, UIPageViewController
     }
 
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let moreInfoviewController = viewController as? PVGameMoreInfoViewController else {
+        guard let moreInfoviewController = viewController as? RMGameMoreInfoViewController else {
             ELOG("Wrong controller type \(viewController.debugDescription)")
             return nil
         }
@@ -159,7 +159,7 @@ class GameMoreInfoPageViewController: UIPageViewController, UIPageViewController
 //    public func presentationCount(for pageViewController: UIPageViewController) -> Int // The number of items reflected in the page indicator.
 //    public func presentationIndex(for pageViewController: UIPageViewController) -> Int // The selected item reflected in the page indicator.
 
-    private func nextFrom(viewController: PVGameMoreInfoViewController, direction: UIPageViewControllerNavigationDirection) -> PVGameMoreInfoViewController? {
+    private func nextFrom(viewController: RMGameMoreInfoViewController, direction: UIPageViewControllerNavigationDirection) -> RMGameMoreInfoViewController? {
         guard let game = viewController.game, let currentIndex = games.index(of: game) else {
             ELOG("Game or current index was nil")
             return nil
@@ -172,7 +172,7 @@ class GameMoreInfoPageViewController: UIPageViewController, UIPageViewController
         }
 
         let storyboard = UIStoryboard.init(name: "Provenance", bundle: nil)
-        let nextViewController = storyboard.instantiateViewController(withIdentifier: "gameMoreInfoVC") as! PVGameMoreInfoViewController
+        let nextViewController = storyboard.instantiateViewController(withIdentifier: "gameMoreInfoVC") as! RMGameMoreInfoViewController
 
         let nextGame = games[nextGameIndex]
         nextViewController.game = nextGame
@@ -214,10 +214,10 @@ class GameMoreInfoPageViewController: UIPageViewController, UIPageViewController
     @IBOutlet weak var onlineLookupBarButtonItem: UIBarButtonItem!
 }
 
-class PVGameMoreInfoViewController: UIViewController, GameLaunchingViewController, GameSharingViewController {
+class RMGameMoreInfoViewController: UIViewController, GameLaunchingViewController, GameSharingViewController {
 
     @objc
-    public var game: PVGame! {
+    public var game: RMGame! {
         didSet {
             assert(game != nil, "Set a nil game")
 
@@ -357,7 +357,7 @@ class PVGameMoreInfoViewController: UIViewController, GameLaunchingViewControlle
 
         var descriptionText = game?.gameDescription  ?? ""
         #if DEBUG
-		// Add debuging info about the PVGame database entry to the bottom of the text field
+		// Add debuging info about the RMGame database entry to the bottom of the text field
 			descriptionText = [descriptionText, game?.debugDescription ?? ""].joined(separator: "\n")
         #endif
         descriptionTextView.text = descriptionText
@@ -560,23 +560,23 @@ class PVGameMoreInfoViewController: UIViewController, GameLaunchingViewControlle
     }
 
     @IBAction func nameTapped(_ sender: Any) {
-		editKey(\PVGame.title, title: "Title", label: nameLabel, reloadGameInfoAfter: true)
+		editKey(\RMGame.title, title: "Title", label: nameLabel, reloadGameInfoAfter: true)
     }
 
     @IBAction func developerTapped(_ sender: Any) {
-        editKey(\PVGame.developer, title: "Developer", label: developerLabel)
+        editKey(\RMGame.developer, title: "Developer", label: developerLabel)
     }
 
     @IBAction func publishDateTapped(_ sender: Any) {
-        editKey(\PVGame.publishDate, title: "Published Date", label: publishDateLabel)
+        editKey(\RMGame.publishDate, title: "Published Date", label: publishDateLabel)
     }
 
     @IBAction func genresTapped(_ sender: Any) {
-        editKey(\PVGame.genres, title: "Genres", label: genresLabel)
+        editKey(\RMGame.genres, title: "Genres", label: genresLabel)
     }
 
     @IBAction func regionLongPressed(_ sender: Any) {
-        editKey(\PVGame.regionName, title: "Regions", label: regionLabel)
+        editKey(\RMGame.regionName, title: "Regions", label: regionLabel)
     }
 
     @IBAction func descriptionTapped(_ sender: Any) {
@@ -603,7 +603,7 @@ class PVGameMoreInfoViewController: UIViewController, GameLaunchingViewControlle
     }
 
     // Deal will nullable key paths
-    private func editKey(_ key: WritableKeyPath<PVGame, String?>, title: String, label: UILabel) {
+    private func editKey(_ key: WritableKeyPath<RMGame, String?>, title: String, label: UILabel) {
         let currentValue = game![keyPath: key]
         let alert = UIAlertController(title: "Edit \(title)", message: nil, preferredStyle: .alert)
 
@@ -636,7 +636,7 @@ class PVGameMoreInfoViewController: UIViewController, GameLaunchingViewControlle
     }
 
     // Deal with non-null - non-empty keys paths
-	private func editKey(_ key: WritableKeyPath<PVGame, String>, title: String, label: UILabel, reloadGameInfoAfter: Bool = false) {
+	private func editKey(_ key: WritableKeyPath<RMGame, String>, title: String, label: UILabel, reloadGameInfoAfter: Bool = false) {
 
         let currentValue = game![keyPath: key]
         let alert = UIAlertController(title: "Edit \(title)", message: nil, preferredStyle: .alert)
@@ -669,7 +669,7 @@ class PVGameMoreInfoViewController: UIViewController, GameLaunchingViewControlle
                     label.text = newValue
 
 					if reloadGameInfoAfter, self.game.releaseID == nil || self.game.releaseID!.isEmpty {
-						PVGameImporter.shared.lookupInfo(for: self.game, overwrite: false)
+						RMGameImporter.shared.lookupInfo(for: self.game, overwrite: false)
 					}
                 } catch {
                     ELOG("Failed to update value of \(key) to \(newValue). \(error.localizedDescription)")
@@ -701,7 +701,7 @@ class PVGameMoreInfoViewController: UIViewController, GameLaunchingViewControlle
 }
 
 @available(iOS 9.0, *)
-extension PVGameMoreInfoViewController {
+extension RMGameMoreInfoViewController {
 
      // Buttons that shw up under thie VC when it's in a push/pop preview display mode
     override var previewActionItems: [UIPreviewActionItem] {
@@ -710,7 +710,7 @@ extension PVGameMoreInfoViewController {
 		}
 
         let playAction = UIPreviewAction(title: "Play", style: .default) { (action, viewController) in
-            if let libVC = self.presentingViewController as? PVGameLibraryViewController {
+            if let libVC = self.presentingViewController as? RMGameLibraryViewController {
 				libVC.load(game, sender: self.view, core: nil)
             }
         }
@@ -751,7 +751,7 @@ extension PVGameMoreInfoViewController {
     }
 }
 
-extension PVGameMoreInfoViewController: UITextViewDelegate {
+extension RMGameMoreInfoViewController: UITextViewDelegate {
     func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
         return true
     }
@@ -782,7 +782,7 @@ extension PVGameMoreInfoViewController: UITextViewDelegate {
 }
 
 #if os(tvOS)
-extension PVGameMoreInfoViewController {
+extension RMGameMoreInfoViewController {
 //    override var preferredFocusedView: UIView? {
 //        return artworkImageView
 //    }
@@ -812,7 +812,7 @@ extension PVGameMoreInfoViewController {
 #endif
 
 // MARK: - Edit Gesture
-extension PVGameMoreInfoViewController {
+extension RMGameMoreInfoViewController {
     private func askToResetAnalytics() {
         let alert = UIAlertController(title: "Erase history?", message: "Would you like to erase your play counter and time spent in \(game!.title)?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
@@ -872,10 +872,10 @@ extension PVGameMoreInfoViewController {
         #endif
     }
 
-    // TODO: These are copied from PVGameLibraryViewController
+    // TODO: These are copied from RMGameLibraryViewController
     // Can make a protocol with default implimentation instead
     #if os(iOS)
-    func chooseCustomArtwork(for game: PVGame) {
+    func chooseCustomArtwork(for game: RMGame) {
 //
 //        let imagePickerActionSheet = UIActionSheet()
 //        let cameraIsAvailable: Bool = UIImagePickerController.isSourceTypeAvailable(.camera)
@@ -967,7 +967,7 @@ extension PVGameMoreInfoViewController {
 //        })
     }
 
-    func pasteCustomArtwork(for game: PVGame) {
+    func pasteCustomArtwork(for game: RMGame) {
         let pb = UIPasteboard.general
         var pastedImageMaybe: UIImage? = pb.image
 

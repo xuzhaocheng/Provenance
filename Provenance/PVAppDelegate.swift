@@ -17,7 +17,7 @@ import RealmSwift
 class PVAppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var shortcutItemGame: PVGame?
+    var shortcutItemGame: RMGame?
 	var fileLogger:DDFileLogger = DDFileLogger()
 
 	#if os(iOS)
@@ -53,7 +53,7 @@ class PVAppDelegate: UIResponder, UIApplicationDelegate {
 
 #if os(iOS)
         if #available(iOS 9.0, *) {
-            if let shortcut = launchOptions?[.shortcutItem] as? UIApplicationShortcutItem, shortcut.type == "kRecentGameShortcut", let md5Value = shortcut.userInfo?["PVGameHash"] as? String, let matchedGame = try? Realm().object(ofType: PVGame.self, forPrimaryKey: md5Value) {
+            if let shortcut = launchOptions?[.shortcutItem] as? UIApplicationShortcutItem, shortcut.type == "kRecentGameShortcut", let md5Value = shortcut.userInfo?["RMGameHash"] as? String, let matchedGame = try? Realm().object(ofType: RMGame.self, forPrimaryKey: md5Value) {
                 shortcutItemGame = matchedGame
             }
         }
@@ -134,11 +134,11 @@ class PVAppDelegate: UIResponder, UIApplicationDelegate {
                     return false
                 }
 
-				let md5QueryItem = queryItems.first { $0.name == PVGameMD5Key }
+				let md5QueryItem = queryItems.first { $0.name == RMGameMD5Key }
 				let systemItem = queryItems.first { $0.name == "system" }
 				let nameItem = queryItems.first { $0.name == "title" }
 
-				if let md5QueryItem = md5QueryItem, let value = md5QueryItem.value, !value.isEmpty, let matchedGame = try? Realm().object(ofType: PVGame.self, forPrimaryKey: value) {
+				if let md5QueryItem = md5QueryItem, let value = md5QueryItem.value, !value.isEmpty, let matchedGame = try? Realm().object(ofType: RMGame.self, forPrimaryKey: value) {
 					// Match by md5
 					ILOG("Open by md5 \(value)")
 					shortcutItemGame = matchedGame
@@ -147,7 +147,7 @@ class PVAppDelegate: UIResponder, UIApplicationDelegate {
 					if let systemItem = systemItem {
 						// MAtch by name and system
 						if let value = systemItem.value, !value.isEmpty, let systemMaybe = try? Realm().object(ofType: PVSystem.self, forPrimaryKey: value), let matchedSystem = systemMaybe {
-							if let matchedGame = RomDatabase.sharedInstance.all(PVGame.self).filter("systemIdentifier == %@ AND title == %@", matchedSystem.identifier, gameName).first {
+							if let matchedGame = RomDatabase.sharedInstance.all(RMGame.self).filter("systemIdentifier == %@ AND title == %@", matchedSystem.identifier, gameName).first {
 								ILOG("Open by system \(value), name: \(gameName)")
 								shortcutItemGame = matchedGame
 								return true
@@ -160,7 +160,7 @@ class PVAppDelegate: UIResponder, UIApplicationDelegate {
 							return false
 						}
 					} else {
-						if let matchedGame = RomDatabase.sharedInstance.all(PVGame.self, where: #keyPath(PVGame.title), value: gameName).first {
+						if let matchedGame = RomDatabase.sharedInstance.all(RMGame.self, where: #keyPath(RMGame.title), value: gameName).first {
 							ILOG("Open by name: \(gameName)")
 							shortcutItemGame = matchedGame
 							return true
@@ -178,7 +178,7 @@ class PVAppDelegate: UIResponder, UIApplicationDelegate {
                 ELOG("Unsupported host <\(url.host?.removingPercentEncoding ?? "nil")>")
                 return false
             }
-        } else if let components = components, components.path == PVGameControllerKey, let first = components.queryItems?.first, first.name == PVGameMD5Key, let md5Value = first.value, let matchedGame = try? Realm().object(ofType: PVGame.self, forPrimaryKey: md5Value) {
+        } else if let components = components, components.path == RMGameControllerKey, let first = components.queryItems?.first, first.name == RMGameMD5Key, let md5Value = first.value, let matchedGame = try? Realm().object(ofType: RMGame.self, forPrimaryKey: md5Value) {
             shortcutItemGame = matchedGame
             return true
         }
@@ -188,7 +188,7 @@ class PVAppDelegate: UIResponder, UIApplicationDelegate {
 #if os(iOS)
     @available(iOS 9.0, *)
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
-		if (shortcutItem.type == "kRecentGameShortcut"), let md5Value = shortcutItem.userInfo?["PVGameHash"] as? String, let matchedGame = try? Realm().object(ofType: PVGame.self, forPrimaryKey: md5Value) {
+		if (shortcutItem.type == "kRecentGameShortcut"), let md5Value = shortcutItem.userInfo?["RMGameHash"] as? String, let matchedGame = try? Realm().object(ofType: RMGame.self, forPrimaryKey: md5Value) {
 			shortcutItemGame = matchedGame
 			completionHandler(true)
 		} else {
@@ -203,7 +203,7 @@ class PVAppDelegate: UIResponder, UIApplicationDelegate {
         #if os(iOS)
         if #available(iOS 9.0, *) {
             if userActivity.activityType == CSSearchableItemActionType {
-                if let md5 = userActivity.userInfo?[CSSearchableItemActivityIdentifier] as? String, let md5Value = md5.components(separatedBy: ".").last, let matchedGame = try? Realm().object(ofType: PVGame.self, forPrimaryKey: md5Value) {
+                if let md5 = userActivity.userInfo?[CSSearchableItemActivityIdentifier] as? String, let md5Value = md5.components(separatedBy: ".").last, let matchedGame = try? Realm().object(ofType: RMGame.self, forPrimaryKey: md5Value) {
                     // Comes in a format of "com....md5"
 					shortcutItemGame = matchedGame
                     return true

@@ -234,11 +234,11 @@ public final class Theme {
 //        }
 
         // Game Library Headers
-        PVGameLibrarySectionHeaderView.appearance {
+        RMGameLibrarySectionHeaderView.appearance {
             $0.backgroundColor = theme.gameLibraryHeaderBackground
         }
 
-		appearance(in: [PVGameLibrarySectionHeaderView.self]) {
+		appearance(in: [RMGameLibrarySectionHeaderView.self]) {
 			UILabel.appearance {
 				$0.backgroundColor = theme.gameLibraryHeaderBackground
 				$0.textColor = theme.gameLibraryHeaderText
@@ -246,7 +246,7 @@ public final class Theme {
 		}
 
 		// Game Library Main
-		appearance(inAny: [PVGameLibraryCollectionViewCell.self]) {
+		appearance(inAny: [RMGameLibraryCollectionViewCell.self]) {
 			UILabel.appearance {
 				$0.textColor = theme.gameLibraryText
 			}

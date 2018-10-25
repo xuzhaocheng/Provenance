@@ -1,13 +1,13 @@
 //  Converted to Swift 4 by Swiftify v4.1.6613 - https://objectivec2swift.com/
 //
-//  PVGameLibrarySectionHeaderView.m
+//  RMGameLibrarySectionHeaderView.m
 //  Provenance
 //
 //  Created by James Addyman on 16/09/2013.
 //  Copyright (c) 2013 James Addyman. All rights reserved.
 //
 
-class PVGameLibrarySectionFooterView: UICollectionReusableView {
+class RMGameLibrarySectionFooterView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -24,7 +24,7 @@ class PVGameLibrarySectionFooterView: UICollectionReusableView {
     }
 }
 
-class PVGameLibrarySectionHeaderView: UICollectionReusableView {
+class RMGameLibrarySectionHeaderView: UICollectionReusableView {
     private(set) var titleLabel: UILabel = UILabel()
 
     override init(frame: CGRect) {

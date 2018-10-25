@@ -918,7 +918,7 @@ static void FinalizeSamplesAudioCallback(void *)
             GCExtendedGamepad *pad = [controller extendedGamepad];
             GCControllerDirectionPad *dpad = [pad dpad];
 
-            PVControllerAxisDirection axisDirection = [PVGameControllerUtilities axisDirectionForThumbstick:pad.leftThumbstick];
+            PVControllerAxisDirection axisDirection = [RMGameControllerUtilities axisDirectionForThumbstick:pad.leftThumbstick];
 
             BOOL upPressed = dpad.up.pressed || axisDirection == PVControllerAxisDirectionUp || axisDirection == PVControllerAxisDirectionUpLeft || axisDirection == PVControllerAxisDirectionUpRight;
             S9xReportButton(playerMask | PVSNESButtonUp, upPressed);

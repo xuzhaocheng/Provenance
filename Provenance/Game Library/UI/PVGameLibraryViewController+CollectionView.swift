@@ -1,5 +1,5 @@
 //
-//  PVGameLibraryViewController+CollectionView.swift
+//  RMGameLibraryViewController+CollectionView.swift
 //  Provenance
 //
 //  Created by Joseph Mattiello on 5/26/18.
@@ -13,7 +13,7 @@ import PVSupport
 // tvOS
 let tvOSCellUnit: CGFloat = 256.0
 
-extension PVGameLibraryViewController {
+extension RMGameLibraryViewController {
 //	func collectionView(_ collectionView: UICollectionView, didUpdateFocusIn context: UICollectionViewFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
 //		if let focusedIndexPath = context.nextFocusedIndexPath {
 //			let section = focusedIndexPath.section
@@ -30,7 +30,7 @@ extension PVGameLibraryViewController {
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
-extension PVGameLibraryViewController: UICollectionViewDelegateFlowLayout {
+extension RMGameLibraryViewController: UICollectionViewDelegateFlowLayout {
 
 	var minimumInteritemSpacing : CGFloat {
 		#if os(tvOS)
@@ -96,22 +96,22 @@ extension PVGameLibraryViewController: UICollectionViewDelegateFlowLayout {
 			let numberOfRows : CGFloat = 1.0
 			let width = viewWidth - collectionView.contentInset.left - collectionView.contentInset.right / 4
 			let height = tvOSCellUnit * numberOfRows + PageIndicatorHeight
-			return RMSaveStaveCollectionViewCell.cellSize(forImageSize: CGSize(width: width, height: height))
+			return RMSaveStateCollectionViewCell.cellSize(forImageSize: CGSize(width: width, height: height))
 		}
 
 		if indexPath.section == recentGamesSection || indexPath.section == favoritesSection {
 			let numberOfRows : CGFloat = 1.0
 			let width = viewWidth - collectionView.contentInset.left - collectionView.contentInset.right / 5
 			let height :CGFloat = tvOSCellUnit * numberOfRows + PageIndicatorHeight
-            return RMSaveStaveCollectionViewCell.cellSize(forImageSize: CGSize(width: width, height: height))
-//            return PVGameLibraryCollectionViewCell.cellSize(forImageSize: CGSize(width: width, height: height / PVGameBoxArtAspectRatio.tall.rawValue))
+            return RMSaveStateCollectionViewCell.cellSize(forImageSize: CGSize(width: width, height: height))
+//            return RMGameLibraryCollectionViewCell.cellSize(forImageSize: CGSize(width: width, height: height / RMGameBoxArtAspectRatio.tall.rawValue))
 		}
 
 		if let game = self.game(at: indexPath, location: .zero) {
 			let boxartSize = CGSize(width: tvOSCellUnit, height: tvOSCellUnit / game.boxartAspectRatio.rawValue)
-			return PVGameLibraryCollectionViewCell.cellSize(forImageSize: boxartSize)
+			return RMGameLibraryCollectionViewCell.cellSize(forImageSize: boxartSize)
 		} else {
-			return PVGameLibraryCollectionViewCell.cellSize(forImageSize: CGSize(width: tvOSCellUnit, height: tvOSCellUnit))
+			return RMGameLibraryCollectionViewCell.cellSize(forImageSize: CGSize(width: tvOSCellUnit, height: tvOSCellUnit))
 		}
 	}
 	#endif
@@ -148,7 +148,7 @@ extension PVGameLibraryViewController: UICollectionViewDelegateFlowLayout {
 }
 
 // MARK: - UICollectionViewDataSource
-extension PVGameLibraryViewController: UICollectionViewDataSource {
+extension RMGameLibraryViewController: UICollectionViewDataSource {
 	// MARK: - UICollectionViewDataSource
 	func numberOfSections(in collectionView: UICollectionView) -> Int {
 		if searchResults != nil {
@@ -194,8 +194,8 @@ extension PVGameLibraryViewController: UICollectionViewDataSource {
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
 		if let searchResults = searchResults {
-			guard let cell = self.collectionView?.dequeueReusableCell(withReuseIdentifier: PVGameLibraryCollectionViewCellIdentifier, for: indexPath) as? PVGameLibraryCollectionViewCell else {
-				fatalError("Couldn't create cell of type PVGameLibraryCollectionViewCellIdentifier")
+			guard let cell = self.collectionView?.dequeueReusableCell(withReuseIdentifier: RMGameLibraryCollectionViewCellIdentifier, for: indexPath) as? RMGameLibraryCollectionViewCell else {
+				fatalError("Couldn't create cell of type RMGameLibraryCollectionViewCellIdentifier")
 			}
 			let game = searchResults[indexPath.item]
 			cell.game = game
@@ -205,8 +205,8 @@ extension PVGameLibraryViewController: UICollectionViewDataSource {
 		}
 
 		if indexPath.section == favoritesSection {
-			guard let cell = self.collectionView?.dequeueReusableCell(withReuseIdentifier: PVGameLibraryCollectionViewFavoritesCellIdentifier, for: indexPath) as? FavoritesPlayedCollectionCell else {
-				fatalError("Couldn't create cell of type PVGameLibraryCollectionViewFavoritesCellIdentifier")
+			guard let cell = self.collectionView?.dequeueReusableCell(withReuseIdentifier: RMGameLibraryCollectionViewFavoritesCellIdentifier, for: indexPath) as? FavoritesPlayedCollectionCell else {
+				fatalError("Couldn't create cell of type RMGameLibraryCollectionViewFavoritesCellIdentifier")
 			}
 
 			cell.selectionDelegate = self
@@ -215,8 +215,8 @@ extension PVGameLibraryViewController: UICollectionViewDataSource {
 		}
 
 		if indexPath.section == saveStateSection {
-			guard let cell = self.collectionView?.dequeueReusableCell(withReuseIdentifier: PVGameLibraryCollectionViewSaveStatesCellIdentifier, for: indexPath) as? SaveStatesCollectionCell else {
-				fatalError("Couldn't create cell of type PVGameLibraryCollectionViewSaveStatesCellIdentifier")
+			guard let cell = self.collectionView?.dequeueReusableCell(withReuseIdentifier: RMGameLibraryCollectionViewSaveStatesCellIdentifier, for: indexPath) as? SaveStatesCollectionCell else {
+				fatalError("Couldn't create cell of type RMGameLibraryCollectionViewSaveStatesCellIdentifier")
 			}
 
 			cell.selectionDelegate = self
@@ -225,8 +225,8 @@ extension PVGameLibraryViewController: UICollectionViewDataSource {
 		}
 
 		if indexPath.section == recentGamesSection {
-			guard let cell = self.collectionView?.dequeueReusableCell(withReuseIdentifier: PVGameLibraryCollectionViewRecentlyPlayedCellIdentifier, for: indexPath) as? RecentlyPlayedCollectionCell else {
-				fatalError("Couldn't create cell of type PVGameLibraryCollectionViewRecentlyPlayedCellIdentifier")
+			guard let cell = self.collectionView?.dequeueReusableCell(withReuseIdentifier: RMGameLibraryCollectionViewRecentlyPlayedCellIdentifier, for: indexPath) as? RecentlyPlayedCollectionCell else {
+				fatalError("Couldn't create cell of type RMGameLibraryCollectionViewRecentlyPlayedCellIdentifier")
 			}
 
 			cell.selectionDelegate = self
@@ -234,8 +234,8 @@ extension PVGameLibraryViewController: UICollectionViewDataSource {
 			return cell
 		}
 
-		guard let cell = self.collectionView?.dequeueReusableCell(withReuseIdentifier: PVGameLibraryCollectionViewCellIdentifier, for: indexPath) as? PVGameLibraryCollectionViewCell else {
-			fatalError("Couldn't create cell of type PVGameLibraryCollectionViewCellIdentifier")
+		guard let cell = self.collectionView?.dequeueReusableCell(withReuseIdentifier: RMGameLibraryCollectionViewCellIdentifier, for: indexPath) as? RMGameLibraryCollectionViewCell else {
+			fatalError("Couldn't create cell of type RMGameLibraryCollectionViewCellIdentifier")
 		}
 
 		let game = self.game(at: indexPath, location: .zero)
@@ -247,10 +247,10 @@ extension PVGameLibraryViewController: UICollectionViewDataSource {
 
 	func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
 		if (kind == UICollectionElementKindSectionHeader) {
-			var headerView: PVGameLibrarySectionHeaderView?
+			var headerView: RMGameLibrarySectionHeaderView?
 			let title = searchResults != nil ? "Search Results" : sectionTitles[indexPath.section]
 
-			headerView = self.collectionView?.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: PVGameLibraryHeaderViewIdentifier, for: indexPath) as? PVGameLibrarySectionHeaderView
+			headerView = self.collectionView?.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: RMGameLibraryHeaderViewIdentifier, for: indexPath) as? RMGameLibrarySectionHeaderView
 #if os(tvOS)
             headerView?.titleLabel.text = title
             headerView?.titleLabel.font = UIFont.boldSystemFont(ofSize: 42)
@@ -265,7 +265,7 @@ extension PVGameLibraryViewController: UICollectionViewDataSource {
 				fatalError("Couldn't create header view")
 			}
 		} else if kind == UICollectionElementKindSectionFooter {
-			let footerView = self.collectionView!.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: PVGameLibraryFooterViewIdentifier, for: indexPath) as! PVGameLibrarySectionFooterView
+			let footerView = self.collectionView!.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: RMGameLibraryFooterViewIdentifier, for: indexPath) as! RMGameLibrarySectionFooterView
 			return footerView
 		}
 
@@ -274,7 +274,7 @@ extension PVGameLibraryViewController: UICollectionViewDataSource {
 }
 
 // MARK: - UICollectionViewDelegate
-extension PVGameLibraryViewController: UICollectionViewDelegate {
+extension RMGameLibraryViewController: UICollectionViewDelegate {
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		//		if searchResults == nil, indexPath.section == saveStateSection {
 		//			let cell = collectionView.cellForItem(at: indexPath)
@@ -294,9 +294,9 @@ extension PVGameLibraryViewController: UICollectionViewDelegate {
 }
 
 // MARK: - CollectionView helpers
-extension PVGameLibraryViewController {
-	func game(at indexPath: IndexPath, location: CGPoint) -> PVGame? {
-		var game: PVGame?
+extension RMGameLibraryViewController {
+	func game(at indexPath: IndexPath, location: CGPoint) -> RMGame? {
+		var game: RMGame?
 		if let searchResults = searchResults {
 			game = Array(searchResults)[indexPath.item]
 		} else {

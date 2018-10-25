@@ -1,4 +1,4 @@
-//  PVCoreFactory.swift
+//  CoreFactory.swift
 //  Provenance
 //
 //  Created by Joseph Mattiello on 2/14/18.
@@ -19,7 +19,7 @@ import PVSupport
 //    }
 //}
 
-extension PVCore {
+extension RMCore {
     func createInstance(forSystem system: PVSystem) -> PVEmulatorCore? {
         guard let coreClass = NSClassFromString(self.principleClass) as? PVEmulatorCore.Type else {
             ELOG("Couldn't get class for <\(self.principleClass)>")
@@ -36,7 +36,7 @@ extension PVCore {
     }
 }
 
-public final class PVCoreFactory: NSObject {
+public final class CoreFactory: NSObject {
     class func controllerViewController(forSystem system: PVSystem, core: ResponderClient) -> (UIViewController & StartSelectDelegate)? {
         guard let controllerLayout = system.controllerLayout else {
             fatalError("No controller layout config defined for system \(system.name)")

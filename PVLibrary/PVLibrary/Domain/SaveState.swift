@@ -11,7 +11,7 @@ import Foundation
 public struct SaveState : Codable {
 	public let game: Game
 	public let core: Core
-	public let file: FileInfoProvider
+	public let file: FileInfo
 	public let date: Date
 	public let lastOpened: Date?
 	public let image: LocalFile?

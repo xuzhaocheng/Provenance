@@ -1,4 +1,4 @@
-//  PVGame+TopShelf.m
+//  RMGame+TopShelf.m
 //  Provenance
 //
 //  Created by entourloop on 2018-03-29.
@@ -9,7 +9,7 @@ import TVServices
 import PVLibrary
 
 // Top shelf extensions
-extension PVGame {
+extension RMGame {
     public func contentItem(with containerIdentifier: TVContentIdentifier) -> TVContentItem? {
 
         guard let identifier = TVContentIdentifier(identifier: self.md5Hash, container: containerIdentifier),
@@ -28,8 +28,8 @@ extension PVGame {
     var displayURL: URL {
         var components = URLComponents()
         components.scheme = PVAppURLKey
-        components.path = PVGameControllerKey
-        components.queryItems = [URLQueryItem(name: PVGameMD5Key, value: self.md5Hash)]
+        components.path = RMGameControllerKey
+        components.queryItems = [URLQueryItem(name: RMGameMD5Key, value: self.md5Hash)]
         return (components.url)!
     }
 }

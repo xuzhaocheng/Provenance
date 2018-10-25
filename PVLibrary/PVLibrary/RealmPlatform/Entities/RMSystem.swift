@@ -101,8 +101,8 @@ public final class PVSystem: Object, SystemProtocol {
 
     // Reverse Links
     public private(set) var bioses = LinkingObjects(fromType: RMBIOS.self, property: "system")
-    public private(set) var games = LinkingObjects(fromType: PVGame.self, property: "system")
-    public private(set) var cores = LinkingObjects(fromType: PVCore.self, property: "supportedSystems")
+    public private(set) var games = LinkingObjects(fromType: RMGame.self, property: "system")
+    public private(set) var cores = LinkingObjects(fromType: RMCore.self, property: "supportedSystems")
 
 	public var gameStructs: [Game] {
 		return games.map { Game(withGame: $0) }
@@ -115,7 +115,7 @@ public final class PVSystem: Object, SystemProtocol {
 	public var userPreferredCore: Core? {
 		guard let userPreferredCoreID = userPreferredCoreID,
 			let realm = try? Realm(),
-			let preferredCore = realm.object(ofType: PVCore.self, forPrimaryKey: userPreferredCoreID) else {
+			let preferredCore = realm.object(ofType: RMCore.self, forPrimaryKey: userPreferredCoreID) else {
 			return nil
 		}
 		return Core(with: preferredCore)

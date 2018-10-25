@@ -9,7 +9,6 @@
 import Foundation
 
 public struct LocalFile : LocalFileProvider, Codable {
-
 	public let url : URL
 	public var data: Data? {
 		return try? Data(contentsOf: url)

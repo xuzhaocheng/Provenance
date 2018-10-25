@@ -1,5 +1,5 @@
 //
-//  PVCore.swift
+//  RMCore.swift
 //  Provenance
 //
 //  Created by Joseph Mattiello on 3/11/18.
@@ -10,7 +10,7 @@ import Foundation
 import RealmSwift
 
 @objcMembers
-public final class PVCore: Object {
+public final class RMCore: Object {
     dynamic public var identifier: String = ""
     dynamic public var principleClass: String = ""
     dynamic public var supportedSystems = List<PVSystem>()
@@ -20,7 +20,7 @@ public final class PVCore: Object {
     dynamic public var projectVersion = ""
 
 	// Reverse links
-	public var saveStates = LinkingObjects(fromType: RMSaveStave.self, property: "core")
+	public var saveStates = LinkingObjects(fromType: RMSaveState.self, property: "core")
 
     public convenience init(withIdentifier identifier: String, principleClass: String, supportedSystems: [PVSystem], name: String, url: String, version: String) {
         self.init()
@@ -38,36 +38,40 @@ public final class PVCore: Object {
     }
 }
 
-public struct CoreProject : Codable {
-	public let name : String
-	public let url : URL
-	public let version : String
-}
-
-public struct Core : Codable {
-	public let identifier : String
-	public var systems : [System] {
-		let realm = try! Realm()
-		let systems = realm.objects(PVSystem.self).filter { $0.cores.contains(where: {
-			$0.identifier == self.identifier
-		}) }.map {
-			System(with: $0)
-		}
-		return systems.map {$0}
-	}
-
-	public let project : CoreProject
-}
-
-extension Core : Equatable {
-	public static func == (lhs: Core, rhs: Core) -> Bool {
-		return lhs.identifier == rhs.identifier
-	}
-}
-
-public extension Core {
-	public init(with core : PVCore) {
+// MARK: - Conversions
+internal extension Core {
+	init(with core : RMCore) {
 		identifier = core.identifier
+		principleClass = core.principleClass
+		// TODO: Supported systems
 		project = CoreProject(name: core.projectName, url: URL(string: core.projectURL)!, version: core.projectVersion)
 	}
 }
+
+
+extension RMCore: DomainConvertibleType {
+	public typealias DomainType = Core
+
+	func asDomain() -> Core {
+		return Core(with: self)
+	}
+}
+
+extension Core: RealmRepresentable {
+	var uid: String {
+		return identifier
+	}
+
+	func asRealm() -> RMCore {
+		return RMCore.build({ object in
+			object.identifier = identifier
+			object.principleClass = principleClass
+			#warning("do me")
+//			object.supportedSystems
+			object.projectName = project.name
+			object.projectVersion = project.version
+			object.projectURL = project.url.absoluteString
+		})
+	}
+}
+

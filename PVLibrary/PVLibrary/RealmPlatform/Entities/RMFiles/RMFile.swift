@@ -66,6 +66,7 @@ public class RMLocalFile: Object, LocalFileProvider, Codable, DomainConvertibleT
 
     @objc internal dynamic var partialPath: String = ""
     @objc private dynamic var md5Cache: String?
+//	@objc private dynamic var crcCache: String?
     @objc private(set) dynamic public var createdDate = Date()
     @objc dynamic private var _relativeRoot: Int = RelativeRoot.documents.rawValue
 
@@ -131,6 +132,31 @@ public extension RMLocalFile {
             }
         }
     }
+
+//	public private(set) var crc: String? {
+//		get {
+//			if let crc = crcCache {
+//				return crc
+//			}
+//
+//			// Lazy make CRC
+//			guard let calculatedCRC = FileManager.default.crcForFile(atPath: url.path, fromOffset: 0) else {
+//				return nil
+//			}
+//
+//			self.crc = calculatedCRC
+//			return calculatedCRC
+//		}
+//		set {
+//			do {
+//				try realm?.write {
+//					crcCache = newValue
+//				}
+//			} catch {
+//				ELOG("\(error)")
+//			}
+//		}
+//	}
 
     public var size: UInt64 {
         let fileSize: UInt64

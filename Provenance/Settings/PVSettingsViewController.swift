@@ -55,7 +55,7 @@ class PVSettingsViewController: UITableViewController, SFSafariViewControllerDel
 	@IBOutlet weak var builderLabel: UILabel!
 	@IBOutlet weak var bundleIDLabel: UILabel!
 
-    var gameImporter: PVGameImporter?
+    var gameImporter: RMGameImporter?
 
     @IBAction func wikiLinkButton(_ sender: Any) {
 		let webVC = WebkitViewController(url: URL(string: "https://github.com/Provenance-Emu/Provenance/wiki/Formatting-ROMs")!)

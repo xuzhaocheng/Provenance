@@ -39,8 +39,8 @@ extension PVRecentGame {
 
         var components = URLComponents()
         components.scheme = PVAppURLKey
-        components.path = PVGameControllerKey
-        	components.queryItems = [URLQueryItem(name: PVGameMD5Key, value: game.md5Hash)]
+        components.path = RMGameControllerKey
+        	components.queryItems = [URLQueryItem(name: RMGameMD5Key, value: game.md5Hash)]
         return components.url ?? URL(fileURLWithPath: "")
     }
 }

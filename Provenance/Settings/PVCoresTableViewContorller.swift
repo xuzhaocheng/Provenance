@@ -1,5 +1,5 @@
 //
-//  PVCoresTableViewController
+//  RMCoresTableViewController
 //  Provenance
 //
 //  Created by Joe Mattiello on 16.03.18.
@@ -11,11 +11,11 @@ import RealmSwift
 import PVLibrary
 import QuickTableViewController
 
-class PVCoresTableViewController: QuickTableViewController {
+class RMCoresTableViewController: QuickTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-		let cores = RomDatabase.sharedInstance.all(PVCore.self, sortedByKeyPath: #keyPath(PVCore.projectName))
+		let cores = RomDatabase.sharedInstance.all(RMCore.self, sortedByKeyPath: #keyPath(RMCore.projectName))
 
 		#if os(tvOS)
 		splitViewController?.title = "Cores"

@@ -1,5 +1,5 @@
 //
-//  PVGame.swift
+//  RMGame.swift
 //  Provenance
 //
 //  Created by Joe Mattiello on 10/02/2018.
@@ -9,11 +9,11 @@
 import Foundation
 import RealmSwift
 
-// Hack for game library having eitehr PVGame or PVRecentGame in containers
+// Hack for game library having eitehr RMGame or PVRecentGame in containers
 protocol PVLibraryEntry where Self: Object {}
 
 @objcMembers
-public final class PVGame: Object, PVLibraryEntry {
+public final class RMGame: Object, PVLibraryEntry {
     dynamic public var title: String				= ""
 	dynamic public var id							= NSUUID().uuidString
 
@@ -45,11 +45,11 @@ public final class PVGame: Object, PVLibraryEntry {
 	dynamic public var crc: String            = ""
 
 	// If the user has set 'always use' for a specfic core
-	// We don't use PVCore incase cores are removed / deleted
+	// We don't use RMCore incase cores are removed / deleted
 	dynamic public var userPreferredCoreID : String?
 
     /* Links to other objects */
-    public private(set) var saveStates = LinkingObjects<RMSaveStave>(fromType: RMSaveStave.self, property: "game")
+    public private(set) var saveStates = LinkingObjects<RMSaveState>(fromType: RMSaveState.self, property: "game")
     public private(set) var recentPlays = LinkingObjects(fromType: PVRecentGame.self, property: "game")
     public private(set) var screenShots = List<PVImageFile>()
 
@@ -106,7 +106,7 @@ public final class PVGame: Object, PVLibraryEntry {
     }
 }
 
-public extension PVGame {
+public extension RMGame {
 	public var isCD : Bool {
 		let ext = (romPath as NSString).pathExtension
 		var exts = PVEmulatorConfiguration.supportedCDFileExtensions
@@ -123,12 +123,12 @@ public extension PVGame {
 	}
 }
 
-public extension PVGame {
-	public var autoSaves : Results<RMSaveStave> {
+public extension RMGame {
+	public var autoSaves : Results<RMSaveState> {
 		return saveStates.filter("isAutosave == true").sorted(byKeyPath: "date", ascending: false)
 	}
 
-	public var newestAutoSave : RMSaveStave? {
+	public var newestAutoSave : RMSaveState? {
 		return autoSaves.first
 	}
 
@@ -141,15 +141,47 @@ public extension PVGame {
 	}
 }
 
+// MARK: Conversions
 public extension Game {
-	init(withGame game : PVGame) {
+	init(withGame game : RMGame) {
 		title = game.title
+		md5 = game.md5Hash
+		crc = game.crc
+		isFavorite = game.isFavorite
+		playCount = UInt(game.playCount)
+		lastPlayed = game.lastPlayed
+		boxBackArtworkURL = game.boxBackArtworkURL
+		developer = game.developer
+		publisher = game.publisher
+		genres = game.genres
+		referenceURL = game.referenceURL
+		releaseID = game.releaseID
+		regionID = game.regionID
+		regionName = game.regionName
+		systemShortName = game.systemShortName
+		language = game.language
+		file = FileInfo(fileName: game.file.fileName, size: game.file.size, md5: game.file.md5, online: game.file.online, local:true)
+		gameDescription = game.gameDescription
+		publishDate = game.publishDate
 	}
 }
 
-//public extension PVGame {
-//    // Support older code
-//    var md5Hash : String {
-//        return file.md5!
-//    }
-//}
+extension RMGame : DomainConvertibleType {
+	public typealias DomainType = Game
+
+	func asDomain() -> Game {
+		return Game(withGame: self)
+	}
+}
+
+extension Game: RealmRepresentable {
+	var uid: String {
+		return md5
+	}
+
+	func asRealm() -> RMGame {
+		return RMGame.build { object in
+//			#warning DO me
+		}
+	}
+}

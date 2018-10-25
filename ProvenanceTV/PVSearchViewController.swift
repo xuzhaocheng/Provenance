@@ -14,7 +14,7 @@ import PVLibrary
 class PVSearchViewController: UICollectionViewController, GameLaunchingViewController {
     var mustRefreshDataSource: Bool = false
 
-    var searchResults: Results<PVGame>?
+    var searchResults: Results<RMGame>?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,12 +23,12 @@ class PVSearchViewController: UICollectionViewController, GameLaunchingViewContr
 
 		if #available(iOS 9.0, tvOS 9.0, *) {
 			#if os(iOS)
-			collectionView?.register(UINib(nibName: "PVGameLibraryCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: PVGameLibraryCollectionViewCellIdentifier)
+			collectionView?.register(UINib(nibName: "RMGameLibraryCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: RMGameLibraryCollectionViewCellIdentifier)
 			#else
-			collectionView?.register(UINib(nibName: "PVGameLibraryCollectionViewCell~tvOS", bundle: nil), forCellWithReuseIdentifier: PVGameLibraryCollectionViewCellIdentifier)
+			collectionView?.register(UINib(nibName: "RMGameLibraryCollectionViewCell~tvOS", bundle: nil), forCellWithReuseIdentifier: RMGameLibraryCollectionViewCellIdentifier)
 			#endif
 		} else {
-			collectionView?.register(PVGameLibraryCollectionViewCell.self, forCellWithReuseIdentifier: PVGameLibraryCollectionViewCellIdentifier)
+			collectionView?.register(RMGameLibraryCollectionViewCell.self, forCellWithReuseIdentifier: RMGameLibraryCollectionViewCellIdentifier)
 		}
 		collectionView?.contentInset = UIEdgeInsets(top: 40, left: 80, bottom: 40, right: 80)
 
@@ -46,7 +46,7 @@ class PVSearchViewController: UICollectionViewController, GameLaunchingViewContr
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PVGameLibraryCollectionViewCellIdentifier, for: indexPath) as! PVGameLibraryCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RMGameLibraryCollectionViewCellIdentifier, for: indexPath) as! RMGameLibraryCollectionViewCell
 
         if let game = searchResults?[indexPath.item] {
             cell.game = game
@@ -104,7 +104,7 @@ class PVSearchViewController: UICollectionViewController, GameLaunchingViewContr
 }
 
 extension PVSearchViewController {
-	func toggleFavorite(for game: PVGame) {
+	func toggleFavorite(for game: RMGame) {
 		do {
 			try RomDatabase.sharedInstance.writeTransaction {
 				game.isFavorite = !game.isFavorite
@@ -121,7 +121,7 @@ extension PVSearchViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         let searchText = searchController.searchBar.text ?? ""
 
-        let sorted = RomDatabase.sharedInstance.all(PVGame.self, filter: NSPredicate(format: "title CONTAINS[c] %@", argumentArray: [searchText])).sorted(byKeyPath: #keyPath(PVGame.title), ascending: true)
+        let sorted = RomDatabase.sharedInstance.all(RMGame.self, filter: NSPredicate(format: "title CONTAINS[c] %@", argumentArray: [searchText])).sorted(byKeyPath: #keyPath(RMGame.title), ascending: true)
         searchResults = sorted
         collectionView?.reloadData()
     }

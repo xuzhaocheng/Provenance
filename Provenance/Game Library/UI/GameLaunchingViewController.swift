@@ -27,26 +27,26 @@ public func PVMaxRecentsCount() -> Int {
 /*
  Protocol with default implimentation.
  
- This allows any UIViewController class to just inherit GameLaunchingViewController, and then it can call load(PVGame)!
+ This allows any UIViewController class to just inherit GameLaunchingViewController, and then it can call load(RMGame)!
  
  */
 
 public protocol GameLaunchingViewController: class {
     var mustRefreshDataSource: Bool {get set}
-    func canLoad(_ game: PVGame) throws
-	func load(_ game: PVGame, sender : Any?, core: PVCore?, saveState: RMSaveStave?)
-	func openSaveState(_ saveState: RMSaveStave)
-    func updateRecentGames(_ game: PVGame)
+    func canLoad(_ game: RMGame) throws
+	func load(_ game: RMGame, sender : Any?, core: RMCore?, saveState: RMSaveState?)
+	func openSaveState(_ saveState: RMSaveState)
+    func updateRecentGames(_ game: RMGame)
     func register3DTouchShortcuts()
-	func presentCoreSelection(forGame game : PVGame, sender : Any?)
+	func presentCoreSelection(forGame game : RMGame, sender : Any?)
 }
 
 public protocol GameSharingViewController : class {
-	func share(for game: PVGame, sender: Any?)
+	func share(for game: RMGame, sender: Any?)
 }
 
 extension GameSharingViewController where Self : UIViewController {
-	func share(for game: PVGame, sender: Any?) {
+	func share(for game: RMGame, sender: Any?) {
 		/*
 		TODO:
 		Add native share action for sharing to other provenance devices
@@ -376,7 +376,7 @@ extension GameLaunchingViewController where Self : UIViewController {
         }
     }
 
-    func canLoad(_ game: PVGame) throws {
+    func canLoad(_ game: RMGame) throws {
         guard let system = game.system else {
             throw GameLaunchingError.systemNotFound
         }
@@ -393,7 +393,7 @@ extension GameLaunchingViewController where Self : UIViewController {
         self.present(alertController, animated: true)
     }
 
-	func presentCoreSelection(forGame game : PVGame, sender: Any?) {
+	func presentCoreSelection(forGame game : RMGame, sender: Any?) {
 		guard let system = game.system else {
 			ELOG("No sytem for game \(game.title)")
 			return
@@ -445,7 +445,7 @@ extension GameLaunchingViewController where Self : UIViewController {
 		present(coreChoiceAlert, animated: true)
 	}
 
-	func load(_ game: PVGame, sender : Any?, core: PVCore?, saveState : RMSaveStave? = nil) {
+	func load(_ game: RMGame, sender : Any?, core: RMCore?, saveState : RMSaveState? = nil) {
         guard !(presentedViewController is PVEmulatorViewController) else {
             let currentGameVC = presentedViewController as! PVEmulatorViewController
             displayAndLogError(withTitle: "Cannot open new game", message: "A game is already running the game \(currentGameVC.game.title).")
@@ -480,7 +480,7 @@ extension GameLaunchingViewController where Self : UIViewController {
 				return
 			}
 
-			var selectedCore : PVCore?
+			var selectedCore : RMCore?
 
 			// If a core is passed in and it's valid for this system, use it.
 			if let saveState = saveState {
@@ -540,7 +540,7 @@ extension GameLaunchingViewController where Self : UIViewController {
         }
     }
 
-	private func presentEMU(withCore core : PVCore, forGame game: PVGame, fromSaveState saveState: RMSaveStave? = nil) {
+	private func presentEMU(withCore core : RMCore, forGame game: RMGame, fromSaveState saveState: RMSaveState? = nil) {
 		guard let coreInstance = core.createInstance(forSystem: game.system) else {
 			displayAndLogError(withTitle: "Cannot open game", message: "Failed to create instance of core '\(core.projectName)'.")
 			ELOG("Failed to init core instance")
@@ -565,8 +565,8 @@ extension GameLaunchingViewController where Self : UIViewController {
 		}
 	}
 
-	// Used to just show and then optionally quickly load any passed in RMSaveStaves
-	private func presentEMUVC(_ emulatorViewController : PVEmulatorViewController, withGame game: PVGame, loadingSaveState saveState: RMSaveStave? = nil) {
+	// Used to just show and then optionally quickly load any passed in RMSaveStates
+	private func presentEMUVC(_ emulatorViewController : PVEmulatorViewController, withGame game: RMGame, loadingSaveState saveState: RMSaveState? = nil) {
 		// Present the emulator VC
 		emulatorViewController.modalTransitionStyle = .crossDissolve
 		emulatorViewController.glViewController?.view.isHidden = saveState != nil
@@ -608,7 +608,7 @@ extension GameLaunchingViewController where Self : UIViewController {
 		self.updateRecentGames(game)
 	}
 
-	private func checkForSaveStateThenRun(withCore core : PVCore, forGame game: PVGame, completion: @escaping (RMSaveStave?) -> Void) {
+	private func checkForSaveStateThenRun(withCore core : RMCore, forGame game: RMGame, completion: @escaping (RMSaveState?) -> Void) {
 		if let latestSaveState = game.saveStates.filter("core.identifier == \"\(core.identifier)\"").sorted(byKeyPath: "date", ascending: false).first {
 			let shouldAskToLoadSaveState: Bool = PVSettingsModel.sharedInstance().askToAutoLoad
 			let shouldAutoLoadSaveState: Bool = PVSettingsModel.sharedInstance().autoLoadSaves
@@ -695,7 +695,7 @@ extension GameLaunchingViewController where Self : UIViewController {
 		}
 	}
 
-    func doLoad(_ game: PVGame) throws {
+    func doLoad(_ game: RMGame) throws {
         guard let system = game.system else {
             throw GameLaunchingError.systemNotFound
         }
@@ -703,7 +703,7 @@ extension GameLaunchingViewController where Self : UIViewController {
         try biosCheck(system: system)
     }
 
-    func updateRecentGames(_ game: PVGame) {
+    func updateRecentGames(_ game: RMGame) {
         let database = RomDatabase.sharedInstance
         database.refresh()
 
@@ -738,7 +738,7 @@ extension GameLaunchingViewController where Self : UIViewController {
                 ELOG("Failed to update Recent Game entry. \(error.localizedDescription)")
             }
         } else {
-			// TODO: Add PVCore
+			// TODO: Add RMCore
             let newRecent = PVRecentGame(withGame: game)
             do {
                 try database.add(newRecent, update: false)
@@ -754,7 +754,7 @@ extension GameLaunchingViewController where Self : UIViewController {
         register3DTouchShortcuts()
     }
 
-	func openSaveState(_ saveState: RMSaveStave) {
+	func openSaveState(_ saveState: RMSaveState) {
 		if let gameVC = presentedViewController as? PVEmulatorViewController {
 
 			try? RomDatabase.sharedInstance.writeTransaction {
@@ -782,7 +782,7 @@ extension GameLaunchingViewController where Self : UIViewController {
 
                 let database = RomDatabase.sharedInstance
 
-                let favorites = database.all(PVGame.self, where: #keyPath(PVGame.isFavorite), value: true)
+                let favorites = database.all(RMGame.self, where: #keyPath(RMGame.isFavorite), value: true)
                 for game in favorites {
                     let icon: UIApplicationShortcutIcon?
                     if #available(iOS 9.1, *) {
@@ -791,7 +791,7 @@ extension GameLaunchingViewController where Self : UIViewController {
                         icon = UIApplicationShortcutIcon(type: .play)
                     }
 
-                    let shortcut = UIApplicationShortcutItem(type: "kRecentGameShortcut", localizedTitle: game.title, localizedSubtitle: PVEmulatorConfiguration.name(forSystemIdentifier: game.systemIdentifier), icon: icon, userInfo: ["PVGameHash": game.md5Hash])
+                    let shortcut = UIApplicationShortcutItem(type: "kRecentGameShortcut", localizedTitle: game.title, localizedSubtitle: PVEmulatorConfiguration.name(forSystemIdentifier: game.systemIdentifier), icon: icon, userInfo: ["RMGameHash": game.md5Hash])
                     shortcuts.append(shortcut)
                 }
 
@@ -803,7 +803,7 @@ extension GameLaunchingViewController where Self : UIViewController {
                         let icon: UIApplicationShortcutIcon?
                         icon = UIApplicationShortcutIcon(type: .play)
 
-                        let shortcut = UIApplicationShortcutItem(type: "kRecentGameShortcut", localizedTitle: game.title, localizedSubtitle: PVEmulatorConfiguration.name(forSystemIdentifier: game.systemIdentifier), icon: icon, userInfo: ["PVGameHash": game.md5Hash])
+                        let shortcut = UIApplicationShortcutItem(type: "kRecentGameShortcut", localizedTitle: game.title, localizedSubtitle: PVEmulatorConfiguration.name(forSystemIdentifier: game.systemIdentifier), icon: icon, userInfo: ["RMGameHash": game.md5Hash])
                         shortcuts.append(shortcut)
                     }
                 }
