@@ -1,5 +1,5 @@
 //
-//  RMCore.swift
+//  PVCore.swift
 //  Provenance
 //
 //  Created by Joseph Mattiello on 3/11/18.
@@ -10,7 +10,7 @@ import Foundation
 import RealmSwift
 
 @objcMembers
-public final class RMCore: Object {
+public final class PVCore: Object {
     dynamic public var identifier: String = ""
     dynamic public var principleClass: String = ""
     dynamic public var supportedSystems = List<PVSystem>()
@@ -20,7 +20,7 @@ public final class RMCore: Object {
     dynamic public var projectVersion = ""
 
 	// Reverse links
-	public var saveStates = LinkingObjects(fromType: RMSaveState.self, property: "core")
+	public var saveStates = LinkingObjects(fromType: PVSaveState.self, property: "core")
 
     public convenience init(withIdentifier identifier: String, principleClass: String, supportedSystems: [PVSystem], name: String, url: String, version: String) {
         self.init()
@@ -40,7 +40,7 @@ public final class RMCore: Object {
 
 // MARK: - Conversions
 internal extension Core {
-	init(with core : RMCore) {
+	init(with core : PVCore) {
 		identifier = core.identifier
 		principleClass = core.principleClass
 		// TODO: Supported systems
@@ -49,7 +49,7 @@ internal extension Core {
 }
 
 
-extension RMCore: DomainConvertibleType {
+extension PVCore: DomainConvertibleType {
 	public typealias DomainType = Core
 
 	func asDomain() -> Core {
@@ -62,8 +62,8 @@ extension Core: RealmRepresentable {
 		return identifier
 	}
 
-	func asRealm() -> RMCore {
-		return RMCore.build({ object in
+	func asRealm() -> PVCore {
+		return PVCore.build({ object in
 			object.identifier = identifier
 			object.principleClass = principleClass
 			#warning("do me")

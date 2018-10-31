@@ -1,5 +1,5 @@
 //
-//  RMGame+Spotlight.swift
+//  PVGame+Spotlight.swift
 //  Provenance
 //
 //  Created by Joseph Mattiello on 3/11/18.
@@ -13,7 +13,7 @@ import CoreSpotlight
 import MobileCoreServices
 //import UIKit
 
-public extension RMGame {
+public extension PVGame {
 
     public var url: URL {
         return file.url

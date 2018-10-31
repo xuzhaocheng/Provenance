@@ -27,26 +27,26 @@ public func PVMaxRecentsCount() -> Int {
 /*
  Protocol with default implimentation.
  
- This allows any UIViewController class to just inherit GameLaunchingViewController, and then it can call load(RMGame)!
+ This allows any UIViewController class to just inherit GameLaunchingViewController, and then it can call load(PVGame)!
  
  */
 
 public protocol GameLaunchingViewController: class {
     var mustRefreshDataSource: Bool {get set}
-    func canLoad(_ game: RMGame) throws
-	func load(_ game: RMGame, sender : Any?, core: RMCore?, saveState: RMSaveState?)
-	func openSaveState(_ saveState: RMSaveState)
-    func updateRecentGames(_ game: RMGame)
+    func canLoad(_ game: PVGame) throws
+	func load(_ game: PVGame, sender : Any?, core: PVCore?, saveState: PVSaveState?)
+	func openSaveState(_ saveState: PVSaveState)
+    func updateRecentGames(_ game: PVGame)
     func register3DTouchShortcuts()
-	func presentCoreSelection(forGame game : RMGame, sender : Any?)
+	func presentCoreSelection(forGame game : PVGame, sender : Any?)
 }
 
 public protocol GameSharingViewController : class {
-	func share(for game: RMGame, sender: Any?)
+	func share(for game: PVGame, sender: Any?)
 }
 
 extension GameSharingViewController where Self : UIViewController {
-	func share(for game: RMGame, sender: Any?) {
+	func share(for game: PVGame, sender: Any?) {
 		/*
 		TODO:
 		Add native share action for sharing to other provenance devices
@@ -77,13 +77,13 @@ extension GameSharingViewController where Self : UIViewController {
 		// - Add save states and images
 		// - Use symlinks to images so we can modify the filenames
 		var files = game.saveStates.reduce([URL](), { (arr, save) -> [URL] in
-			guard !save.file.missing else {
+			guard save.file.online else {
 				WLOG("Save file is missing. Can't add to zip")
 				return arr
 			}
 			var arr = arr
 			arr.append(save.file.url)
-			if let image = save.image, !image.missing {
+			if let image = save.image, image.online {
 					// Construct destination url "{SAVEFILE}.{EXT}"
 				let destination = tempDirURL.appendingPathComponent(save.file.fileNameWithoutExtension + "." + image.url.pathExtension, isDirectory: false)
 				if FileManager.default.fileExists(atPath: destination.path) {
@@ -376,7 +376,7 @@ extension GameLaunchingViewController where Self : UIViewController {
         }
     }
 
-    func canLoad(_ game: RMGame) throws {
+    func canLoad(_ game: PVGame) throws {
         guard let system = game.system else {
             throw GameLaunchingError.systemNotFound
         }
@@ -393,7 +393,7 @@ extension GameLaunchingViewController where Self : UIViewController {
         self.present(alertController, animated: true)
     }
 
-	func presentCoreSelection(forGame game : RMGame, sender: Any?) {
+	func presentCoreSelection(forGame game : PVGame, sender: Any?) {
 		guard let system = game.system else {
 			ELOG("No sytem for game \(game.title)")
 			return
@@ -445,7 +445,7 @@ extension GameLaunchingViewController where Self : UIViewController {
 		present(coreChoiceAlert, animated: true)
 	}
 
-	func load(_ game: RMGame, sender : Any?, core: RMCore?, saveState : RMSaveState? = nil) {
+	func load(_ game: PVGame, sender : Any?, core: PVCore?, saveState : PVSaveState? = nil) {
         guard !(presentedViewController is PVEmulatorViewController) else {
             let currentGameVC = presentedViewController as! PVEmulatorViewController
             displayAndLogError(withTitle: "Cannot open new game", message: "A game is already running the game \(currentGameVC.game.title).")
@@ -453,7 +453,7 @@ extension GameLaunchingViewController where Self : UIViewController {
         }
 
 		// Check if file exists
-		if game.file.missing {
+		if !game.file.online {
 			displayAndLogError(withTitle: "Cannot open game", message: "The ROM file for this game cannot be found. Try re-importing the file for this game.\n\(game.file.fileName)")
 			return
 		}
@@ -480,7 +480,7 @@ extension GameLaunchingViewController where Self : UIViewController {
 				return
 			}
 
-			var selectedCore : RMCore?
+			var selectedCore : PVCore?
 
 			// If a core is passed in and it's valid for this system, use it.
 			if let saveState = saveState {
@@ -540,7 +540,7 @@ extension GameLaunchingViewController where Self : UIViewController {
         }
     }
 
-	private func presentEMU(withCore core : RMCore, forGame game: RMGame, fromSaveState saveState: RMSaveState? = nil) {
+	private func presentEMU(withCore core : PVCore, forGame game: PVGame, fromSaveState saveState: PVSaveState? = nil) {
 		guard let coreInstance = core.createInstance(forSystem: game.system) else {
 			displayAndLogError(withTitle: "Cannot open game", message: "Failed to create instance of core '\(core.projectName)'.")
 			ELOG("Failed to init core instance")
@@ -565,8 +565,8 @@ extension GameLaunchingViewController where Self : UIViewController {
 		}
 	}
 
-	// Used to just show and then optionally quickly load any passed in RMSaveStates
-	private func presentEMUVC(_ emulatorViewController : PVEmulatorViewController, withGame game: RMGame, loadingSaveState saveState: RMSaveState? = nil) {
+	// Used to just show and then optionally quickly load any passed in PVSaveStates
+	private func presentEMUVC(_ emulatorViewController : PVEmulatorViewController, withGame game: PVGame, loadingSaveState saveState: PVSaveState? = nil) {
 		// Present the emulator VC
 		emulatorViewController.modalTransitionStyle = .crossDissolve
 		emulatorViewController.glViewController?.view.isHidden = saveState != nil
@@ -608,7 +608,7 @@ extension GameLaunchingViewController where Self : UIViewController {
 		self.updateRecentGames(game)
 	}
 
-	private func checkForSaveStateThenRun(withCore core : RMCore, forGame game: RMGame, completion: @escaping (RMSaveState?) -> Void) {
+	private func checkForSaveStateThenRun(withCore core : PVCore, forGame game: PVGame, completion: @escaping (PVSaveState?) -> Void) {
 		if let latestSaveState = game.saveStates.filter("core.identifier == \"\(core.identifier)\"").sorted(byKeyPath: "date", ascending: false).first {
 			let shouldAskToLoadSaveState: Bool = PVSettingsModel.sharedInstance().askToAutoLoad
 			let shouldAutoLoadSaveState: Bool = PVSettingsModel.sharedInstance().autoLoadSaves
@@ -695,7 +695,7 @@ extension GameLaunchingViewController where Self : UIViewController {
 		}
 	}
 
-    func doLoad(_ game: RMGame) throws {
+    func doLoad(_ game: PVGame) throws {
         guard let system = game.system else {
             throw GameLaunchingError.systemNotFound
         }
@@ -703,7 +703,7 @@ extension GameLaunchingViewController where Self : UIViewController {
         try biosCheck(system: system)
     }
 
-    func updateRecentGames(_ game: RMGame) {
+    func updateRecentGames(_ game: PVGame) {
         let database = RomDatabase.sharedInstance
         database.refresh()
 
@@ -738,7 +738,7 @@ extension GameLaunchingViewController where Self : UIViewController {
                 ELOG("Failed to update Recent Game entry. \(error.localizedDescription)")
             }
         } else {
-			// TODO: Add RMCore
+			// TODO: Add PVCore
             let newRecent = PVRecentGame(withGame: game)
             do {
                 try database.add(newRecent, update: false)
@@ -754,7 +754,7 @@ extension GameLaunchingViewController where Self : UIViewController {
         register3DTouchShortcuts()
     }
 
-	func openSaveState(_ saveState: RMSaveState) {
+	func openSaveState(_ saveState: PVSaveState) {
 		if let gameVC = presentedViewController as? PVEmulatorViewController {
 
 			try? RomDatabase.sharedInstance.writeTransaction {
@@ -782,7 +782,7 @@ extension GameLaunchingViewController where Self : UIViewController {
 
                 let database = RomDatabase.sharedInstance
 
-                let favorites = database.all(RMGame.self, where: #keyPath(RMGame.isFavorite), value: true)
+                let favorites = database.all(PVGame.self, where: #keyPath(PVGame.isFavorite), value: true)
                 for game in favorites {
                     let icon: UIApplicationShortcutIcon?
                     if #available(iOS 9.1, *) {

@@ -1,6 +1,6 @@
 //  Converted to Swift 4 by Swiftify v4.1.6613 - https://objectivec2swift.com/
 //
-//  RMGameLibrarySectionHeaderView.m
+//  PVGameLibrarySectionHeaderView.m
 //  Provenance
 //
 //  Created by James Addyman on 16/09/2013.

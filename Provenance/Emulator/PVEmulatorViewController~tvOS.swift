@@ -143,7 +143,7 @@ extension PVEmulatorViewController {
 		#endif
 		actionsheet.addAction(UIAlertAction(title: "Game Info", style: .default, handler: {(_ action: UIAlertAction) -> Void in
 			let sb = UIStoryboard(name: "Provenance", bundle: nil)
-			let moreInfoViewContrller = sb.instantiateViewController(withIdentifier: "gameMoreInfoVC") as? RMGameMoreInfoViewController
+			let moreInfoViewContrller = sb.instantiateViewController(withIdentifier: "gameMoreInfoVC") as? PVGameMoreInfoViewController
 			moreInfoViewContrller?.game = self.game
 			moreInfoViewContrller?.showsPlayButton = false
 			moreInfoViewContrller?.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.hideModeInfo))

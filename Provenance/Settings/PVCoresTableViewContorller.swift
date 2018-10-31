@@ -15,7 +15,7 @@ final class PVCoresTableViewController: QuickTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-		let cores = RomDatabase.sharedInstance.all(RMCore.self, sortedByKeyPath: #keyPath(RMCore.projectName))
+		let cores = RomDatabase.sharedInstance.all(PVCore.self, sortedByKeyPath: #keyPath(PVCore.projectName))
 
 		#if os(tvOS)
 		splitViewController?.title = "Cores"

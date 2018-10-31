@@ -59,7 +59,7 @@
         <!--Game More Info View Controller-->
         <scene sceneID="ZjI-cp-Va1">
             <objects>
-                <viewController storyboardIdentifier="gameMoreInfoVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="7RB-u6-8KS" customClass="RMGameMoreInfoViewController" customModule="Provenance" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="gameMoreInfoVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="7RB-u6-8KS" customClass="PVGameMoreInfoViewController" customModule="Provenance" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hhb-pt-htj">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -438,7 +438,7 @@
         <!--Game Library View Controller-->
         <scene sceneID="SSZ-SN-hMc">
             <objects>
-                <viewController restorationIdentifier="gameLibrary" storyboardIdentifier="RMGameLibraryViewController" id="40z-oi-2L6" customClass="RMGameLibraryViewController" customModule="Provenance" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController restorationIdentifier="gameLibrary" storyboardIdentifier="PVGameLibraryViewController" id="40z-oi-2L6" customClass="PVGameLibraryViewController" customModule="Provenance" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ooJ-sW-pgf">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

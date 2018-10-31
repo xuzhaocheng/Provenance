@@ -1,5 +1,5 @@
 //
-//  RMSaveStateCollectionViewCell.swift
+//  PVSaveStateCollectionViewCell.swift
 //  Provenance
 //
 //  Created by James Addyman on 30/03/2018.
@@ -39,7 +39,7 @@ final class PVSaveStateCollectionViewCell: UICollectionViewCell {
 	}
 #endif
 
-	weak var saveState: RMSaveState? {
+	weak var saveState: PVSaveState? {
 		didSet {
 			if let saveState = saveState {
 				if let image = saveState.image {
@@ -47,7 +47,7 @@ final class PVSaveStateCollectionViewCell: UICollectionViewCell {
                     imageView.layer.borderWidth = 1.0
                     imageView.layer.borderColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.3).cgColor
                 }
-				let timeText = "\(RMSaveStateCollectionViewCell.dateFormatter.string(from: saveState.date)) \(RMSaveStateCollectionViewCell.timeFormatter.string(from: saveState.date))"
+				let timeText = "\(PVSaveStateCollectionViewCell.dateFormatter.string(from: saveState.date)) \(PVSaveStateCollectionViewCell.timeFormatter.string(from: saveState.date))"
 
 				let multipleCores = saveState.game.system.cores.count > 1
 				let system = saveState.game.system

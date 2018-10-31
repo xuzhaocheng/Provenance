@@ -1,5 +1,5 @@
 //
-//  RMGameControllerUtilities.m
+//  PVGameControllerUtilities.m
 //  PVSupport
 //
 //  Created by Tyler Hedrick on 4/3/16.
@@ -9,7 +9,7 @@
 #import "PVGameControllerUtilities.h"
 #import <GameController/GameController.h>
 
-@implementation RMGameControllerUtilities
+@implementation PVGameControllerUtilities
 
 + (PVControllerAxisDirection)axisDirectionForThumbstick:(GCControllerDirectionPad *)thumbstick {
     static CGFloat thumbstickSensitivty = 0.2;

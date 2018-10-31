@@ -62,7 +62,7 @@ public struct SytemPlistEntry: Codable {
     public private(set) var PVSystemName: String
     public private(set) var PVSystemShortName: String
     public private(set) var PVSystemShortNameAlt: String?
-    public private(set) var RMBIOSNames: [SystemPlistBIOSEntry]?
+    public private(set) var PVBIOSNames: [SystemPlistBIOSEntry]?
     public private(set) var PVSupportedExtensions: [String]
     public private(set) var PVControlLayout: [ControlLayoutEntry]
     public private(set) var PVHeaderByteSize: Int?

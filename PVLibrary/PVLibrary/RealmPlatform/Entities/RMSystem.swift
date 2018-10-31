@@ -60,7 +60,7 @@ public protocol SystemProtocol {
 
 @objcMembers
 public final class PVSystem: Object, SystemProtocol {
-	public typealias BIOSInfoProviderType = RMBIOS
+	public typealias BIOSInfoProviderType = PVBIOS
 
     dynamic public var name: String = ""
     dynamic public var shortName: String = ""
@@ -91,7 +91,7 @@ public final class PVSystem: Object, SystemProtocol {
 
     public private(set) var supportedExtensions = List<String>()
 
-	public var BIOSes: [RMBIOS]? {
+	public var BIOSes: [PVBIOS]? {
 		return Array(bioses)
 	}
 
@@ -100,9 +100,9 @@ public final class PVSystem: Object, SystemProtocol {
 	}
 
     // Reverse Links
-    public private(set) var bioses = LinkingObjects(fromType: RMBIOS.self, property: "system")
-    public private(set) var games = LinkingObjects(fromType: RMGame.self, property: "system")
-    public private(set) var cores = LinkingObjects(fromType: RMCore.self, property: "supportedSystems")
+    public private(set) var bioses = LinkingObjects(fromType: PVBIOS.self, property: "system")
+    public private(set) var games = LinkingObjects(fromType: PVGame.self, property: "system")
+    public private(set) var cores = LinkingObjects(fromType: PVCore.self, property: "supportedSystems")
 
 	public var gameStructs: [Game] {
 		return games.map { Game(withGame: $0) }
@@ -115,7 +115,7 @@ public final class PVSystem: Object, SystemProtocol {
 	public var userPreferredCore: Core? {
 		guard let userPreferredCoreID = userPreferredCoreID,
 			let realm = try? Realm(),
-			let preferredCore = realm.object(ofType: RMCore.self, forPrimaryKey: userPreferredCoreID) else {
+			let preferredCore = realm.object(ofType: PVCore.self, forPrimaryKey: userPreferredCoreID) else {
 			return nil
 		}
 		return Core(with: preferredCore)
@@ -291,7 +291,7 @@ public extension PVSystem {
         return SystemIdentifier(rawValue: identifier) ?? .Unknown
     }
 
-    public var biosesHave: [RMBIOS]? {
+    public var biosesHave: [PVBIOS]? {
         let have = bioses.filter({ (bios) -> Bool in
             return bios.online
         })
@@ -299,7 +299,7 @@ public extension PVSystem {
         return !have.isEmpty ? Array(have) : nil
     }
 
-    public var missingBIOSes: [RMBIOS]? {
+    public var missingBIOSes: [PVBIOS]? {
         let missing = bioses.filter({ (bios) -> Bool in
             return !bios.online
         })

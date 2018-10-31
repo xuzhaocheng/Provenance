@@ -1,4 +1,4 @@
-//  RMGameLibraryCollectionViewCell.swift
+//  PVGameLibraryCollectionViewCell.swift
 //  Provenance
 //
 //  Created by James Addyman on 07/04/2013.
@@ -204,7 +204,7 @@ func + (left: NSAttributedString, right: NSAttributedString) -> NSAttributedStri
 }
 
 protocol GameLibraryCollectionViewDelegate : class {
-	func promptToDeleteGame(_ game : RMGame, completion: ((_ deleted: Bool) -> Swift.Void)?)
+	func promptToDeleteGame(_ game : PVGame, completion: ((_ deleted: Bool) -> Swift.Void)?)
 }
 
 @IBDesignable
@@ -483,7 +483,7 @@ final class PVGameLibraryCollectionViewCell: UICollectionViewCell {
 	#endif
 
     var token: NotificationToken?
-    var game: RMGame? {
+    var game: PVGame? {
         didSet {
             DispatchQueue.main.async { [unowned self] in
                 self.token?.invalidate()
@@ -519,7 +519,7 @@ final class PVGameLibraryCollectionViewCell: UICollectionViewCell {
 
 	}
 
-    private func setup(with game: RMGame) {
+    private func setup(with game: PVGame) {
         let artworkURL: String = game.customArtworkURL
         let originalArtworkURL: String = game.originalArtworkURL
         if PVSettingsModel.shared.showGameTitles {
@@ -579,7 +579,7 @@ final class PVGameLibraryCollectionViewCell: UICollectionViewCell {
             }
         }
 
-		self.missingFileView?.isHidden = !game.file.missing
+		self.missingFileView?.isHidden = game.file.online
 		self.setupBadges()
         if !PVSettingsModel.shared.showGameBadges {
             self.setupDots()
@@ -665,7 +665,7 @@ final class PVGameLibraryCollectionViewCell: UICollectionViewCell {
 	private func setupPanGesture() {
 		if #available(iOS 9.0, tvOS 9.0, *) {
 
-			let panGesture = UIPanGestureRecognizer(target: self, action: #selector(RMGameLibraryCollectionViewCell.containerPanGestureRecognized(panGesture:)))
+			let panGesture = UIPanGestureRecognizer(target: self, action: #selector(PVGameLibraryCollectionViewCell.containerPanGestureRecognized(panGesture:)))
 			panGesture.cancelsTouchesInView = true
 			panGesture.delegate = self
 			panGesture.maximumNumberOfTouches = 1
@@ -1077,7 +1077,7 @@ final class PVGameLibraryCollectionViewCell: UICollectionViewCell {
 	#endif
 }
 
-extension RMGameLibraryCollectionViewCell : UIGestureRecognizerDelegate {
+extension PVGameLibraryCollectionViewCell : UIGestureRecognizerDelegate {
 	override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
 		if let panGestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer {
 			let velocity = panGestureRecognizer.velocity(in: self)

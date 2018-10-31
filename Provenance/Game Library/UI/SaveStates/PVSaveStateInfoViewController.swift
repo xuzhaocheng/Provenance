@@ -1,5 +1,5 @@
 //
-//  RMSaveStateInfoViewController.swift
+//  PVSaveStateInfoViewController.swift
 //  Provenance
 //
 //  Created by Joseph Mattiello on 4/1/18.
@@ -25,7 +25,7 @@ final class PVSaveStateInfoViewController: UIViewController, GameLaunchingViewCo
 
 	@IBOutlet weak var playBarButtonItem: UIBarButtonItem!
 
-	var saveState : RMSaveState? {
+	var saveState : PVSaveState? {
 		didSet {
 			assert(saveState != nil, "Set a nil game")
 
@@ -92,13 +92,13 @@ final class PVSaveStateInfoViewController: UIViewController, GameLaunchingViewCo
 		coreLabel.text = saveState.core.projectName
 		coreVersionLabel.text = saveState.createdWithCoreVersion
 
-		let createdText = "\(RMSaveStateInfoViewController.dateFormatter.string(from: saveState.date)), \(RMSaveStateInfoViewController.timeFormatter.string(from: saveState.date))"
+		let createdText = "\(PVSaveStateInfoViewController.dateFormatter.string(from: saveState.date)), \(PVSaveStateInfoViewController.timeFormatter.string(from: saveState.date))"
 		createdLabel.text = createdText
 
 		title = "\(saveState.game.title) : \(createdText)"
 
 		if let lastOpened = saveState.lastOpened {
-			let lastOpenedText = "\(RMSaveStateInfoViewController.dateFormatter.string(from: lastOpened)), \(RMSaveStateInfoViewController.timeFormatter.string(from: lastOpened))"
+			let lastOpenedText = "\(PVSaveStateInfoViewController.dateFormatter.string(from: lastOpened)), \(PVSaveStateInfoViewController.timeFormatter.string(from: lastOpened))"
 			print("Last opened \(lastOpenedText)")
 			lastPlayedLabel.text = lastOpenedText
 		} else {
@@ -153,7 +153,7 @@ final class PVSaveStateInfoViewController: UIViewController, GameLaunchingViewCo
 }
 
 @available(iOS 9.0, *)
-extension RMSaveStateInfoViewController {
+extension PVSaveStateInfoViewController {
 
 	// Buttons that shw up under thie VC when it's in a push/pop preview display mode
 	override var previewActionItems: [UIPreviewActionItem] {
@@ -166,7 +166,7 @@ extension RMSaveStateInfoViewController {
 			alert.addAction(UIAlertAction(title: "Yes", style: .destructive, handler: {(_ action: UIAlertAction) -> Void in
 				if let saveState = self.saveState {
 					do {
-						try RMSaveState.delete(saveState)
+						try PVSaveState.delete(saveState)
 					} catch {
 						self.presentError("Error deleting save state: " + error.localizedDescription)
 					}

@@ -33,7 +33,7 @@ public final class IndexRequestHandler: CSIndexExtensionRequestHandler {
         if RealmConfiguration.supportsAppGroups {
             let database = RomDatabase.sharedInstance
 
-            let allGames = database.all(RMGame.self)
+            let allGames = database.all(PVGame.self)
             indexResults(allGames)
 
         } else {
@@ -49,7 +49,7 @@ public final class IndexRequestHandler: CSIndexExtensionRequestHandler {
         if RealmConfiguration.supportsAppGroups {
             let database = RomDatabase.sharedInstance
 
-            let allGamesMatching = database.all(RMGame.self, filter: NSPredicate(format: "md5Hash IN %@", identifiers))
+            let allGamesMatching = database.all(PVGame.self, filter: NSPredicate(format: "md5Hash IN %@", identifiers))
             indexResults(allGamesMatching)
         } else {
             WLOG("App Groups not setup")
@@ -89,7 +89,7 @@ public final class IndexRequestHandler: CSIndexExtensionRequestHandler {
         if typeIdentifier == (kUTTypeImage as String) {
             let md5 = itemIdentifier.components(separatedBy: ".").last ?? ""
 
-            if let game = RomDatabase.sharedInstance.all(RMGame.self, where: #keyPath(RMGame.md5Hash), value: md5).first, let artworkURL = game.pathOfCachedImage {
+            if let game = RomDatabase.sharedInstance.all(PVGame.self, where: #keyPath(PVGame.md5Hash), value: md5).first, let artworkURL = game.pathOfCachedImage {
                 return artworkURL
             } else {
                 throw SpotlightError.notFound
@@ -99,7 +99,7 @@ public final class IndexRequestHandler: CSIndexExtensionRequestHandler {
         }
     }
 
-    private func indexResults(_ results: Results<RMGame>) {
+    private func indexResults(_ results: Results<PVGame>) {
 		#if swift(>=4.1)
 		let items: [CSSearchableItem] = results.compactMap({ (game) -> CSSearchableItem? in
 			if !game.md5Hash.isEmpty {

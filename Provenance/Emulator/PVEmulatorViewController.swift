@@ -67,10 +67,10 @@ extension UIViewController {
 	}
 }
 
-final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudioDelegate, RMSaveStatesViewControllerDelegate {
+final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudioDelegate, PVSaveStatesViewControllerDelegate {
 
     var core: PVEmulatorCore
-    var game: RMGame
+    var game: PVGame
 
     var batterySavesPath = ""
     var saveStatePath = ""
@@ -90,7 +90,7 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
 
     let minimumPlayTimeToMakeAutosave : Double = 60
 
-    required init(game: RMGame, core: PVEmulatorCore) {
+    required init(game: PVGame, core: PVEmulatorCore) {
         self.core = core
         self.game = game
 
@@ -616,13 +616,13 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
     }
 
     @objc func showSaveStateMenu() {
-		guard let saveStatesNavController = UIStoryboard(name: "SaveStates", bundle: nil).instantiateViewController(withIdentifier: "RMSaveStatesViewControllerNav") as? UINavigationController else {
+		guard let saveStatesNavController = UIStoryboard(name: "SaveStates", bundle: nil).instantiateViewController(withIdentifier: "PVSaveStatesViewControllerNav") as? UINavigationController else {
 			return
 		}
 
 		let image = captureScreenshot()
 
-		if let saveStatesViewController = saveStatesNavController.viewControllers.first as? RMSaveStatesViewController {
+		if let saveStatesViewController = saveStatesNavController.viewControllers.first as? PVSaveStatesViewController {
 			saveStatesViewController.saveStates = game.saveStates
 			saveStatesViewController.delegate = self
 			saveStatesViewController.screenshot = image
@@ -671,15 +671,15 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
 
 		if fileManager.fileExists(atPath: autoSaveURL.path) {
 			do {
-				guard let core = realm.object(ofType: RMCore.self, forPrimaryKey: core.coreIdentifier) else {
+				guard let core = realm.object(ofType: PVCore.self, forPrimaryKey: core.coreIdentifier) else {
 					presentError("No core in database with id \(self.core.coreIdentifier ?? "null")")
 					return
 				}
 
 				let newURL = URL(fileURLWithPath: saveStatePath).appendingPathComponent("\(game.md5Hash)|\(Date().timeIntervalSinceReferenceDate)")
 				try fileManager.moveItem(at: autoSaveURL, to: newURL)
-				let saveFile = RMLocalFile(withURL: newURL)
-				let newState = RMSaveState(withGame: game, core: core, file: saveFile, image: nil, isAutosave: true)
+				let saveFile = PVLocalFile(withURL: newURL)
+				let newState = PVSaveState(withGame: game, core: core, file: saveFile, image: nil, isAutosave: true)
 				try realm.write {
 					realm.add(newState)
 				}
@@ -691,15 +691,15 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
 		for url in saveStateURLs {
 			if fileManager.fileExists(atPath: url.path) {
 				do {
-					guard let core = realm.object(ofType: RMCore.self, forPrimaryKey: core.coreIdentifier) else {
+					guard let core = realm.object(ofType: PVCore.self, forPrimaryKey: core.coreIdentifier) else {
 						presentError("No core in database with id \(self.core.coreIdentifier ?? "null")")
 						return
 					}
 
 					let newURL = URL(fileURLWithPath: saveStatePath).appendingPathComponent("\(game.md5Hash)|\(Date().timeIntervalSinceReferenceDate)")
 					try fileManager.moveItem(at: url, to: newURL)
-					let saveFile = RMLocalFile(withURL: newURL)
-					let newState = RMSaveState(withGame: game, core: core, file: saveFile, image: nil, isAutosave: false)
+					let saveFile = PVLocalFile(withURL: newURL)
+					let newState = PVSaveState(withGame: game, core: core, file: saveFile, image: nil, isAutosave: false)
 					try realm.write {
 						realm.add(newState)
 					}
@@ -741,7 +741,7 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
 			throw SaveStateError.saveStatesUnsupportedByCore
 		}
 
-		let saveFile = RMLocalFile(withURL: URL(fileURLWithPath: saveStatePath).appendingPathComponent("\(game.md5Hash)|\(Date().timeIntervalSinceReferenceDate).svs"))
+		let saveFile = PVLocalFile(withURL: URL(fileURLWithPath: saveStatePath).appendingPathComponent("\(game.md5Hash)|\(Date().timeIntervalSinceReferenceDate).svs"))
 
 		var imageFile: PVImageFile?
 		if let screenshot = screenshot {
@@ -766,14 +766,14 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
 
 			DLOG("Succeeded saving state, auto: \(auto)")
 			if let realm = try? Realm() {
-				guard let core = realm.object(ofType: RMCore.self, forPrimaryKey: core.coreIdentifier) else {
+				guard let core = realm.object(ofType: PVCore.self, forPrimaryKey: core.coreIdentifier) else {
 					presentError("No core in database with id \(self.core.coreIdentifier ?? "null")")
 					return
 				}
 
 				do {
 					try realm.write {
-						let saveState = RMSaveState(withGame: game, core: core, file: saveFile, image: imageFile, isAutosave: auto)
+						let saveState = PVSaveState(withGame: game, core: core, file: saveFile, image: imageFile, isAutosave: auto)
 						realm.add(saveState)
 					}
 				} catch let error {
@@ -797,14 +797,14 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
 		}
 	}
 
-	func loadSaveState(_ state: RMSaveState) {
+	func loadSaveState(_ state: PVSaveState) {
 		guard core.supportsSaveStates else {
 			WLOG("Core \(core.description) doesn't support save states.")
 			return
 		}
 
 		let realm = try! Realm()
-		guard let core = realm.object(ofType: RMCore.self, forPrimaryKey: core.coreIdentifier) else {
+		guard let core = realm.object(ofType: PVCore.self, forPrimaryKey: core.coreIdentifier) else {
 			presentError("No core in database with id \(self.core.coreIdentifier ?? "null")")
 			return
 		}
@@ -836,23 +836,23 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
 		}
 	}
 
-	func saveStatesViewControllerDone(_ saveStatesViewController: RMSaveStatesViewController) {
+	func saveStatesViewControllerDone(_ saveStatesViewController: PVSaveStatesViewController) {
 		dismiss(animated: true, completion: nil)
 		self.core.setPauseEmulation(false)
 		self.isShowingMenu = false
 		self.enableContorllerInput(false)
 	}
 
-	func saveStatesViewControllerCreateNewState(_ saveStatesViewController: RMSaveStatesViewController) throws {
+	func saveStatesViewControllerCreateNewState(_ saveStatesViewController: PVSaveStatesViewController) throws {
 		try createNewSaveState(auto: false, screenshot: saveStatesViewController.screenshot)
 	}
 
-    func saveStatesViewControllerOverwriteState(_ saveStatesViewController: RMSaveStatesViewController, state: RMSaveState) throws {
+    func saveStatesViewControllerOverwriteState(_ saveStatesViewController: PVSaveStatesViewController, state: PVSaveState) throws {
         try createNewSaveState(auto: false, screenshot: saveStatesViewController.screenshot)
-		try RMSaveState.delete(state)
+		try PVSaveState.delete(state)
     }
 
-	func saveStatesViewController(_ saveStatesViewController: RMSaveStatesViewController, load state: RMSaveState) {
+	func saveStatesViewController(_ saveStatesViewController: PVSaveStatesViewController, load state: PVSaveState) {
 		dismiss(animated: true, completion: nil)
 		loadSaveState(state)
 	}

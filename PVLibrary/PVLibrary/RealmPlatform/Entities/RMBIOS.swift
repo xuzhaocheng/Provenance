@@ -1,5 +1,5 @@
 //
-//  RMBIOS.swift
+//  PVBIOS.swift
 //  Provenance
 //
 //  Created by Joseph Mattiello on 3/11/18.
@@ -10,7 +10,7 @@ import Foundation
 import RealmSwift
 
 @objcMembers
-public final class RMBIOS: Object, BIOSFileProvider {
+public final class PVBIOS: Object, BIOSFileProvider {
     dynamic public var system: PVSystem!
 
 	dynamic public var descriptionText: String = ""
@@ -22,7 +22,7 @@ public final class RMBIOS: Object, BIOSFileProvider {
     dynamic public var expectedSize: Int = 0
     dynamic public var expectedFilename: String = ""
 
-    dynamic public var file: RMLocalFile?
+    dynamic public var file: PVLocalFile?
 
     public convenience init(withSystem system: PVSystem, descriptionText: String, optional: Bool = false, expectedMD5: String, expectedSize: Int, expectedFilename: String) {
         self.init()
@@ -39,13 +39,13 @@ public final class RMBIOS: Object, BIOSFileProvider {
     }
 }
 
-public extension RMBIOS {
+public extension PVBIOS {
 	var expectedPath: URL {
 		return system.biosDirectory.appendingPathComponent(expectedFilename, isDirectory: false)
 	}
 }
 
-extension RMBIOS {
+extension PVBIOS {
 	public var status : BIOSStatus {
 		return BIOSStatus(withBios: self)
 	}
@@ -53,7 +53,7 @@ extension RMBIOS {
 
 // MARK: - Conversions
 fileprivate extension BIOS {
-	init(with bios : RMBIOS) {
+	init(with bios : PVBIOS) {
 		descriptionText = bios.descriptionText
 		optional = bios.optional
 		expectedMD5 = bios.expectedMD5
@@ -66,7 +66,7 @@ fileprivate extension BIOS {
 	}
 }
 
-extension RMBIOS: DomainConvertibleType {
+extension PVBIOS: DomainConvertibleType {
 	public typealias DomainType = BIOS
 
 	func asDomain() -> BIOS {
@@ -79,8 +79,8 @@ extension BIOS: RealmRepresentable {
 		return expectedFilename
 	}
 
-	func asRealm() -> RMBIOS {
-		return RMBIOS.build({ object in
+	func asRealm() -> PVBIOS {
+		return PVBIOS.build({ object in
 			object.descriptionText = descriptionText
 			object.optional = optional
 			object.expectedMD5 = expectedMD5

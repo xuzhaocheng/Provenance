@@ -890,7 +890,7 @@
         <!--Cores Table View Controller-->
         <scene sceneID="o5w-ra-VgU">
             <objects>
-                <tableViewController storyboardIdentifier="coresTableVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Ehn-W4-Sfs" customClass="RMCoresTableViewController" customModule="Provenance" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="coresTableVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Ehn-W4-Sfs" customClass="PVCoresTableViewController" customModule="Provenance" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" sectionHeaderHeight="66" sectionFooterHeight="66" id="kB7-g7-2f9">
                         <rect key="frame" x="0.0" y="0.0" width="1920" height="1080"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

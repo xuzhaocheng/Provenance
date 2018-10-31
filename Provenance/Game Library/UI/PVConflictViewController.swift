@@ -15,7 +15,7 @@ final class PVConflictViewController: UITableViewController {
     var gameImporter: PVGameImporter?
     var conflictedFiles: [URL] = [URL]()
 
-    init(gameImporter: RMGameImporter) {
+    init(gameImporter: PVGameImporter) {
         super.init(style: .plain)
 
         self.gameImporter = gameImporter

@@ -1,5 +1,5 @@
 //
-//  RMSaveState.swift
+//  PVSaveState.swift
 //  Provenance
 //
 //  Created by Joseph Mattiello on 3/11/18.
@@ -11,11 +11,11 @@ import RealmSwift
 import PVSupport
 
 @objcMembers
-public final class RMSaveState: Object {
+public final class PVSaveState: Object {
 
-    dynamic public var game: RMGame!
-	dynamic public var core: RMCore!
-    dynamic public var file: RMLocalFile!
+    dynamic public var game: PVGame!
+	dynamic public var core: PVCore!
+    dynamic public var file: PVLocalFile!
     dynamic public var date: Date = Date()
 	dynamic public var lastOpened: Date?
     dynamic public var image: PVImageFile?
@@ -23,7 +23,7 @@ public final class RMSaveState: Object {
 
 	dynamic public var createdWithCoreVersion: String!
 
-	public convenience init(withGame game: RMGame, core: RMCore, file: RMLocalFile, image: PVImageFile? = nil, isAutosave: Bool = false) {
+	public convenience init(withGame game: PVGame, core: PVCore, file: PVLocalFile, image: PVImageFile? = nil, isAutosave: Bool = false) {
         self.init()
         self.game  = game
         self.file  = file
@@ -33,7 +33,7 @@ public final class RMSaveState: Object {
 		createdWithCoreVersion = core.projectVersion
     }
 
-    public class func delete(_ state: RMSaveState) throws {
+    public class func delete(_ state: PVSaveState) throws {
         do {
 			// Temp store these URLs
 			let fileURL = state.file.url
@@ -61,14 +61,14 @@ public final class RMSaveState: Object {
 		return isNewest
 	}
 
-	public static func == (lhs: RMSaveState, rhs: RMSaveState) -> Bool {
+	public static func == (lhs: PVSaveState, rhs: PVSaveState) -> Bool {
 		return lhs.file.url == rhs.file.url
 	}
 }
 
 // MARK: - Conversions
 fileprivate extension SaveState {
-	init(with saveState : RMSaveState) {
+	init(with saveState : PVSaveState) {
 		game = saveState.game.asDomain()
 		#warning ("DO me")
 		core = saveState.core.asDomain()
@@ -84,7 +84,7 @@ fileprivate extension SaveState {
 }
 
 
-extension RMSaveState : DomainConvertibleType {
+extension PVSaveState : DomainConvertibleType {
 	public typealias DomainType = SaveState
 
 	func asDomain() -> SaveState {
@@ -97,8 +97,8 @@ extension SaveState: RealmRepresentable {
 		return file.fileName
 	}
 
-	func asRealm() -> RMSaveState {
-		return RMSaveState.build { object in
+	func asRealm() -> PVSaveState {
+		return PVSaveState.build { object in
 			#warning ("DO me")
 		}
 	}

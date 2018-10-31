@@ -56,8 +56,8 @@ public final class ServiceProvider: NSObject, TVTopShelfProvider {
             return nil
         }
         recentlyAddedItems.title = "Recently Added"
-        let recentlyAddedGames = database.all(RMGame.self, sortedByKeyPath:
-            #keyPath(RMGame.importDate), ascending: false)
+        let recentlyAddedGames = database.all(PVGame.self, sortedByKeyPath:
+            #keyPath(PVGame.importDate), ascending: false)
         recentlyAddedItems.topShelfItems = recentlyAddedGames.map({$0.contentItem(with: identifier)! })
         return recentlyAddedItems
     }
@@ -79,7 +79,7 @@ public final class ServiceProvider: NSObject, TVTopShelfProvider {
             return nil
         }
         favoriteItems.title = "Favorites"
-        let favoriteGames = database.all(RMGame.self, where: "isFavorite", value: true).sorted(byKeyPath: #keyPath(RMGame.title), ascending: false)
+        let favoriteGames = database.all(PVGame.self, where: "isFavorite", value: true).sorted(byKeyPath: #keyPath(PVGame.title), ascending: false)
         favoriteItems.topShelfItems = favoriteGames.map({$0.contentItem(with: identifier)! })
         return favoriteItems
     }

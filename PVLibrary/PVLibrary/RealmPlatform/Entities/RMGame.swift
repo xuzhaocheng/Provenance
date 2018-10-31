@@ -1,5 +1,5 @@
 //
-//  RMGame.swift
+//  PVGame.swift
 //  Provenance
 //
 //  Created by Joe Mattiello on 10/02/2018.
@@ -9,11 +9,11 @@
 import Foundation
 import RealmSwift
 
-// Hack for game library having eitehr RMGame or PVRecentGame in containers
+// Hack for game library having eitehr PVGame or PVRecentGame in containers
 protocol PVLibraryEntry where Self: Object {}
 
 @objcMembers
-public final class RMGame: Object, PVLibraryEntry {
+public final class PVGame: Object, PVLibraryEntry {
     dynamic public var title: String				= ""
 	dynamic public var id							= NSUUID().uuidString
 
@@ -24,8 +24,8 @@ public final class RMGame: Object, PVLibraryEntry {
     // The other option is to only use the filename and then path(forGame:) would determine the
     // fully qualified path, but if we add network / cloud storage that may or may not change that.
     dynamic public var romPath: String            = ""
-    dynamic public var file: RMLocalFile!
-	public private(set) var relatedFiles = List<RMLocalFile>()
+    dynamic public var file: PVLocalFile!
+	public private(set) var relatedFiles = List<PVLocalFile>()
 
     dynamic public var customArtworkURL: String   = ""
     dynamic public var originalArtworkURL: String = ""
@@ -45,11 +45,11 @@ public final class RMGame: Object, PVLibraryEntry {
 	dynamic public var crc: String            = ""
 
 	// If the user has set 'always use' for a specfic core
-	// We don't use RMCore incase cores are removed / deleted
+	// We don't use PVCore incase cores are removed / deleted
 	dynamic public var userPreferredCoreID : String?
 
     /* Links to other objects */
-    public private(set) var saveStates = LinkingObjects<RMSaveState>(fromType: RMSaveState.self, property: "game")
+    public private(set) var saveStates = LinkingObjects<PVSaveState>(fromType: PVSaveState.self, property: "game")
     public private(set) var recentPlays = LinkingObjects(fromType: PVRecentGame.self, property: "game")
     public private(set) var screenShots = List<PVImageFile>()
 
@@ -84,7 +84,7 @@ public final class RMGame: Object, PVLibraryEntry {
     dynamic public var systemShortName: String?
 	dynamic public var language: String?
 
-    public convenience init(withFile file: RMLocalFile, system: PVSystem) {
+    public convenience init(withFile file: PVLocalFile, system: PVSystem) {
         self.init()
         self.file = file
         self.system = system
@@ -106,7 +106,7 @@ public final class RMGame: Object, PVLibraryEntry {
     }
 }
 
-public extension RMGame {
+public extension PVGame {
 	public var isCD : Bool {
 		let ext = (romPath as NSString).pathExtension
 		var exts = PVEmulatorConfiguration.supportedCDFileExtensions
@@ -123,12 +123,12 @@ public extension RMGame {
 	}
 }
 
-public extension RMGame {
-	public var autoSaves : Results<RMSaveState> {
+public extension PVGame {
+	public var autoSaves : Results<PVSaveState> {
 		return saveStates.filter("isAutosave == true").sorted(byKeyPath: "date", ascending: false)
 	}
 
-	public var newestAutoSave : RMSaveState? {
+	public var newestAutoSave : PVSaveState? {
 		return autoSaves.first
 	}
 
@@ -143,7 +143,7 @@ public extension RMGame {
 
 // MARK: Conversions
 public extension Game {
-	init(withGame game : RMGame) {
+	init(withGame game : PVGame) {
 		title = game.title
 		md5 = game.md5Hash
 		crc = game.crc
@@ -166,7 +166,7 @@ public extension Game {
 	}
 }
 
-extension RMGame : DomainConvertibleType {
+extension PVGame : DomainConvertibleType {
 	public typealias DomainType = Game
 
 	func asDomain() -> Game {
@@ -179,8 +179,8 @@ extension Game: RealmRepresentable {
 		return md5
 	}
 
-	func asRealm() -> RMGame {
-		return RMGame.build { object in
+	func asRealm() -> PVGame {
+		return PVGame.build { object in
 //			#warning DO me
 		}
 	}

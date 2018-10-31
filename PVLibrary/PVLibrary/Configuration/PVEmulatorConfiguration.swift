@@ -10,7 +10,7 @@ import RealmSwift
 import PVSupport
 
 public struct SystemDictionaryKeys {
-    public static let BIOSEntries         = "RMBIOSNames"
+    public static let BIOSEntries         = "PVBIOSNames"
     public static let ControlLayout       = "PVControlLayout"
     public static let DatabaseID          = "PVDatabaseID"
     public static let RequiresBIOS        = "PVRequiresBIOS"
@@ -105,7 +105,7 @@ public enum SystemIdentifier: String {
 //        return PVEmulatorConfiguration.requiresBIOS(forSystemIdentifier: self)
 //    }
 //
-//    var biosEntries : [RMBIOS]? {
+//    var biosEntries : [PVBIOS]? {
 //        return PVEmulatorConfiguration.biosEntries(forSystemIdentifier: self)
 //    }
 //
@@ -130,8 +130,8 @@ public extension PVSystem {
     }
 }
 
-// MARK: - RMGame convenience extension
-public extension RMGame {
+// MARK: - PVGame convenience extension
+public extension PVGame {
     // TODO: See above TODO, this should be based on the ROM systemid/md5
     public var batterSavesPath: URL {
         return PVEmulatorConfiguration.batterySavesPath(forGame: self)
@@ -217,8 +217,8 @@ public final class PVEmulatorConfiguration: NSObject {
         })
     }()
 
-    static public var biosEntries: Results<RMBIOS> {
-        return RMBIOS.all
+    static public var biosEntries: Results<PVBIOS> {
+        return PVBIOS.all
     }
 
     // MARK: - Filesystem Helpers
@@ -301,11 +301,11 @@ public final class PVEmulatorConfiguration: NSObject {
         })
     }
 
-    class public func biosEntry(forMD5 md5: String) -> RMBIOS? {
-        return RomDatabase.sharedInstance.all(RMBIOS.self, where: "expectedMD5", value: md5).first
+    class public func biosEntry(forMD5 md5: String) -> PVBIOS? {
+        return RomDatabase.sharedInstance.all(PVBIOS.self, where: "expectedMD5", value: md5).first
     }
 
-    class public func biosEntry(forFilename filename: String) -> RMBIOS? {
+    class public func biosEntry(forFilename filename: String) -> PVBIOS? {
         return biosEntries.first { $0.expectedFilename == filename }
     }
 
@@ -395,11 +395,11 @@ public extension PVEmulatorConfiguration {
         return biosesPath.appendingPathComponent(systemID, isDirectory: true)
     }
 
-    class func biosPath(forGame game: RMGame) -> URL {
+    class func biosPath(forGame game: PVGame) -> URL {
         return biosPath(forSystemIdentifier: game.systemIdentifier)
     }
 
-    class func biosEntries(forSystemIdentifier systemID: String) -> [RMBIOS]? {
+    class func biosEntries(forSystemIdentifier systemID: String) -> [PVBIOS]? {
         if let bioses = system(forIdentifier: systemID)?.bioses {
             return Array(bioses)
         } else {
@@ -443,7 +443,7 @@ public extension PVEmulatorConfiguration {
         return biosPath(forSystemIdentifier: systemID.rawValue)
     }
 
-    class func biosEntries(forSystemIdentifier systemID: SystemIdentifier) -> [RMBIOS]? {
+    class func biosEntries(forSystemIdentifier systemID: SystemIdentifier) -> [PVBIOS]? {
         return biosEntries(forSystemIdentifier: systemID.rawValue)
     }
 
@@ -459,7 +459,7 @@ public extension PVEmulatorConfiguration {
 // MARK: - Rom queries
 public extension PVEmulatorConfiguration {
 
-    class func batterySavesPath(forGame game: RMGame) -> URL {
+    class func batterySavesPath(forGame game: PVGame) -> URL {
         return batterySavesPath(forROM: game.url)
     }
 
@@ -476,7 +476,7 @@ public extension PVEmulatorConfiguration {
         return batterySavesDirectory
     }
 
-    class func saveStatePath(forGame game: RMGame) -> URL {
+    class func saveStatePath(forGame game: PVGame) -> URL {
         return saveStatePath(forROM: game.url)
     }
 
@@ -493,7 +493,7 @@ public extension PVEmulatorConfiguration {
         return saveSavesPath
     }
 
-	class func screenshotsPath(forGame game: RMGame) -> URL {
+	class func screenshotsPath(forGame game: PVGame) -> URL {
 		let screenshotsPath = self.screenShotsPath.appendingPathComponent(game.system.shortName, isDirectory: true).appendingPathComponent(game.title, isDirectory: true)
 
 		do {
@@ -505,7 +505,7 @@ public extension PVEmulatorConfiguration {
 		return screenshotsPath
 	}
 
-    class func path(forGame game: RMGame) -> URL {
+    class func path(forGame game: PVGame) -> URL {
         return game.file.url
     }
 }
@@ -517,7 +517,7 @@ public extension PVEmulatorConfiguration {
     }
 
     @objc
-    class func m3uFile(forGame game: RMGame) -> URL? {
+    class func m3uFile(forGame game: PVGame) -> URL? {
         let gamePath = self.path(forGame: game)
         let gameDirectory = self.romDirectory(forSystemIdentifier: game.system.identifier)
         let filenameWithoutExtension =  stripDiscNames(fromFilename: gamePath.deletingPathExtension().lastPathComponent)
