@@ -322,6 +322,13 @@ end
 
     ipa_name  = "Provenance-#{git_branch}-#{build_number}.ipa"
 
+    if is_ci?
+      increment_build_number_in_plist(
+        build_number: ci_build_number,
+        target: 'Provenance'
+      )
+    end
+
     badge_alpha
     buid_ios_adhoc(
       ipa_name: ipa_name, 
@@ -366,16 +373,16 @@ end
     end
 
     # SCP to web-server
-    begin
-      UI.message "SCP'ing to #{build_time}"
-      scp_upload(source: lane_context[SharedValues::IPA_OUTPUT_PATH], subfolder: build_time)
-      scp_upload(source: lane_context[SharedValues::DSYM_OUTPUT_PATH], subfolder: build_time)
-    rescue => ex
-        # re-raise the exception unless it's something we're OK with ignoring
-        # raise ex unless ex.message.include?('Error message of interest')
-      # don't fail the build
-      UI.important("SCP Something went wrong: #{ex}")
-    end
+    # begin
+    #   UI.message "SCP'ing to #{build_time}"
+    #   scp_upload(source: lane_context[SharedValues::IPA_OUTPUT_PATH], subfolder: build_time)
+    #   scp_upload(source: lane_context[SharedValues::DSYM_OUTPUT_PATH], subfolder: build_time)
+    # rescue => ex
+    #     # re-raise the exception unless it's something we're OK with ignoring
+    #     # raise ex unless ex.message.include?('Error message of interest')
+    #   # don't fail the build
+    #   UI.important("SCP Something went wrong: #{ex}")
+    # end
 
 
     # uploadToWordpress(lane_context[SharedValues::IPA_OUTPUT_PATH])
@@ -670,11 +677,12 @@ end
       include_bitcode: false,
       include_symbols: false,
       #xcargs: activeArchOnly ? "-arch arm64 ONLY_ACTIVE_ARCH=YES" : "",
-      # export_xcargs: "-allowProvisioningUpdates",
+      export_xcargs: "-allowProvisioningUpdates",
       export_options: {
         method: export_method,
+        iCloudContainerEnvironment: "Production",
         manifest: {
-        #   appURL: "https://www.provenance-emu.com/builds/#{ipa_name}",
+          appURL: "https://www.provenance-emu.com/builds/#{ipa_name}",
           displayImageURL: "https://provenance-emu.com/github-files/ipa-assets/Icon57x57.png", # 57x57
           fullSizeImageURL: "https://provenance-emu.com/github-files/ipa-assets/Icon512x512.png" # 512x512
         },
@@ -822,8 +830,9 @@ end
     carthage(
       command: command,
       platform: platform,
-      use_binaries: true,
+      use_binaries: false,
       cache_builds: true,
+      use_ssh: true,
       project_directory: project_directory
     )
   end

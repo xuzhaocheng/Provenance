@@ -246,8 +246,8 @@ extension RMGameLibraryViewController: UICollectionViewDataSource {
 	}
 
 	func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-		if (kind == UICollectionElementKindSectionHeader) {
-			var headerView: RMGameLibrarySectionHeaderView?
+		if (kind == UICollectionView.elementKindSectionHeader) {
+			var headerView: PVGameLibrarySectionHeaderView?
 			let title = searchResults != nil ? "Search Results" : sectionTitles[indexPath.section]
 
 			headerView = self.collectionView?.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: RMGameLibraryHeaderViewIdentifier, for: indexPath) as? RMGameLibrarySectionHeaderView
@@ -264,8 +264,8 @@ extension RMGameLibraryViewController: UICollectionViewDataSource {
 			} else {
 				fatalError("Couldn't create header view")
 			}
-		} else if kind == UICollectionElementKindSectionFooter {
-			let footerView = self.collectionView!.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: RMGameLibraryFooterViewIdentifier, for: indexPath) as! RMGameLibrarySectionFooterView
+		} else if kind == UICollectionView.elementKindSectionFooter {
+			let footerView = self.collectionView!.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: PVGameLibraryFooterViewIdentifier, for: indexPath) as! PVGameLibrarySectionFooterView
 			return footerView
 		}
 

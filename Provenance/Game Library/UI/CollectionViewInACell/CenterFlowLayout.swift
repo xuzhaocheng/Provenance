@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CenterViewFlowLayout: UICollectionViewFlowLayout {
+final class CenterViewFlowLayout: UICollectionViewFlowLayout {
 
 	var canvasSize : CGSize {
 		return self.collectionView?.frame.size ?? .zero
@@ -39,7 +39,7 @@ class CenterViewFlowLayout: UICollectionViewFlowLayout {
 		// Only support Horizontal scroll
 		let count = collectionView.dataSource?.collectionView(collectionView, numberOfItemsInSection: 0) ?? 0
 		var contentSize = canvasSize
-		if self.scrollDirection == UICollectionViewScrollDirection.horizontal {
+		if self.scrollDirection == UICollectionView.ScrollDirection.horizontal {
 			let page = ceilf(Float(count) / Float(rowCount * columnCount))
 			contentSize.width = CGFloat(CGFloat(page) * canvasSize.width).rounded(.toNearestOrEven)
 		}
@@ -111,7 +111,7 @@ class CenterViewFlowLayout: UICollectionViewFlowLayout {
 		cellFrame.size.width = (self.itemSize.width).rounded(.toNearestOrEven)
 		cellFrame.size.height = (itemHeight).rounded(.toNearestOrEven)
 
-		if self.scrollDirection == UICollectionViewScrollDirection.horizontal {
+		if self.scrollDirection == UICollectionView.ScrollDirection.horizontal {
 			cellFrame.origin.x += CGFloat(page) * canvasSize.width
 		}
 

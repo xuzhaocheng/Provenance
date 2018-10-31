@@ -1,5 +1,5 @@
 //
-//  RMCoresTableViewController
+//  PVCoresTableViewController
 //  Provenance
 //
 //  Created by Joe Mattiello on 16.03.18.
@@ -11,7 +11,7 @@ import RealmSwift
 import PVLibrary
 import QuickTableViewController
 
-class RMCoresTableViewController: QuickTableViewController {
+final class PVCoresTableViewController: QuickTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

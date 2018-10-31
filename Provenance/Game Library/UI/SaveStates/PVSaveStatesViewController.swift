@@ -19,7 +19,7 @@ protocol RMSaveStatesViewControllerDelegate: class {
 	func saveStatesViewController(_ saveStatesViewController: RMSaveStatesViewController, load state: RMSaveState)
 }
 
-class RMSaveStatesViewController: UICollectionViewController {
+final class PVSaveStatesViewController: UICollectionViewController {
 
 	private var autoSaveStatesObserverToken: NotificationToken!
 	private var manualSaveStatesObserverToken: NotificationToken!

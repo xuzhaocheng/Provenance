@@ -14,7 +14,7 @@ import PVSupport
 
 // Subclass to help with themeing
 @objc public final class SettingsTableView: UITableView {
-    public override init(frame: CGRect, style: UITableViewStyle) {
+    public override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
         self.backgroundColor = Theme.currentTheme.settingsHeaderBackground
     }
@@ -25,7 +25,7 @@ import PVSupport
     }
 }
 
-class PVSettingsViewController: UITableViewController, SFSafariViewControllerDelegate, WebServerActivatorController {
+final class PVSettingsViewController: UITableViewController, SFSafariViewControllerDelegate, WebServerActivatorController {
     @IBOutlet weak var autoSaveSwitch: UISwitch!
     @IBOutlet weak var autoLoadSwitch: UISwitch!
     @IBOutlet weak var timedAutoSavesSwitch: UISwitch!
@@ -130,7 +130,18 @@ class PVSettingsViewController: UITableViewController, SFSafariViewControllerDel
 		let outputDateFormatter = DateFormatter()
 		outputDateFormatter.dateFormat = "MM/dd/yyyy hh:mm a"
 
-		let buildDate = incomingDateFormatter.date(from: gitdate)!
+		var buildDate = Date(timeIntervalSince1970: 0)
+
+		if let processedDate = incomingDateFormatter.date(from: gitdate) {
+			buildDate = processedDate
+		} else {
+			// Try chaninging local - depends on which local was build with for git string
+			// more than the current local
+			incomingDateFormatter.locale = Locale.current
+			if let processedDate = incomingDateFormatter.date(from: gitdate) {
+				buildDate = processedDate
+			}
+		}
 
 		buildDateLabel.text = outputDateFormatter.string(from: buildDate)
 		bundleIDLabel.text = Bundle.main.bundleIdentifier
@@ -147,7 +158,7 @@ class PVSettingsViewController: UITableViewController, SFSafariViewControllerDel
 		reachability.startNotifier()
 
         let settings = PVSettingsModel.shared
-        iCadeControllerSetting.text = iCadeControllerSettingToString(settings.myiCadeControllerSetting)
+        iCadeControllerSetting.text = settings.myiCadeControllerSetting.description ?? "nil"
 
         if #available(iOS 9.0, *) {
             themeValueLabel.text = settings.theme.rawValue

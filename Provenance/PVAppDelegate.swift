@@ -14,7 +14,7 @@ import HockeySDK
 import RealmSwift
 
 @UIApplicationMain
-class PVAppDelegate: UIResponder, UIApplicationDelegate {
+final class PVAppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var shortcutItemGame: RMGame?
@@ -24,7 +24,7 @@ class PVAppDelegate: UIResponder, UIApplicationDelegate {
 	var _logViewController: PVLogViewController?
 	#endif
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]? = nil) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         UIApplication.shared.isIdleTimerDisabled = PVSettingsModel.shared.disableAutoLock
 		_initLogging()
         setDefaultsFromSettingsBundle();
@@ -86,7 +86,7 @@ class PVAppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
         let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
 
         if url.isFileURL {
@@ -197,7 +197,7 @@ class PVAppDelegate: UIResponder, UIApplicationDelegate {
     }
 #endif
 
-    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
 
         // Spotlight search click-through
         #if os(iOS)
@@ -280,19 +280,21 @@ extension PVAppDelegate {
 
 		let masterBranch = kGITBranch.lowercased() == "master"
         let developBranch = kGITBranch.lowercased() == "develop"
+		let travisBuild = ["jmattiello","travis"].contains(builtByUser)
         let masterOrDevelopBranch = masterBranch || developBranch
+		let feedbackEnabled = masterOrDevelopBranch && travisBuild
 
         #if os(iOS)
         BITHockeyManager.shared().isFeedbackManagerDisabled = !masterOrDevelopBranch
         BITHockeyManager.shared().isStoreUpdateManagerEnabled = false
         #endif
         
-		BITHockeyManager.shared().isUpdateManagerDisabled = !masterBranch
+		BITHockeyManager.shared().isUpdateManagerDisabled = !masterBranch && travisBuild
         
-        if !UserDefaults.standard.bool(forKey: "hockeyAppEnabled") {
-            BITHockeyManager.shared().isUpdateManagerDisabled = true
-        }
-		
+//        if !UserDefaults.standard.bool(forKey: "hockeyAppEnabled") {
+//            BITHockeyManager.shared().isUpdateManagerDisabled = true
+//        }
+
 		BITHockeyManager.shared().logLevel = BITLogLevel.warning
 		BITHockeyManager.shared().start()
 		BITHockeyManager.shared().authenticator.authenticateInstallation() // This line is obsolete in the crash only builds

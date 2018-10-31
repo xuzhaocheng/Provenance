@@ -80,7 +80,7 @@ before_script:
     # - kill %1
 after_success:
   - ./Scripts/rome-upload.sh iOS
-  - wget https://raw.githubusercontent.com/k3rn31p4nic/travis-ci-discord-webhook/master/send.sh
+  - wget https://raw.githubusercontent.com/JoeMatt/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh
   - ./send.sh success $WEBHOOK_URL
   - ./Scripts/travis-upload.bash
@@ -89,12 +89,12 @@ after_success:
   #- bash <(curl -s https://codecov.io/bash)
 after_failure:
   - tail -100 /tmp/carthage.log
-  - wget https://raw.githubusercontent.com/k3rn31p4nic/travis-ci-discord-webhook/master/send.sh
+  - wget https://raw.githubusercontent.com/JoeMatt/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh
   - ./send.sh failure $WEBHOOK_URL
 script:
   - set -o pipefail
-  - bundle exec carthage_bootstrap_ios
+  - bundle exec fastlane carthage_bootstrap_ios
   - bundle exec fastlane travis
   # - swiftlint
   # - travis_wait 60 xcodebuild -workspace "$WORKSPACE_NAME" -scheme "$SCHEME" -configuration "$CONFIGURATION" -destination "$DESTINATION" -sdk "$SDK" ONLY_ACTIVE_ARCH=YES CODE_SIGNING_REQUIRED=NO | xcpretty -f `xcpretty-travis-formatter`
