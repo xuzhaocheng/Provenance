@@ -5,3 +5,4 @@ github "weichsel/ZIPFoundation"
 
 github "ReactiveX/RxSwift" ~> 4.0
 github "RxSwiftCommunity/RxRealm"
+github "saoudrizwan/Disk"

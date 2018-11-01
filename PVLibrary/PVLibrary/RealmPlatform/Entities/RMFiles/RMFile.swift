@@ -1,5 +1,5 @@
 //
-//  PVLocalFile.swift
+//  PVFile.swift
 //  Provenance
 //
 //  Created by Joseph Mattiello on 3/11/18.
@@ -61,7 +61,7 @@ public enum RelativeRoot: Int {
 }
 
 @objcMembers
-public class PVLocalFile: Object, LocalFileProvider, Codable, DomainConvertibleType {
+public class PVFile: Object, LocalFileProvider, Codable, DomainConvertibleType {
 	typealias DomainType = LocalFile
 
     @objc internal dynamic var partialPath: String = ""
@@ -83,7 +83,7 @@ public class PVLocalFile: Object, LocalFileProvider, Codable, DomainConvertibleT
     }
 }
 
-public extension PVLocalFile {
+public extension PVFile {
     public internal(set) var relativeRoot: RelativeRoot {
         get {
             return RelativeRoot(rawValue: _relativeRoot)!

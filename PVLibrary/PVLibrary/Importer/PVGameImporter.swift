@@ -1192,19 +1192,19 @@ extension PVGameImporter {
 		let destinationDir = (system.identifier as NSString)
         let partialPath: String = destinationDir.appendingPathComponent(filename)
 
-        let file = PVLocalFile(withURL: path)
+        let file = PVFile(withURL: path)
 
         let game = PVGame(withFile: file, system: system)
         game.romPath = partialPath
         game.title = title
         game.requiresSync = true
 
-		var relatedRMFiles = [PVLocalFile]()
+		var relatedRMFiles = [PVFile]()
 		if let relatedFiles = relatedFiles {
 			for relatedFile in relatedFiles {
 				let fileName = relatedFile.lastPathComponent
 				let partialRelatedPath = destinationDir.appendingPathComponent(fileName)
-				let newRelatedRMFile = PVLocalFile(withPartialPath: partialRelatedPath)
+				let newRelatedRMFile = PVFile(withPartialPath: partialRelatedPath)
 				relatedRMFiles.append(newRelatedRMFile)
 			}
 		}
@@ -1364,7 +1364,7 @@ extension PVGameImporter {
                 }
 
                 try RomDatabase.sharedInstance.writeTransaction {
-                    let file = PVLocalFile.init(withURL: destinationPath)
+                    let file = PVFile.init(withURL: destinationPath)
                     biosEntry.file = file
                 }
             } catch {
@@ -1401,7 +1401,7 @@ extension PVGameImporter {
                     ILOG("Moved <\(filePath.lastPathComponent)> to \(directory.lastPathComponent)")
 					// Add it as an associated file
 					try RomDatabase.sharedInstance.writeTransaction {
-						let file = PVLocalFile.init(withURL: destinationPath)
+						let file = PVFile.init(withURL: destinationPath)
 						game.relatedFiles.append(file)
 					}
                 } catch {

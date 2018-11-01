@@ -11,7 +11,7 @@ import RealmSwift
 import PVSupport
 
 @objcMembers
-public final class PVImageFile: PVLocalFile {
+public final class PVImageFile: PVFile {
 	dynamic internal(set) public var _cgsize: String!
 	dynamic public var ratio: Float = 0.0
 	dynamic public var width: Int = 0

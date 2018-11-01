@@ -1839,6 +1839,7 @@
 				"$(SRCROOT)/PVSupport/Carthage/Build/tvOS/SwiftyUserDefaults.framework",
 				"$(SRCROOT)/PVLibrary/Carthage/Build/tvOS/ZipArchive.framework",
 				"$(SRCROOT)/Carthage/Build/tvOS/QuickTableViewController.framework",
+				"$(SRCROOT)/PVLibrary/Carthage/Build/tvOS/Disk.framework",
 			);
 			name = "Carthage Copy Frameworks";
 			outputPaths = (
@@ -1855,6 +1856,7 @@
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SwiftyUserDefaults.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/ZipArchive.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/QuickTableViewController.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Disk.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1880,6 +1882,10 @@
 				"$(SRCROOT)/PVSupport/Carthage/Build/iOS/SwiftyUserDefaults.framework",
 				"$(SRCROOT)/PVLibrary/Carthage/Build/iOS/ZipArchive.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/QuickTableViewController.framework",
+				"$(SRCROOT)/PVLibrary/Carthage/Build/iOS/Disk.framework",
+				"$(SRCROOT)/PVLibrary/Carthage/Build/iOS/RxRealm.framework",
+				"$(SRCROOT)/PVLibrary/Carthage/Build/iOS/RxSwift.framework",
+				"$(SRCROOT)/PVLibrary/Carthage/Build/iOS/RxCocoa.framework",
 			);
 			name = "Carthage Copy Frameworks";
 			outputPaths = (
@@ -1897,6 +1903,10 @@
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SwiftyUserDefaults.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/ZipArchive.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/QuickTableViewController.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Disk.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/RxRealm.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/RxSwift.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/RxCocoa.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

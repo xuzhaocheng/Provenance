@@ -95,6 +95,9 @@
 		B35D669B2181953A0005A992 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = B35D669A2181953A0005A992 /* Game.swift */; };
 		B35D669C2181953A0005A992 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = B35D669A2181953A0005A992 /* Game.swift */; };
 		B38D8FFD21577AFC00F7D25A /* ZipArchive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3AF475E21071DE0002211EE /* ZipArchive.framework */; };
+		B3AF296021894CDD00A87667 /* LibrarySerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AF295F21894CDD00A87667 /* LibrarySerializer.swift */; };
+		B3AF296121894CDD00A87667 /* LibrarySerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AF295F21894CDD00A87667 /* LibrarySerializer.swift */; };
+		B3AF29632189525900A87667 /* Disk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3AF29622189525800A87667 /* Disk.framework */; };
 		B3AF42F42107145C002211EE /* PVDirectoryWatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3579D332106B4D700DDEBD6 /* PVDirectoryWatcher.swift */; };
 		B3AF475621071CDB002211EE /* LzmaSDKObjC.h in Headers */ = {isa = PBXBuildFile; fileRef = B3AF475221071CA6002211EE /* LzmaSDKObjC.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B3AF475721071CDB002211EE /* LzmaSDKObjCBufferProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = B3AF474321071CA6002211EE /* LzmaSDKObjCBufferProcessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -538,6 +541,8 @@
 		B35D6694218194510005A992 /* SaveState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveState.swift; sourceTree = "<group>"; };
 		B35D6697218194E30005A992 /* LocalFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFile.swift; sourceTree = "<group>"; };
 		B35D669A2181953A0005A992 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
+		B3AF295F21894CDD00A87667 /* LibrarySerializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibrarySerializer.swift; sourceTree = "<group>"; };
+		B3AF29622189525800A87667 /* Disk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Disk.framework; path = Carthage/Build/iOS/Disk.framework; sourceTree = "<group>"; };
 		B3AF45E32107188D002211EE /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		B3AF45E521071894002211EE /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		B3AF45E72107189E002211EE /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
@@ -895,6 +900,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3AF29632189525900A87667 /* Disk.framework in Frameworks */,
 				B3067F762106B9190091437F /* MobileCoreServices.framework in Frameworks */,
 				B3067F742106B9130091437F /* CoreGraphics.framework in Frameworks */,
 				B3067F4D2106B5A80091437F /* PVSupport.framework in Frameworks */,
@@ -944,6 +950,7 @@
 		B3067F492106B5A20091437F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B3AF29622189525800A87667 /* Disk.framework */,
 				B32155452107D2AC0085B18E /* PVSupport.framework */,
 				B3C04B8B2107972200E7AF79 /* Realm.framework */,
 				B3C04B892107972200E7AF79 /* RealmSwift.framework */,
@@ -1138,7 +1145,6 @@
 		B3579D232106B4D600DDEBD6 /* Util */ = {
 			isa = PBXGroup;
 			children = (
-				B3274E942106C2F800857F52 /* CocoaLumberExtensions.swift */,
 				B3579D242106B4D600DDEBD6 /* Time Utilities.swift */,
 				B3579D252106B4D600DDEBD6 /* UTI.swift */,
 				B3B0DA79217AD7120006F760 /* Cache.swift */,
@@ -1169,6 +1175,7 @@
 				B3579D332106B4D700DDEBD6 /* PVDirectoryWatcher.swift */,
 				B3579D342106B4D700DDEBD6 /* PVGameImporter.swift */,
 				B3274E852106BFD000857F52 /* ImportCandidateFile.swift */,
+				B3AF295F21894CDD00A87667 /* LibrarySerializer.swift */,
 			);
 			path = Importer;
 			sourceTree = "<group>";
@@ -1864,9 +1871,10 @@
 				"$(SRCROOT)/Carthage/Build/iOS/ZIPFoundation.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Realm.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/RealmSwift.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Disk.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/bash;
+			shellPath = "/usr/bin/env bash";
 			shellScript = "cd \"${SRCROOT}/../\"\n. ./Scripts/xcode.carthage.bootstrap.sh iOS \"${SRCROOT}\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1949,6 +1957,7 @@
 				B3AF47A421071EFC002211EE /* DllExports2.cpp in Sources */,
 				B3174ACB217ABDFE006EB928 /* RealmRepresentable.swift in Sources */,
 				B3AF477221071E85002211EE /* 7zCrcOpt.c in Sources */,
+				B3AF296021894CDD00A87667 /* LibrarySerializer.swift in Sources */,
 				B3AF479621071EC1002211EE /* 7zHandlerOut.cpp in Sources */,
 				B3AF477821071E85002211EE /* Bcj2Enc.c in Sources */,
 				B3AF476721071E28002211EE /* LzmaSDKObjCReader.mm in Sources */,
@@ -2119,6 +2128,7 @@
 				B3C04ADB21077B3100E7AF79 /* DllExports2.cpp in Sources */,
 				B3174ACC217ABDFE006EB928 /* RealmRepresentable.swift in Sources */,
 				B3C04ADC21077B3100E7AF79 /* 7zCrcOpt.c in Sources */,
+				B3AF296121894CDD00A87667 /* LibrarySerializer.swift in Sources */,
 				B3C04ADD21077B3100E7AF79 /* 7zHandlerOut.cpp in Sources */,
 				B3C04ADE21077B3100E7AF79 /* Bcj2Enc.c in Sources */,
 				B3C04ADF21077B3100E7AF79 /* LzmaSDKObjCReader.mm in Sources */,

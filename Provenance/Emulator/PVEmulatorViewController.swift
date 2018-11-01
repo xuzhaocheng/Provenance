@@ -678,7 +678,7 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
 
 				let newURL = URL(fileURLWithPath: saveStatePath).appendingPathComponent("\(game.md5Hash)|\(Date().timeIntervalSinceReferenceDate)")
 				try fileManager.moveItem(at: autoSaveURL, to: newURL)
-				let saveFile = PVLocalFile(withURL: newURL)
+				let saveFile = PVFile(withURL: newURL)
 				let newState = PVSaveState(withGame: game, core: core, file: saveFile, image: nil, isAutosave: true)
 				try realm.write {
 					realm.add(newState)
@@ -698,7 +698,7 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
 
 					let newURL = URL(fileURLWithPath: saveStatePath).appendingPathComponent("\(game.md5Hash)|\(Date().timeIntervalSinceReferenceDate)")
 					try fileManager.moveItem(at: url, to: newURL)
-					let saveFile = PVLocalFile(withURL: newURL)
+					let saveFile = PVFile(withURL: newURL)
 					let newState = PVSaveState(withGame: game, core: core, file: saveFile, image: nil, isAutosave: false)
 					try realm.write {
 						realm.add(newState)
@@ -741,7 +741,7 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
 			throw SaveStateError.saveStatesUnsupportedByCore
 		}
 
-		let saveFile = PVLocalFile(withURL: URL(fileURLWithPath: saveStatePath).appendingPathComponent("\(game.md5Hash)|\(Date().timeIntervalSinceReferenceDate).svs"))
+		let saveFile = PVFile(withURL: URL(fileURLWithPath: saveStatePath).appendingPathComponent("\(game.md5Hash)|\(Date().timeIntervalSinceReferenceDate).svs"))
 
 		var imageFile: PVImageFile?
 		if let screenshot = screenshot {
@@ -771,14 +771,24 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
 					return
 				}
 
+                var saveState : PVSaveState!
 				do {
 					try realm.write {
-						let saveState = PVSaveState(withGame: game, core: core, file: saveFile, image: imageFile, isAutosave: auto)
+                        saveState = PVSaveState(withGame: game, core: core, file: saveFile, image: imageFile, isAutosave: auto)
 						realm.add(saveState)
 					}
 				} catch let error {
 					presentError("Unable to write save state to realm: \(error.localizedDescription)")
 				}
+
+                let serializer = LibrarySerializer()
+                serializer.serialize(saveState, completion: { error in
+                    if let error = error {
+                        ELOG("Failed to serialize save metadata. \(error)")
+                    } else {
+                        ILOG("Serialzed save state metadata")
+                    }
+                })
 
 				// Delete the oldest auto-saves over 5 count
 				try? realm.write {

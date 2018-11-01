@@ -15,7 +15,7 @@ public final class PVSaveState: Object {
 
     dynamic public var game: PVGame!
 	dynamic public var core: PVCore!
-    dynamic public var file: PVLocalFile!
+    dynamic public var file: PVFile!
     dynamic public var date: Date = Date()
 	dynamic public var lastOpened: Date?
     dynamic public var image: PVImageFile?
@@ -23,7 +23,7 @@ public final class PVSaveState: Object {
 
 	dynamic public var createdWithCoreVersion: String!
 
-	public convenience init(withGame game: PVGame, core: PVCore, file: PVLocalFile, image: PVImageFile? = nil, isAutosave: Bool = false) {
+	public convenience init(withGame game: PVGame, core: PVCore, file: PVFile, image: PVImageFile? = nil, isAutosave: Bool = false) {
         self.init()
         self.game  = game
         self.file  = file
