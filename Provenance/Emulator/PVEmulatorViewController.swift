@@ -38,6 +38,24 @@ class MenuButton: UIButton, HitAreaEnlarger {
     var hitAreaInset: UIEdgeInsets = UIEdgeInsets(top: -5, left: -5, bottom: -5, right: -5)
 }
 
+class QuickButton: UIButton, HitAreaEnlarger {
+    var hitAreaInset: UIEdgeInsets = UIEdgeInsets(top: -5, left: -5, bottom: -5, right: -5)
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.layer.borderWidth = 1
+        self.layer.borderColor = UIColor.white.cgColor
+        self.layer.cornerRadius = 5
+
+        self.tintColor = UIColor.white
+        self.titleLabel?.font = UIFont.systemFont(ofSize: 7)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 extension UIViewController {
     func presentMessage(_ message: String, title: String, completion _: (() -> Swift.Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -72,6 +90,9 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
     var batterySavesPath: URL { return PVEmulatorConfiguration.batterySavesPath(forGame: game) }
     var BIOSPath: URL { return PVEmulatorConfiguration.biosPath(forGame: game) }
     var menuButton: MenuButton?
+
+    private var quickLoadStateButton: UIButton?
+    private var quickSaveStateButton: UIButton?
 
     private(set) lazy var glViewController: PVGLViewController = PVGLViewController(emulatorCore: core)
     private(set) lazy var controllerViewController: (UIViewController & StartSelectDelegate)? = PVCoreFactory.controllerViewController(forSystem: game.system, core: core)
@@ -226,6 +247,26 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
         view.addSubview(menuButton!)
     }
 
+    private func initQuickButtons() {
+        let alpha: CGFloat = CGFloat(PVSettingsModel.shared.controllerOpacity)
+        guard core.supportsSaveStates else { return }
+
+        quickLoadStateButton = QuickButton(type: .custom)
+        quickLoadStateButton?.alpha = alpha
+        quickLoadStateButton?.tintColor = UIColor.white
+        quickLoadStateButton?.setTitle("QL", for: .normal)
+        quickLoadStateButton?.addTarget(self, action: #selector(PVEmulatorViewController.quickLoadState(_:)), for: .touchUpInside)
+        view.addSubview(quickLoadStateButton!)
+
+        quickSaveStateButton = QuickButton(type: .custom)
+        quickSaveStateButton?.alpha = alpha
+        quickSaveStateButton?.tintColor = UIColor.white
+        quickSaveStateButton?.setTitle("QS", for: .normal)
+        quickSaveStateButton?.addTarget(self, action: #selector(PVEmulatorViewController.quickSaveState(_:)), for: .touchUpInside)
+        view.addSubview(quickSaveStateButton!)
+
+    }
+
     private func initFPSLabel() {
         fpsLabel.textColor = UIColor.yellow
         fpsLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -321,6 +362,7 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
         #if os(iOS)
             addControllerOverlay()
             initMenuButton()
+            initQuickButtons()
         #endif
 
         if PVSettingsModel.shared.showFPSCount {
@@ -444,6 +486,7 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
         super.viewDidLayoutSubviews()
         #if os(iOS)
             layoutMenuButton()
+            layoutQuickButtons()
         #endif
     }
 
@@ -456,6 +499,24 @@ final class PVEmulatorViewController: PVEmulatorViewControllerRootClass, PVAudio
                 let frame = CGRect(x: safeAreaInsets.left + 10, y: safeAreaInsets.top + 5, width: width, height: height)
                 menuButton.frame = frame
             }
+        }
+
+        func layoutQuickButtons() {
+            let glViewBottom = glViewController.view.frame.maxY
+            if let quickSaveStateButton = self.quickSaveStateButton {
+                quickSaveStateButton.translatesAutoresizingMaskIntoConstraints = false
+                quickSaveStateButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -50).isActive = true
+                quickSaveStateButton.topAnchor.constraint(equalTo: view.topAnchor, constant: glViewBottom).isActive = true
+                quickSaveStateButton.widthAnchor.constraint(equalToConstant: 70).isActive = true
+            }
+
+            if let quickLoadStateButton = self.quickLoadStateButton {
+                quickLoadStateButton.translatesAutoresizingMaskIntoConstraints = false
+                quickLoadStateButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 50).isActive = true
+                quickLoadStateButton.topAnchor.constraint(equalTo: view.topAnchor, constant: glViewBottom).isActive = true
+                quickLoadStateButton.widthAnchor.constraint(equalToConstant: 70).isActive = true
+            }
+
         }
     #endif
     func documentsPath() -> String? {

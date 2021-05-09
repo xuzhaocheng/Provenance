@@ -30,16 +30,18 @@ public final class PVSaveState: Object, Filed, LocalFileProvider {
     public dynamic var lastOpened: Date?
     public dynamic var image: PVImageFile?
     public dynamic var isAutosave: Bool = false
+    public dynamic var isQuicksave: Bool = false
 
     public dynamic var createdWithCoreVersion: String!
 
-    public convenience init(withGame game: PVGame, core: PVCore, file: PVFile, image: PVImageFile? = nil, isAutosave: Bool = false) {
+    public convenience init(withGame game: PVGame, core: PVCore, file: PVFile, image: PVImageFile? = nil, isAutosave: Bool = false, isQuicksave: Bool = false) {
         self.init()
         self.game = game
         self.file = file
         self.image = image
         self.isAutosave = isAutosave
         self.core = core
+        self.isQuicksave = isQuicksave
         createdWithCoreVersion = core.projectVersion
     }
 

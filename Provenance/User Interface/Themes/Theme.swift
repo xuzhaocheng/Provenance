@@ -38,6 +38,8 @@ public protocol iOSTheme {
     // Mandatory
     var gameLibraryBackground: UIColor { get }
     var gameLibraryText: UIColor { get }
+    var gameLibraryCellBackground: UIColor { get }
+    var gameLibraryCellText: UIColor { get }
 
     var gameLibraryHeaderBackground: UIColor { get }
     var gameLibraryHeaderText: UIColor { get }
@@ -117,6 +119,9 @@ struct DarkTheme: iOSTheme {
     var gameLibraryBackground: UIColor { return UIColor.black }
     var gameLibraryText: UIColor { return UIColor(hex: "#6F6F6F")! }
 
+    var gameLibraryCellBackground: UIColor { return UIColor(hex: "#292929")! }
+    var gameLibraryCellText: UIColor { return UIColor(hex: "#6F6F6F")! }
+
     var gameLibraryHeaderBackground: UIColor { return UIColor.black }
     var gameLibraryHeaderText: UIColor { return UIColor(hex: "#333")! }
 
@@ -138,15 +143,37 @@ struct DarkTheme: iOSTheme {
 }
 
 struct LightTheme: iOSTheme {
+
     let theme = Themes.light
 
     var defaultTintColor: UIColor? { return UIColor(hex: "#007aff") } // iOS Blue
 
     let gameLibraryBackground = UIColor.white
-    let gameLibraryText: UIColor = UIColor.black
+    let gameLibraryText: UIColor = UIColor.darkText
+    var gameLibraryCellBackground: UIColor { return UIColor(hex: "#eeeeee")!  }
+    var gameLibraryCellText: UIColor { return UIColor.gray }
 
-    let gameLibraryHeaderBackground = UIColor(white: 0.9, alpha: 0.6)
+    let gameLibraryHeaderBackground = UIColor(hex: "efeff4")!
     let gameLibraryHeaderText = UIColor.darkGray
+
+    var navigationBarStyle: UIBarStyle { return UIBarStyle.default }
+
+    var keyboardAppearance: UIKeyboardAppearance = .light
+
+    var navigationBarBackgroundColor: UIColor? { return UIColor(hex: "#fefefe") }
+
+    var alertViewBackground: UIColor { return UIColor.darkGray }
+    var alertViewText: UIColor { return UIColor.lightGray }
+
+    var statusBarStyle: UIStatusBarStyle { return UIStatusBarStyle.lightContent }
+
+    var settingsHeaderBackground: UIColor? { return UIColor(hex: "efeff4") }
+    var settingsHeaderText: UIColor? { return UIColor(white: 0.9, alpha: 1.0) }
+
+    var settingsCellBackground: UIColor? { return UIColor(hex: "#fefefe")! }
+    var settingsCellText: UIColor? { return UIColor.darkText }
+
+    var settingsSeperator: UIColor? { return UIColor.gray.withAlphaComponent(0.8) }
 }
 
 // @available(iOS 9.0, *)
@@ -200,6 +227,10 @@ public final class Theme {
                 $0.textLabel?.backgroundColor = theme.settingsCellBackground
                 $0.textLabel?.textColor = theme.settingsCellText
                 $0.detailTextLabel?.textColor = theme.settingsCellText
+            }
+
+            UITableViewHeaderFooterView.appearance {
+                $0.backgroundColor = theme.settingsHeaderBackground
             }
 
             SwitchCell.appearance {

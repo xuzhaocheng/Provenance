@@ -91,7 +91,7 @@ extension PVEmulatorViewController {
     }
 
     //    #error ("Use to https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/iCloud/iCloud.html to save files to iCloud from local url, and setup packages for bundles")
-    func createNewSaveState(auto: Bool, screenshot: UIImage?, completion: @escaping SaveCompletion) {
+    func createNewSaveState(auto: Bool, quick: Bool = false, screenshot: UIImage?, completion: @escaping SaveCompletion) {
         guard core.supportsSaveStates else {
             WLOG("Core \(core.description) doesn't support save states.")
             completion(.error(.saveStatesUnsupportedByCore))
@@ -138,7 +138,7 @@ extension PVEmulatorViewController {
                 var saveState: PVSaveState!
 
                 try realm.write {
-                    saveState = PVSaveState(withGame: self.game, core: core, file: saveFile, image: imageFile, isAutosave: auto)
+                    saveState = PVSaveState(withGame: self.game, core: core, file: saveFile, image: imageFile, isAutosave: auto, isQuicksave: quick)
                     realm.add(saveState)
                 }
 
@@ -286,6 +286,35 @@ extension PVEmulatorViewController {
             }
         #endif
         present(saveStatesNavController, animated: true)
+    }
+
+    @objc func quickLoadState(_: Any?) {
+        guard let coreID = core.coreIdentifier else { return }
+        let filter: String = "core.identifier == \"\(coreID)\" AND isQuicksave == true"
+        guard let quick = game.saveStates.filter(filter).first else { return }
+        loadSaveState(quick)
+    }
+
+    @objc func quickSaveState(_: Any?) {
+        guard let coreID = core.coreIdentifier else { return }
+        let filter: String = "core.identifier == \"\(coreID)\" AND isQuicksave == true"
+        let image = captureScreenshot()
+
+        let quick = self.game.saveStates.filter(filter).first
+        createNewSaveState(auto: false, quick: true, screenshot: image, completion:  { result in
+            switch result {
+            case .success:
+                do {
+                    if let saveState = quick {
+                        try PVSaveState.delete(saveState)
+                    }
+                } catch {
+                    self.presentError("Failed to delete old quick save state")
+                }
+            case .error:
+                self.presentError("Failed to save quick save state")
+            }
+        })
     }
 
     func convertOldSaveStatesToNewIfNeeded() {

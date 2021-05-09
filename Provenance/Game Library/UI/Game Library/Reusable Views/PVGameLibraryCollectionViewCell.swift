@@ -773,7 +773,7 @@ final class PVGameLibraryCollectionViewCell: UICollectionViewCell {
 
     func image(withText text: String) -> UIImage? {
         #if os(iOS)
-            let backgroundColor: UIColor = Theme.currentTheme.settingsCellBackground!
+            let backgroundColor: UIColor = Theme.currentTheme.gameLibraryCellBackground
         #else
             let backgroundColor: UIColor = UIColor(white: 0.18, alpha: 1.0)
         #endif
@@ -785,7 +785,7 @@ final class PVGameLibraryCollectionViewCell: UICollectionViewCell {
         paragraphStyle.alignment = .center
 
         #if os(iOS)
-            let attributedText = NSAttributedString(string: text, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 30.0), NSAttributedString.Key.paragraphStyle: paragraphStyle, NSAttributedString.Key.foregroundColor: Theme.currentTheme.settingsCellText!])
+            let attributedText = NSAttributedString(string: text, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 30.0), NSAttributedString.Key.paragraphStyle: paragraphStyle, NSAttributedString.Key.foregroundColor: Theme.currentTheme.gameLibraryCellText])
         #else
             let attributedText = NSAttributedString(string: text, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 60.0), NSAttributedString.Key.paragraphStyle: paragraphStyle, NSAttributedString.Key.foregroundColor: UIColor.gray])
         #endif

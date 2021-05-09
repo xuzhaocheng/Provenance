@@ -54,6 +54,7 @@ final class PVGameLibrarySectionHeaderView: UICollectionReusableView {
     override init(frame: CGRect) {
         viewModel = GameLibrarySectionViewModel(title: "", collapsable: false, collapsed: false)
         super.init(frame: frame)
+        addSubview(titleLabel)
         #if os(tvOS)
             titleLabel.frame = CGRect(x: 90, y: 0, width: (bounds.size.width / 2.0) - 90.0, height: bounds.size.height)
             titleLabel.font = UIFont.preferredFont(forTextStyle: .title1)
@@ -73,10 +74,11 @@ final class PVGameLibrarySectionHeaderView: UICollectionReusableView {
             clipsToBounds = false
         
         #else
-            let labelHeight: CGFloat = 20.0
-            let labelBottomMargin: CGFloat = 5.0
-
-            titleLabel.frame = CGRect(x: 14, y: bounds.size.height - labelHeight - labelBottomMargin, width: bounds.size.width - 40, height: labelHeight)
+            titleLabel.translatesAutoresizingMaskIntoConstraints = false
+//            titleLabel.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 1).isActive = true
+//            titleLabel.widthAnchor.constraint(equalTo: heightAnchor, multiplier: 1).isActive = true
+            titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
             titleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
 
 //        let topSeparator = UIView(frame: CGRect(x: 0, y: 0, width: bounds.size.width, height: 1.0))
@@ -92,24 +94,23 @@ final class PVGameLibrarySectionHeaderView: UICollectionReusableView {
             addSubview(bottomSeparator)
 
             // Style
-            backgroundColor = UIColor.black.withAlphaComponent(0.8)
+//            backgroundColor = UIColor.black.withAlphaComponent(0.8)
             titleLabel.textAlignment = .left
             titleLabel.backgroundColor = .clear
-            titleLabel.textColor = UIColor(white: 1.0, alpha: 0.5)
+//            titleLabel.textColor = UIColor(white: 1.0, alpha: 0.5)
 //        topSeparator.backgroundColor = UIColor(hex: "#262626")
 //        bottomSeparator.backgroundColor = UIColor(hex: "#262626")
             clipsToBounds = false
         #endif
         titleLabel.numberOfLines = 0
         titleLabel.autoresizingMask = .flexibleWidth
-        addSubview(titleLabel)
 
         addSubview(collapseButton)
         collapseButton.translatesAutoresizingMaskIntoConstraints = false
         collapseButton.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 1).isActive = true
         collapseButton.widthAnchor.constraint(equalTo: heightAnchor, multiplier: 1).isActive = true
         collapseButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        collapseButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -94).isActive = true
+        collapseButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10).isActive = true
 
         isOpaque = true
     }
@@ -145,13 +146,21 @@ final class PVGameLibrarySectionHeaderView: UICollectionReusableView {
                 }, completion: nil)
                 UIView.animate(withDuration: 0.1, animations: {
                     self.collapseButton.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
-                    self.collapseButton.tintColor = .white
+                    #if os(iOS)
+                    self.collapseButton.tintColor = Theme.currentTheme.gameLibraryHeaderText
+                    #else
+                    self.collapseButton.tintColor = .darkGray
+                    #endif
                 })
             } else {
                 titleLabel.textColor = colorForText
                 UIView.animate(withDuration: 0.1, animations: {
                     self.collapseButton.transform = CGAffineTransform(scaleX: 1, y: 1)
+                    #if os(iOS)
+                    self.collapseButton.tintColor = Theme.currentTheme.gameLibraryHeaderText
+                    #else
                     self.collapseButton.tintColor = .darkGray
+                    #endif
                 })
             }
         }
